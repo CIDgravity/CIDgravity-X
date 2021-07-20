@@ -2,7 +2,7 @@ title = "CIDGravity Filter"
 
 # API
 [api]
-endpoint = "https://api.cidgravity.com/proposal/check"
+endpoint = "https://api.cidgravity.com/api/proposal/check"
 token = "YOUR_API_TOKEN"
 
 # Default behavior
