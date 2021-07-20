@@ -1,0 +1,10 @@
+title = "CIDGravity Filter"
+
+# API
+[api]
+endpoint = "https://api.cidgravity.com/proposal/check"
+token = "YOUR_API_TOKEN"
+
+# Default behavior
+[behavior]
+default = true
