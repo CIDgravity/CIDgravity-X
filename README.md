@@ -3,11 +3,11 @@
 The "CID gravity connector" connects a lotus-miner to the CIDgravity service. 
 This lighweight connector is executed locally by the lotus-miner process each time the lotus-miner receives a deal proposal.
 ```
- --------                --------------------------------                ----------------------------  
-| Client | --- Deal --> | miner --> CIDgravity connector | --- Deal --> | CID gravity Cloud platform |
- --------                --------------------------------                ----------------------------
-                                      ^                                                  |
-                                      !-------- Decision Accept/Reject--------------------
+ --------                --------------------------------                ------------------  
+| Client | --- Deal --> | miner --> CIDgravity connector | --- Deal --> | CIDgravity Cloud |
+ --------                --------------------------------                ------------------
+                                      ^                                           |
+                                      |-------- Decision Accept/Reject------------
 ```
 # Requirements 
 1. A CIDgravity account
