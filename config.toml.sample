@@ -1,11 +1,6 @@
-# API
 [api]
 endpoint = "https://api.cidgravity.com/api/proposal/check"
 token = "YOUR_API_TOKEN"
-
-# Default behavior
-[behavior]
-reject_by_default = true
 
 [logging]
 log_file = "/var/log/lotus/cidgravity_storage_connector.log"
