@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# pylint: disable=C0301, E0213, W0621, W0404, C0415, W0611, W0703, W0702, R0914, R0912, R0915
 """
 @author: CID gravity
 Copyright (c) 2021 CID gravity
@@ -33,7 +34,6 @@ import datetime
 VERSION = "1.0"
 
 # XXX TODO
-# modifier le readme
 # coder le check : Checking Script version")
 
 ################################################################################
@@ -54,6 +54,60 @@ CONFIG = {
     }
 }
 
+class Result:
+    """ a very simple class to display and format the --check results """
+    UNDERLINE = '\033[04m'
+    GREY = '\033[90m'
+    BLINK = '\033[05m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+
+    NUMBER_OF_STEPS = 6
+    STEP = 1
+
+    def success(string=""):
+        """ display a sucess tag"""
+        print(f"[{Result.GREEN}Success{Result.ENDC}] {string}")
+
+    def exit_failed(err_msg, hint=None, command=None):
+        """ display a failed tag with the associated message, hint and command before exiting"""
+        Result.failed(err_msg)
+        if hint:
+            print(f"\n{Result.UNDERLINE}HINT :{Result.ENDC} {hint} :")
+        if command:
+            Result.command(f"\n{command}\n")
+        sys.exit(f"{ Result.BLINK }\nCorrect and re-run this process { Result.ENDC } ")
+
+    def failed(string):
+        """ display a failed tag """
+        print(f"[{Result.RED}Failed {Result.ENDC}] {string}")
+
+    def command(command):
+        """ display a command"""
+        print(f"\t\t{Result.CYAN}{command}{Result.ENDC}")
+
+    def label(string):
+        """ display a label"""
+        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<30} '.format(string), end="")
+        Result.STEP += 1
+
+    def allgood():
+        """ display the final message before exiting """
+        print(Result.YELLOW + '''
+ _________________________________________________
+/ All set! the connector is properly configured.  \\
+\ Don't forget to restart the miner               /
+ -------------------------------------------------
+        \   ^__^
+         \  (\033[05moo\033[0m\033[93m)\_______
+            (__)\       )\/\\
+                ||----w |
+                ||     ||
+''' + Result.ENDC)
+
 
 
 class ConfigFileException(Exception):
@@ -64,8 +118,6 @@ class ConfigFileException(Exception):
         self.decision_value = value
         self.message = "Failed to load Config file : " + internal_message
         super().__init__(self.message)
-
-
 
 def log(msg, code="", level="INFO"):
     """ logging decision and debug to a local file """
@@ -84,6 +136,7 @@ def load_config_file(abs_path, default_behavior):
         raise ConfigFileException(default_behavior, abs_path + " is not accessible or an absolute path")
 
     try:
+        # Module is imported here for being able to return default behavior on error
         import toml
         new_config = toml.load(abs_path)
     except Exception as exception:
@@ -145,11 +198,12 @@ def run():
 
     # CALL API
     try:
+        # Module is imported here to be able to return default behavior
         import requests
         response = requests.post(CONFIG["api"]["endpoint"], json=deal_proposal, headers=headers)
         if CONFIG["logging"]["debug"]:
             log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
-    except requests.exceptions.RequestException  as exception:
+    except Exception as exception:
         decision(DEFAULT_BEHAVIOR, f"API error : { exception }")
 
     # MANAGE HTTP ERROR
@@ -170,27 +224,40 @@ def run():
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
     decision(decision_value, api_result['internalMessage'], api_result['externalMessage'])
 
-
-
 def check():
     """ CHECK PROCESS EXECUTED WHEN USING --check """
-    all_good = True
+    print(f"\nThis will guide you and check the {Result.NUMBER_OF_STEPS} remaining small steps to get CIDgravity connector fully deployed and functionnal\n")
+
+    # verify required modules are installed
+    ###
+    Result.label(f"Required python3 modules")
+    try:
+        import json
+        import sys
+        import os.path
+        import argparse
+        import datetime
+        import requests
+        import toml
+    except Exception as exception:
+        Result.exit_failed(f"loading python3 modules : {exception}", "install the missing packages", 'sudo apt install python3-requests python3-toml')
+    else:
+        Result.success()
 
     # CHECK CONFIG FILE
     ###
-    print('{0:<30} '.format("CIDgravity Config File"), end="")
+    Result.label("CIDgravity config File")
     try:
         load_config_file(ARGS.c, True)
     except ConfigFileException as exception:
-        sys.exit("[Failed ] " + exception.message)
+        Result.exit_failed(exception.message, "create a configfile directly from the template and add your token inside", f"cp {ARGS.c}.sample {ARGS.c}")
     else:
-        print("[Success]")
+        Result.success()
 
     # VERIFY API CONNECTIVITY TO CID gravity
     ###
-    import requests
 
-    print('{0:<30} '.format("CIDgravity API connectivity"), end="")
+    Result.label("CIDgravity API connectivity")
     headers = {
         'Authorization': 'Bearer ' + CONFIG["api"]["token"],
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
@@ -199,98 +266,76 @@ def check():
     try:
         response = requests.post(CONFIG["api"]["endpoint"] + "/ping", data=None, headers=headers)
     except requests.exceptions.RequestException  as exception:
-        sys.exit(f'[Failed ] API error : { exception }')
+        Result.exit_failed(f'API error : { exception }', "", "")
 
-    if (response.status_code == 200):
-        print(f"[Success] {response.content.decode('utf-8')}")
+    if response.status_code == 200:
+        Result.success({response.content.decode('utf-8')})
+    elif response.status_code == 401:
+        Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "edit your config file and add the CID gravity token inside. You find the CIDgravity token under Profile section on the CIDgravity portal", f"nano { ARGS.c }")
+    else:
+        Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "connectivity issue with the CIDgravity cloud platform.")
 
     # VERIFY EXECUTED WITH LOTUS MINER
     ###
-    print('{0:<30} '.format("Lotus-miner environment"), end="")
+    Result.label("Lotus-miner environment")
     miner_path = os.environ['LOTUS_MINER_PATH'] if 'LOTUS_MINER_PATH' in os.environ.keys() else os.environ['HOME'] + "/.lotusminer"
     miner_config_file = miner_path + "/config.toml"
     try:
         open(miner_config_file, 'r').close()
     except Exception as exception:
-        sys.exit(f"[Failed ] {exception} ")
+        Result.exit_failed(f'Cannot load { miner_config_file } : { exception }', "ensure you are running this command from the same user as lotus-miner. If you use another location than ~/.lotusminer ensure that LOTUS_MINER_PATH is set before running this command", 'id\nexport "LOTUS_MINER_PATH=XXX"')
     try:
-        import toml
         miner_config = toml.load(miner_config_file)
     except Exception as exception:
-        sys.exit(f'[Failed ] Cannot load { miner_config_file } : { exception }')
+        Result.exit_failed(f'Cannot load { miner_config_file } : { exception }', "verify the lotus-miner configuration file is in a proper toml format", f"nano {miner_config_file}")
     else:
-        print("[Success]")
+        Result.success()
 
-    print('{0:<30} '.format("Lotus-miner get-ask"), end="")
-    # GET API
+    Result.label("Lotus-miner get-ask")
+    # GET API URL
     with open(miner_path + "/api", "r") as text_file:
         miner_api_line = text_file.read()
     miner_api = miner_api_line.split("/")
-    miner_api_ip = miner_api[2]
-    miner_api_port = miner_api[4]
-    miner_url = "http://" + miner_api_ip + ":" + miner_api_port + "/rpc/v0"
+    miner_url = "http://" + miner_api[2] + ":" + miner_api[4] + "/rpc/v0"
 
     # GET MARKETASK
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
     try:
         miner_get_ask = json.loads(requests.post(miner_url, data=jsondata).content)["result"]["Ask"]
-    except requests.exceptions.RequestException  as exception:
-        sys.exit(f'[Failed ] API error : { exception }')
+    except Exception as exception:
+        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' http://127.0.0.1:2345/rpc/v0")
 
     # GET SECTORSIZE
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [miner_get_ask["Miner"]], "id": 3})
     try:
         miner_sector_size = json.loads(requests.post(miner_url, data=jsondata).content)["result"]
-    except requests.exceptions.RequestException  as exception:
-        sys.exit(f'[Failed ] API error : { exception }')
+    except Exception as exception:
+        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.ActorSectorSize\", \"id\": 3 }' http://127.0.0.1:2345/rpc/v0")
 
     # VERIFY GET ASK
     if miner_get_ask['Price'] != "0" or miner_get_ask['VerifiedPrice'] != "0" or miner_get_ask['MinPieceSize'] != 256 or miner_get_ask['MaxPieceSize'] != miner_sector_size:
-        print(f'[Warning] its highly recommended to set your prices to 0 and your accepting size to min=256B and max={miner_sector_size} by executing : ')
-        print(f'\n\tlotus-miner storage-deals set-ask --price 0 --verified-price 0 --min-piece-size 256 --max-piece-size {miner_sector_size}\n')
-        all_good = False
+        Result.exit_failed(f'GET-ASK price has to be set to 0 and your accepting size to min=256B and max={miner_sector_size}', "set the prices and sizes by typing", f'lotus-miner storage-deals set-ask --price 0 --verified-price 0 --min-piece-size 256 --max-piece-size {miner_sector_size}')
     else:
-        print("[Success]")
+        Result.success()
 
     # VERIFY DEAL FILTER IS CONFIGURED IN CONFIG.TOML
     ###
-    print('{0:<30} '.format("Filter configuration"), end="")
+    Result.label("Filter configuration")
+    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
         filter_storage = miner_config["Dealmaking"]["Filter"]
     except Exception as exception:
-        print(f'[Failed ] Filter not set in config.toml. Add one of the following lines in [Dealmaking] section :')
-        print(f'\n\tFilter = "{os.path.realpath(__file__)} --accept" ')
-        print("OR")
-        print(f'\tFilter = "{os.path.realpath(__file__)} --reject" ')
-        sys.exit()
-
-    import re
-    if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
-        print("[Success]")
+        Result.exit_failed('Filter not set in config.toml', 'Add one of the following lines in [Dealmaking] section to enable CIDgravity. The CIDgravity connector takes one mandatory argument --accept or --reject . This parameter let you control the default behavior of the connector when something wrong happen (connectivity issue, missing module, etc... so you will never/ever miss one deal :-)', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"\nFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
     else:
-        print(f'[Failed ] "Filter" found in [Dealmaking] section of config.toml. But does not match one of the following values:')
-        print(f'\n\tCurrent : \tFilter = "{filter_storage}"')
-        print(f'\tShould be :')
-        print(f'\t\t\tFilter = "{os.path.realpath(__file__)} --accept" ')
-        print(f'\t\tOR\tFilter = "{os.path.realpath(__file__)} --reject" ')
-        sys.exit()
+        import re
+        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
+            Result.success()
+        else:
+            Result.exit_failed(f'"Filter" found in [Dealmaking] section of config.toml, but doesn\'t match standard lines', 'Add one of the following lines in [Dealmaking] section to enable CIDgravity. The CIDgravity connector takes one mandatory argument --accept or --reject . This parameter let you control the default behavior of the connector when something wrong happen (connectivity issue, missing module, etc... so you will never/ever miss one deal :-)', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"\nFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
 
-    print('''
- _________________________________________________
-/ All set! the connector is properly configured.  \\
-\ Don't forget to restart the miner               /
- -------------------------------------------------
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\\
-                ||----w |
-                ||     ||
-''') if all_good else ""
+
+    Result.allgood()
     sys.exit(0)
-
-def printj(parsed):
-    """JSON PRETTY PRINT"""
-    print(json.dumps(parsed, indent=4, sort_keys=True))
 
 if __name__ == "__main__":
     # SET COMMANDLINES ARGUMENTS
