@@ -3,11 +3,11 @@
 The "CID gravity connector" connects a lotus-miner to the CIDgravity service. 
 This lighweight connector is executed locally by the lotus-miner process each time the lotus-miner receives a deal proposal.
 ```
-----------                       ----------------------------------------                       ------------------------------  
-| Client | --- Deal proposal --> | Lotus-miner --> CIDgravity connector | --- Deal proposal --> | CID gravity Cloud platform |
-----------                       ----------------------------------------                       ------------------------------
-                                                           ^                                                  |
-                                                           !-------- Decision Accept/Reject--------------------
+ --------                --------------------------------                ----------------------------  
+| Client | --- Deal --> | miner --> CIDgravity connector | --- Deal --> | CID gravity Cloud platform |
+ --------                --------------------------------                ----------------------------
+                                      ^                                                  |
+                                      !-------- Decision Accept/Reject--------------------
 ```
 # Requirements 
 1. A CIDgravity account
@@ -19,7 +19,7 @@ lotus-miner storage-deals set-ask --price 0 --verified-price 0 --min-piece-size 
 ```
 sudo apt install python3-toml python3-requests
 ```
-# Installation
+# Get Started
 
 ```
 sudo -i -u <USER_RUNNING_LOTUS_MINER_PROCESS>
