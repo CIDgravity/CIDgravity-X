@@ -1,0 +1,7 @@
+[api]
+endpoint = "https://api.cidgravity.com/api/proposal/check"
+token = "YOUR_API_TOKEN"
+
+[logging]
+log_file = "/var/log/lotus/cidgravity_storage_connector.log"
+debug = true
