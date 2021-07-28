@@ -19,7 +19,7 @@ sudo -i -u USER_RUNNING_LOTUS_MINER_PROCESS
 git clone https://github.com/CIDgravity/CIDgravity-X.git
 cd CIDgravity-X
 ```
-2. Add your CIDgravity authentification TOKEN and logfile location to the CIDgravity config file
+2. Add your CIDgravity authentification TOKEN (TOKEN is located under the Profile section on the CIDgravity portal) and logfile location to the CIDgravity config file
 ```
 nano ./cidgravity_storage_connector.toml
 ```
@@ -27,8 +27,10 @@ nano ./cidgravity_storage_connector.toml
 ```
 ./cidgravity_storage_connector.py --check
 ```
-4. Enable "CIDgravity connector" in lotus-miner by adding the following line to .lotusminer/config.toml
+4. Enable "CIDgravity connector" in lotus-miner by adding the following line to .lotusminer/config.toml under the [Dealmaking] section
+```
 Filter = "ABSOLUTE_PATH/cidgravity_storage_connector.py --accept"
+```
 5. Restart lotus-miner
 
 DONE :) you can now enjoy CIDgravity
