@@ -34,4 +34,3 @@ Filter = "ABSOLUTE_PATH/cidgravity_storage_connector.py --accept"
 5. Restart lotus-miner
 
 DONE :) you can now enjoy CIDgravity
-```
