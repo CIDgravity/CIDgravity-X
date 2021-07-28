@@ -13,22 +13,23 @@ sudo apt install python3-toml python3-requests
 ```
 
 # Get Started
+1. Install the connector
 ```
-# INSTALL THE CONNECTOR
 sudo -i -u USER_RUNNING_LOTUS_MINER_PROCESS
 git clone https://github.com/CIDgravity/CIDgravity-X.git
 cd CIDgravity-X
-
-# EDIT THE CONFIG FILE : ADD TOKEN AND LOGFILE LOCATION
+```
+2. Add your CIDgravity authentification TOKEN and logfile location to the CIDgravity config file
+```
 nano ./cidgravity_storage_connector.toml
-
-# EXECUTE THE CHECK PROCESS 
+```
+3. Execute the check process
+```
 ./cidgravity_storage_connector.py --check
-
-# ENABLE "CIDgravity connector" IN LOTUS-MINER by adding the following line to .lotusminer/config.toml
+```
+4. Enable "CIDgravity connector" in lotus-miner by adding the following line to .lotusminer/config.toml
 Filter = "ABSOLUTE_PATH/cidgravity_storage_connector.py --accept"
+5. Restart lotus-miner
 
-# RESTART THE MINER
-
-# DONE :) you can now enjoy CIDgravity
+DONE :) you can now enjoy CIDgravity
 ```
