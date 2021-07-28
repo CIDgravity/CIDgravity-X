@@ -40,7 +40,7 @@ VERSION = "1.0"
 # DEFAULT VALUES
 ################################################################################
 # DEFAULT COFNIG LOCATION
-DEFAULT_CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/config.toml"
+DEFAULT_CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.toml"
 
 # MANDATORY FIELDS IN CONFIG FILE
 CONFIG = {
@@ -57,12 +57,12 @@ CONFIG = {
 class Result:
     """ a very simple class to display and format the --check results """
     UNDERLINE = '\033[04m'
-    GREY = '\033[90m'
     BLINK = '\033[05m'
-    CYAN = '\033[96m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
+    GREY = '\033[90m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
     ENDC = '\033[0m'
 
     NUMBER_OF_STEPS = 6
@@ -76,10 +76,13 @@ class Result:
         """ display a failed tag with the associated message, hint and command before exiting"""
         Result.failed(err_msg)
         if hint:
-            print(f"\n{Result.UNDERLINE}HINT :{Result.ENDC} {hint} :")
+            print(f"\n{Result.UNDERLINE}HINT :{Result.ENDC} {hint}", end="")
         if command:
+            print(" :")
             Result.command(f"\n{command}\n")
-        sys.exit(f"{ Result.BLINK }\nCorrect and re-run this process { Result.ENDC } ")
+        else:
+            print("\n")
+        sys.exit()
 
     def failed(string):
         """ display a failed tag """
@@ -87,7 +90,7 @@ class Result:
 
     def command(command):
         """ display a command"""
-        print(f"\t\t{Result.CYAN}{command}{Result.ENDC}")
+        print(f"\t\t{Result.BLUE}{command}{Result.ENDC}")
 
     def label(string):
         """ display a label"""
@@ -96,18 +99,17 @@ class Result:
 
     def allgood():
         """ display the final message before exiting """
-        print(Result.YELLOW + '''
+        print(Result.MAGENTA + '''
  _________________________________________________
 / All set! the connector is properly configured.  \\
 \ Don't forget to restart the miner               /
  -------------------------------------------------
         \   ^__^
-         \  (\033[05moo\033[0m\033[93m)\_______
+         \  (\033[05moo\033[0m\033[35m)\_______
             (__)\       )\/\\
                 ||----w |
                 ||     ||
 ''' + Result.ENDC)
-
 
 
 class ConfigFileException(Exception):
@@ -118,6 +120,9 @@ class ConfigFileException(Exception):
         self.decision_value = value
         self.message = "Failed to load Config file : " + internal_message
         super().__init__(self.message)
+
+class LogFileException(ConfigFileException):
+    pass
 
 def log(msg, code="", level="INFO"):
     """ logging decision and debug to a local file """
@@ -157,7 +162,7 @@ def load_config_file(abs_path, default_behavior):
     try:
         open(CONFIG["logging"]["log_file"], 'a').close()
     except Exception as exception:
-        raise ConfigFileException(default_behavior, f'log_file access error : {exception}')
+        raise LogFileException(default_behavior, f'log_file access error : {exception}')
 
     # VERIFY IF DEBUG VALUE IS A BOOLEAN
     if not isinstance(CONFIG["logging"]["debug"], bool):
@@ -224,9 +229,14 @@ def run():
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
     decision(decision_value, api_result['internalMessage'], api_result['externalMessage'])
 
+
+
 def check():
     """ CHECK PROCESS EXECUTED WHEN USING --check """
-    print(f"\nThis will guide you and check the {Result.NUMBER_OF_STEPS} remaining small steps to get CIDgravity connector fully deployed and functionnal\n")
+    print(f"""
+This will guide you and check the {Result.NUMBER_OF_STEPS} remaining small steps to get "CIDgravity connector" fully deployed and functionnal
+IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
+""")
 
     # verify required modules are installed
     ###
@@ -249,6 +259,8 @@ def check():
     Result.label("CIDgravity config File")
     try:
         load_config_file(ARGS.c, True)
+    except LogFileException as exception:
+        Result.exit_failed(exception.message, "review logfile access permissions or configure another logfile path in cidgravity_storage_connector.toml")
     except ConfigFileException as exception:
         Result.exit_failed(exception.message, "create a configfile directly from the template and add your token inside", f"cp {ARGS.c}.sample {ARGS.c}")
     else:
@@ -318,24 +330,22 @@ def check():
     else:
         Result.success()
 
-    # VERIFY DEAL FILTER IS CONFIGURED IN CONFIG.TOML
+    # VERIFY DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label("Filter configuration")
+    Result.label("Filter activated on miner")
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
         filter_storage = miner_config["Dealmaking"]["Filter"]
     except Exception as exception:
-        Result.exit_failed('Filter not set in config.toml', 'Add one of the following lines in [Dealmaking] section to enable CIDgravity. The CIDgravity connector takes one mandatory argument --accept or --reject . This parameter let you control the default behavior of the connector when something wrong happen (connectivity issue, missing module, etc... so you will never/ever miss one deal :-)', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"\nFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+        Result.exit_failed(f'Filter not set in  {miner_config_file}', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
     else:
         import re
         if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
             Result.success()
         else:
-            Result.exit_failed(f'"Filter" found in [Dealmaking] section of config.toml, but doesn\'t match standard lines', 'Add one of the following lines in [Dealmaking] section to enable CIDgravity. The CIDgravity connector takes one mandatory argument --accept or --reject . This parameter let you control the default behavior of the connector when something wrong happen (connectivity issue, missing module, etc... so you will never/ever miss one deal :-)', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"\nFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
-
+            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {miner_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
 
     Result.allgood()
-    sys.exit(0)
 
 if __name__ == "__main__":
     # SET COMMANDLINES ARGUMENTS
@@ -352,6 +362,7 @@ if __name__ == "__main__":
 
     if ARGS.check:
         check()
+        sys.exit(0)
 
     # DEFINE DEFAULT BEHAVIOR IN CASE ERRORS OCCURED
     DEFAULT_BEHAVIOR = "reject" if ARGS.reject else "accept"
