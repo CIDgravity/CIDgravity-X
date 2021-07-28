@@ -21,6 +21,7 @@ cd CIDgravity-X
 ```
 2. Add your CIDgravity authentification TOKEN (TOKEN is located under the Profile section on the CIDgravity portal) and logfile location to the CIDgravity config file
 ```
+cp cidgravity_storage_connector.toml.sample cidgravity_storage_connector.toml
 nano ./cidgravity_storage_connector.toml
 ```
 3. Execute the check process
