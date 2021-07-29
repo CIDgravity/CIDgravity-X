@@ -39,6 +39,10 @@ VERSION = "1.0"
 ################################################################################
 # DEFAULT VALUES
 ################################################################################
+# API TIMEOUT IN SEC
+TIMEOUT_CONNECT = 2
+TIMEOUT_READ = 5
+
 # DEFAULT COFNIG LOCATION
 DEFAULT_CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.toml"
 
@@ -205,7 +209,7 @@ def run():
     try:
         # Module is imported here to be able to return default behavior
         import requests
-        response = requests.post(CONFIG["api"]["endpoint"], json=deal_proposal, headers=headers)
+        response = requests.post(CONFIG["api"]["endpoint"], json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
         if CONFIG["logging"]["debug"]:
             log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
     except Exception as exception:
@@ -276,7 +280,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         'X-CIDgravity-Version': VERSION
     }
     try:
-        response = requests.post(CONFIG["api"]["endpoint"] + "/ping", data=None, headers=headers)
+        response = requests.post(CONFIG["api"]["endpoint"] + "/ping", data=None, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
     except requests.exceptions.RequestException  as exception:
         Result.exit_failed(f'API error : { exception }', "", "")
 
@@ -313,14 +317,14 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     # GET MARKETASK
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
     try:
-        miner_get_ask = json.loads(requests.post(miner_url, data=jsondata).content)["result"]["Ask"]
+        miner_get_ask = json.loads(requests.post(miner_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
     except Exception as exception:
         Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' http://127.0.0.1:2345/rpc/v0")
 
     # GET SECTORSIZE
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [miner_get_ask["Miner"]], "id": 3})
     try:
-        miner_sector_size = json.loads(requests.post(miner_url, data=jsondata).content)["result"]
+        miner_sector_size = json.loads(requests.post(miner_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]
     except Exception as exception:
         Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.ActorSectorSize\", \"id\": 3 }' http://127.0.0.1:2345/rpc/v0")
 
