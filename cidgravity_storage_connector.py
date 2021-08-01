@@ -291,6 +291,31 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     else:
         Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "connectivity issue with the CIDgravity cloud platform.")
 
+    # VERIFY IF LOTUS-MARKETS EXIST
+    ###
+    is_markets_running = True
+    if 'LOTUS_MARKETS_PATH' in os.environ.keys():
+        Result.label("Lotus-markets environment")
+        markets_path = os.environ['LOTUS_MARKETS_PATH']
+        markets_config_file = markets_path + "/config.toml"
+        try:
+            open(markets_config_file, 'r').close()
+        except Exception as exception:
+            is_markets_running = False
+        try:
+            markets_config = toml.load(markets_config_file)
+        except Exception as exception:
+            is_markets_running = False
+        else:
+            Result.success()
+            # GET API URL
+            with open(markets_path + "/api", "r") as text_file:
+                markets_api_line = text_file.read()
+            markets_api = markets_api_line.split("/")
+            markets_url = "http://" + markets_api[2] + ":" + markets_api[4] + "/rpc/v0"
+    else:
+        is_markets_running = False
+
     # VERIFY EXECUTED WITH LOTUS MINER
     ###
     Result.label("Lotus-miner environment")
@@ -306,27 +331,32 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         Result.exit_failed(f'Cannot load { miner_config_file } : { exception }', "verify the lotus-miner configuration file is in a proper toml format", f"nano {miner_config_file}")
     else:
         Result.success()
+        # GET API URL
+        with open(miner_path + "/api", "r") as text_file:
+            miner_api_line = text_file.read()
+        miner_api = miner_api_line.split("/")
+        miner_url = "http://" + miner_api[2] + ":" + miner_api[4] + "/rpc/v0"
+
 
     Result.label("Lotus-miner get-ask")
-    # GET API URL
-    with open(miner_path + "/api", "r") as text_file:
-        miner_api_line = text_file.read()
-    miner_api = miner_api_line.split("/")
-    miner_url = "http://" + miner_api[2] + ":" + miner_api[4] + "/rpc/v0"
-
     # GET MARKETASK
+    if is_markets_running:
+        getask_url = markets_url
+    else:
+        getask_url = miner_url
+
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
     try:
-        miner_get_ask = json.loads(requests.post(miner_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
+        miner_get_ask = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
     except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' http://127.0.0.1:2345/rpc/v0")
+        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' {getask_url}")
 
     # GET SECTORSIZE
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [miner_get_ask["Miner"]], "id": 3})
     try:
         miner_sector_size = json.loads(requests.post(miner_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]
     except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.ActorSectorSize\", \"id\": 3 }' http://127.0.0.1:2345/rpc/v0")
+        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.ActorSectorSize\", \"id\": 3 }' {miner_url}")
 
     # VERIFY GET ASK
     if miner_get_ask['Price'] != "0" or miner_get_ask['VerifiedPrice'] != "0" or miner_get_ask['MinPieceSize'] != 256 or miner_get_ask['MaxPieceSize'] != miner_sector_size:
