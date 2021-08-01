@@ -200,7 +200,7 @@ def run():
 
     # SET HEADERS
     headers = {
-        'Authorization': 'Bearer ' + CONFIG["api"]["token"],
+        'Authorization': CONFIG["api"]["token"],
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION
     }
@@ -275,7 +275,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     Result.label("CIDgravity API connectivity")
     headers = {
-        'Authorization': 'Bearer ' + CONFIG["api"]["token"],
+        'Authorization': CONFIG["api"]["token"],
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION
     }
