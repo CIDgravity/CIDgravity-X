@@ -98,7 +98,7 @@ class Result:
 
     def label(string):
         """ display a label"""
-        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<30} '.format(string), end="")
+        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<35} '.format(string), end="")
         Result.STEP += 1
 
     def allgood():
@@ -366,18 +366,26 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     # VERIFY DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label("Filter activated on miner")
+    if is_markets_running:
+        Result.label("Filter activated on lotus-markets")
+        filter_config = markets_config
+        filter_config_file = markets_config_file
+    else:
+        Result.label("Filter activated on lotus-miner")
+        filter_config = miner_config
+        filter_config_file = miner_config_file
+
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
-        filter_storage = miner_config["Dealmaking"]["Filter"]
+        filter_storage = filter_config["Dealmaking"]["Filter"]
     except Exception as exception:
-        Result.exit_failed(f'Filter not set in  {miner_config_file}', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
+        Result.exit_failed(f'Filter not set in  {filter_config_file}', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
     else:
         import re
         if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
             Result.success()
         else:
-            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {miner_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
+            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {filter_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
 
     Result.allgood()
 
