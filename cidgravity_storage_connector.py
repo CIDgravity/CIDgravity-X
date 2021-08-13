@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "1.0"
+VERSION = "1.1"
 
 # XXX TODO
 # coder le check : Checking Script version")
@@ -224,10 +224,13 @@ def run():
     # READ API RESPONSE
     try:
         api_result = response.json()
-        if CONFIG["logging"]["debug"]:
+    except Exception as exception:
+        decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.response }")
+    if CONFIG["logging"]["debug"]:
+        try:
             log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
-    except json.decoder.JSONDecodeError as exception:
-        decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception }")
+        except Exception as exception:
+            decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.response }")
 
     # APPLY DECISION
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
