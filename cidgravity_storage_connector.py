@@ -225,12 +225,12 @@ def run():
     try:
         api_result = response.json()
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.response }")
+        decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.content }")
     if CONFIG["logging"]["debug"]:
         try:
             log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
         except Exception as exception:
-            decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.response }")
+            decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.content }")
 
     # APPLY DECISION
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
