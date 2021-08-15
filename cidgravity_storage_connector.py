@@ -33,9 +33,6 @@ import datetime
 
 VERSION = "1.1"
 
-# XXX TODO
-# coder le check : Checking Script version")
-
 ################################################################################
 # DEFAULT VALUES
 ################################################################################
@@ -135,7 +132,7 @@ def log(msg, code="", level="INFO"):
             output_date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
             print('{0:<20} {1:<6} {2:<12} {3:>}'.format(output_date, level, code, msg), file=logfile)
     except:
-        print("ERROR Internal : run --check")
+        pass
 
 
 
@@ -195,8 +192,10 @@ def run():
     # GET STDIN JSON PROPOSAL
     try:
         deal_proposal = json.load(sys.stdin)
-    except json.decoder.JSONDecodeError as exception:
-        decision(DEFAULT_BEHAVIOR, f"JSON unable to parse the DealProposal : {exception}")
+    except Exception as exception:
+        decision(DEFAULT_BEHAVIOR, f"Error : Connector unable to parse the deal proposal : {exception}", "Error")
+    if CONFIG["logging"]["debug"]:
+        log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
 
     # SET HEADERS
     headers = {
@@ -210,33 +209,26 @@ def run():
         # Module is imported here to be able to return default behavior
         import requests
         response = requests.post(CONFIG["api"]["endpoint"], json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
-        if CONFIG["logging"]["debug"]:
-            log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"API error : { exception }")
+        decision(DEFAULT_BEHAVIOR, f"Error  : connecting API failed : { exception }", "Error")
 
     # MANAGE HTTP ERROR
     if response.status_code != 200:
         if CONFIG["logging"]["debug"]:
             log(json.dumps(dict(response.headers), indent=4, sort_keys=True) + "\n" + str(response.content), "API_RESPONSE", "DEBUG")
-        decision(DEFAULT_BEHAVIOR, f"API error : { response.status_code } - { response.reason }")
+        decision(DEFAULT_BEHAVIOR, f"Error : API code : { response.status_code } - { response.reason }", "Error")
 
     # READ API RESPONSE
     try:
         api_result = response.json()
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.content }")
+        decision(DEFAULT_BEHAVIOR, f"Error : unable to parse API response : { exception } { response.content }", "Error")
     if CONFIG["logging"]["debug"]:
-        try:
-            log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
-        except Exception as exception:
-            decision(DEFAULT_BEHAVIOR, f"API unable to parse JSON { exception } { response.content }")
+        log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
 
     # APPLY DECISION
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
     decision(decision_value, api_result['internalMessage'], api_result['externalMessage'])
-
-
 
 def check():
     """ CHECK PROCESS EXECUTED WHEN USING --check """
