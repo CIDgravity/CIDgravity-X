@@ -180,7 +180,7 @@ def decision(value, internal_message, external_message=""):
     log(internal_message, value)
 
     # EXTERNAL MESSAGE AND DECISION
-    print(decision_msg)
+    print(decision_msg, end="")
     sys.exit(exit_value)
 
 
@@ -228,7 +228,12 @@ def run():
 
     # APPLY DECISION
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
-    decision(decision_value, api_result['internalMessage'], api_result['externalMessage'])
+
+    fullExternalMessage = api_result['externalMessage']
+    if api_result['customMessage'] != "":
+        fullExternalMessage += " | " + api_result['customMessage']
+
+    decision(decision_value, api_result['internalMessage'], fullExternalMessage)
 
 def check():
     """ CHECK PROCESS EXECUTED WHEN USING --check """
