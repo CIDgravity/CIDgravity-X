@@ -103,7 +103,7 @@ class Result:
         print(Result.MAGENTA + '''
  _________________________________________________
 / All set! the connector is properly configured.  \\
-\ Don't forget to restart the miner               /
+\ Don't forget to restart the miner OR the market /
  -------------------------------------------------
         \   ^__^
          \  (\033[05moo\033[0m\033[35m)\_______
@@ -385,7 +385,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
             Result.success()
         else:
-            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {filter_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
+            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {filter_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] sectioni and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
 
     Result.allgood()
 
