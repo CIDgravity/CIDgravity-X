@@ -379,13 +379,13 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     try:
         filter_storage = filter_config["Dealmaking"]["Filter"]
     except Exception as exception:
-        Result.exit_failed(f'Filter not set in  {filter_config_file}', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
+        Result.exit_failed(f'Filter not set in  {filter_config_file}', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
     else:
         import re
         if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
             Result.success()
         else:
-            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {filter_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] sectioni and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--accept"')
+            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {filter_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
 
     Result.allgood()
 
