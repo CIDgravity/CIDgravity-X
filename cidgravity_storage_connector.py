@@ -293,99 +293,79 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     # VERIFY IF LOTUS-MARKETS EXIST
     ###
-    is_markets_running = True
+    node_type = "Unknown"
     if 'LOTUS_MARKETS_PATH' in os.environ.keys():
-        Result.label("Lotus-markets environment")
-        markets_path = os.environ['LOTUS_MARKETS_PATH']
-        markets_config_file = markets_path + "/config.toml"
-        try:
-            open(markets_config_file, 'r').close()
-        except Exception as exception:
-            is_markets_running = False
-        try:
-            markets_config = toml.load(markets_config_file)
-        except Exception as exception:
-            is_markets_running = False
-        else:
-            Result.success()
-            # GET API URL
-            with open(markets_path + "/api", "r") as text_file:
-                markets_api_line = text_file.read()
-            markets_api = markets_api_line.split("/")
-            markets_url = "http://" + markets_api[2] + ":" + markets_api[4] + "/rpc/v0"
+        node_type = "markets"
+        config_path = os.environ['LOTUS_MARKETS_PATH']
+    elif 'LOTUS_MINER_PATH' in os.environ.keys():
+        node_type = "miner or markets"
+        config_path = os.environ['LOTUS_MINER_PATH']
     else:
-        is_markets_running = False
+        config_path = os.environ['HOME'] + "/.lotusminer"
 
-    # VERIFY EXECUTED WITH LOTUS MINER
-    ###
-    Result.label("Lotus-miner environment")
-    miner_path = os.environ['LOTUS_MINER_PATH'] if 'LOTUS_MINER_PATH' in os.environ.keys() else os.environ['HOME'] + "/.lotusminer"
-    miner_config_file = miner_path + "/config.toml"
+    Result.label(f"Lotus-{ node_type } environment")
+
+    # Check config file exist
+    config_file = config_path + "/config.toml"
     try:
-        open(miner_config_file, 'r').close()
+        open(config_file, 'r').close()
     except Exception as exception:
-        Result.exit_failed(f'Cannot load { miner_config_file } : { exception }', "ensure you are running this command from the same user as lotus-miner. If you use another location than ~/.lotusminer ensure that LOTUS_MINER_PATH is set before running this command", 'id\nexport "LOTUS_MINER_PATH=XXX"')
+        Result.exit_failed(f'Cannot load { config_file } : { exception }', "ensure you are running this command from the same user as lotus. If you use another location than ~/.lotusminer ensure that LOTUS_MINER_PATH or LOTUS_MARKETS_PATH is properly set prior running this command", 'id\nexport "LOTUS_MINER_PATH=XXX"')
+
+    # Load config file
     try:
-        miner_config = toml.load(miner_config_file)
+        config = toml.load(config_file)
     except Exception as exception:
-        Result.exit_failed(f'Cannot load { miner_config_file } : { exception }', "verify the lotus-miner configuration file is in a proper toml format", f"nano {miner_config_file}")
+        Result.exit_failed(f'Cannot load { config_file } : { exception }', f"verify that config_file is in a proper toml format", f"nano {config_file}")
+
+    Result.success()
+
+    Result.label(f"Lotus-{node_type} get-ask")
+    # GET API URL
+    try:
+        with open(config_path + "/api", "r") as text_file:
+            api_line = text_file.read()
+    except Exception as exception:
+        Result.exit_failed(f'Cannot read {config_path + "/api"} : { exception }', f"verify the process is running { node_type }", f"pgrep lotus")
     else:
-        Result.success()
-        # GET API URL
-        with open(miner_path + "/api", "r") as text_file:
-            miner_api_line = text_file.read()
-        miner_api = miner_api_line.split("/")
-        miner_url = "http://" + miner_api[2] + ":" + miner_api[4] + "/rpc/v0"
+        api = api_line.split("/")
+        getask_url = "http://" + api[2] + ":" + api[4] + "/rpc/v0"
 
-
-    Result.label("Lotus-miner get-ask")
     # GET MARKETASK
-    if is_markets_running:
-        getask_url = markets_url
-    else:
-        getask_url = miner_url
-
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
     try:
-        miner_get_ask = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
+        getask = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
     except Exception as exception:
         Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' {getask_url}")
 
     # GET SECTORSIZE
-    jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [miner_get_ask["Miner"]], "id": 3})
+    jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [getask["Miner"]], "id": 3})
     try:
-        miner_sector_size = json.loads(requests.post(miner_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]
+        miner_sector_size = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]
     except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.ActorSectorSize\", \"id\": 3 }' {miner_url}")
+        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", 'curl -v -X PST --data \'{ "method": "Filecoin.ActorSectorSize", "params": ["' + getask["Miner"] + '"], "id": 3 }\' ' + getask_url)
 
     # VERIFY GET ASK
-    if miner_get_ask['Price'] != "0" or miner_get_ask['VerifiedPrice'] != "0" or miner_get_ask['MinPieceSize'] != 256 or miner_get_ask['MaxPieceSize'] != miner_sector_size:
+    if getask['Price'] != "0" or getask['VerifiedPrice'] != "0" or getask['MinPieceSize'] != 256 or getask['MaxPieceSize'] != miner_sector_size:
         Result.exit_failed(f'GET-ASK price has to be set to 0 and your accepting size to min=256B and max={miner_sector_size}', "set the prices and sizes by typing", f'lotus-miner storage-deals set-ask --price 0 --verified-price 0 --min-piece-size 256 --max-piece-size {miner_sector_size}')
     else:
         Result.success()
 
     # VERIFY DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    if is_markets_running:
-        Result.label("Filter activated on lotus-markets")
-        filter_config = markets_config
-        filter_config_file = markets_config_file
-    else:
-        Result.label("Filter activated on lotus-miner")
-        filter_config = miner_config
-        filter_config_file = miner_config_file
+    Result.label(f"Filter activated on lotus-{node_type}")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
-        filter_storage = filter_config["Dealmaking"]["Filter"]
+        filter_storage = config["Dealmaking"]["Filter"]
     except Exception as exception:
-        Result.exit_failed(f'Filter not set in  {filter_config_file}', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
+        Result.exit_failed(f'Filter not set in  {config_file}', 'Add the following line to the [Dealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
     else:
         import re
         if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
             Result.success()
         else:
-            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {filter_config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
+            Result.exit_failed(f'"Filter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
 
     Result.allgood()
 
