@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "1.1"
+VERSION = "1.2"
 
 ################################################################################
 # DEFAULT VALUES
@@ -201,7 +201,8 @@ def run():
     headers = {
         'Authorization': CONFIG["api"]["token"],
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
-        'X-CIDgravity-Version': VERSION
+        'X-CIDgravity-Version': VERSION,
+        'X-CIDgravity-DefaultBehavior': DEFAULT_BEHAVIOR
     }
 
     # CALL API
@@ -277,7 +278,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     headers = {
         'Authorization': CONFIG["api"]["token"],
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
-        'X-CIDgravity-Version': VERSION
+        'X-CIDgravity-Version': VERSION,
     }
     try:
         response = requests.post(CONFIG["api"]["endpoint"] + "/ping", data=None, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
@@ -301,6 +302,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         node_type = "miner or markets"
         config_path = os.environ['LOTUS_MINER_PATH']
     else:
+        node_type = "miner or markets"
         config_path = os.environ['HOME'] + "/.lotusminer"
 
     Result.label(f"Lotus-{ node_type } environment")
