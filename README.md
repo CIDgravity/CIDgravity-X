@@ -22,7 +22,7 @@ sudo -i -u USER_RUNNING_LOTUS_MINER_PROCESS
 git clone https://github.com/CIDgravity/CIDgravity-X.git
 cd CIDgravity-X
 ```
-2. Add your CIDgravity authentification TOKEN (TOKEN is located under the "My Settings" section on the CIDgravity portal) and set the logfile location to the CIDgravity config file
+2. Add your CIDgravity authentification TOKEN (TOKEN is located under the "Settings" section on the CIDgravity portal > tab "Other settings") and set the logfile location to the CIDgravity config file
 ```
 cp cidgravity_storage_connector.toml.sample cidgravity_storage_connector.toml
 nano ./cidgravity_storage_connector.toml
