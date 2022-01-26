@@ -66,7 +66,7 @@ class Result:
     MAGENTA = '\033[35m'
     ENDC = '\033[0m'
 
-    NUMBER_OF_STEPS = 6
+    NUMBER_OF_STEPS = 7
     STEP = 1
 
     def success(string=""):
@@ -353,7 +353,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     else:
         Result.success()
 
-    # VERIFY DEAL FILTER IS CONFIGURED IN config.toml
+    # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
     ###
     Result.label(f"Filter activated on lotus-{node_type}")
 
@@ -368,6 +368,23 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
             Result.success()
         else:
             Result.exit_failed(f'"Filter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
+    # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
+    ###
+    Result.label(f"RetrievalFilter activated on lotus-{node_type}")
+
+    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
+    try:
+        filter_retrieval = config["Dealmaking"]["RetrievalFilter"]
+    except Exception as exception:
+        Result.exit_failed(f'RetrievalFilter not set in  {config_file}', 'Add the following line to the [Dealmaking] section.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+    else:
+        import re
+        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_retrieval):
+            Result.success()
+        else:
+            Result.exit_failed(f'"RetrievalFilter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
 
     Result.allgood()
 

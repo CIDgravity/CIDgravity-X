@@ -34,6 +34,7 @@ nano ./cidgravity_storage_connector.toml
 4. Enable "CIDgravity connector" in lotus-miner by adding the following line to .lotusminer/config.toml under the [Dealmaking] section
 ```
 Filter = "ABSOLUTE_PATH/cidgravity_storage_connector.py --reject"
+RetrievalFilter = "ABSOLUTE_PATH/cidgravity_storage_connector.py --reject"
 ```
 5. Restart lotus-miner
 
