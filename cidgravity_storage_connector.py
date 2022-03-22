@@ -336,9 +336,9 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     # GET MARKETASK
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
     try:
-        getask = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
+        getask = json.load(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
     except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' {getask_url}")
+        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " +  getask_url)
 
     # GET SECTORSIZE
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [getask["Miner"]], "id": 3})
