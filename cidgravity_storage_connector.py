@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "1.3"
+VERSION = "1.4"
 
 ################################################################################
 # DEFAULT VALUES
