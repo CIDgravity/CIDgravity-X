@@ -174,7 +174,7 @@ def load_config_file(abs_path, default_behavior):
 def decision(value, internal_message, external_message=""):
     """ terminate script execution by printing messages and exiting with the appropriate code """
     exit_value = 0 if value == "accept" else 1
-    decision_msg = f'Deal {value}ed{external_message if external_message != "" else ""}'
+    decision_msg = f'Deal {value}ed{external_message}'
 
     # LOG DECISION AND REASON
     log(internal_message, value)
