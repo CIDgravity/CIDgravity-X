@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "1.3"
+VERSION = "1.4"
 
 ################################################################################
 # DEFAULT VALUES
@@ -174,7 +174,7 @@ def load_config_file(abs_path, default_behavior):
 def decision(value, internal_message, external_message=""):
     """ terminate script execution by printing messages and exiting with the appropriate code """
     exit_value = 0 if value == "accept" else 1
-    decision_msg = f'Deal {value}ed{(" | " + external_message) if external_message != "" else ""}'
+    decision_msg = f'Deal {value}ed{external_message}'
 
     # LOG DECISION AND REASON
     log(internal_message, value)
@@ -230,7 +230,7 @@ def run():
     # APPLY DECISION
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
 
-    fullExternalMessage = api_result['externalMessage']
+    fullExternalMessage = (" | " + api_result['externalMessage']) if api_result["externalMessage"] != "" else ""
     if api_result['customMessage'] != "":
         fullExternalMessage += " | " + api_result['customMessage']
 
