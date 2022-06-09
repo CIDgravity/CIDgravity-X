@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "1.4"
+VERSION = "1.5"
 
 ################################################################################
 # DEFAULT VALUES
@@ -174,6 +174,9 @@ def load_config_file(abs_path, default_behavior):
 def decision(value, internal_message, external_message=""):
     """ terminate script execution by printing messages and exiting with the appropriate code """
     exit_value = 0 if value == "accept" else 1
+    if (external_message != ""):
+        external_message = f' | {external_message}'
+
     decision_msg = f'Deal {value}ed{external_message}'
 
     # LOG DECISION AND REASON
@@ -230,9 +233,10 @@ def run():
     # APPLY DECISION
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
 
-    fullExternalMessage = (" | " + api_result['externalMessage']) if api_result["externalMessage"] != "" else ""
-    if api_result['customMessage'] != "":
-        fullExternalMessage += " | " + api_result['customMessage']
+    fullExternalMessage = (api_result['externalMessage']) if api_result["externalMessage"] != "" else ""
+    if api_result['customMessage'] != "" and fullExternalMessage != "":
+        fullExternalMessage += " | "
+    fullExternalMessage += api_result['customMessage']
 
     decision(decision_value, api_result['internalMessage'], fullExternalMessage)
 
@@ -288,7 +292,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     if response.status_code == 200:
         Result.success({response.content.decode('utf-8')})
     elif response.status_code == 401:
-        Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "edit your config file and add the CID gravity token inside. You find the CIDgravity token under Profile section on the CIDgravity portal", f"nano { ARGS.c }")
+        Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "edit your config file and add the CID gravity token inside. You find the CIDgravity token under [Settings]/OtherSettings on the CIDgravity app", f"nano { ARGS.c }")
     else:
         Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "connectivity issue with the CIDgravity cloud platform.")
 
