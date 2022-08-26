@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "1.5"
+VERSION = "1.6"
 
 ################################################################################
 # DEFAULT VALUES
@@ -220,7 +220,10 @@ def run():
     if response.status_code != 200:
         if CONFIG["logging"]["debug"]:
             log(json.dumps(dict(response.headers), indent=4, sort_keys=True) + "\n" + str(response.content), "API_RESPONSE", "DEBUG")
-        decision(DEFAULT_BEHAVIOR, f"Error : API code : { response.status_code } - { response.reason }", "Error")
+        if DEFAULT_BEHAVIOR == "accept":
+            decision(DEFAULT_BEHAVIOR, f"Error : API code : {response.status_code} - {response.reason}", "")
+        else:
+            decision(DEFAULT_BEHAVIOR, f"Error : API code : {response.status_code} - {response.reason}", "Error")
 
     # READ API RESPONSE
     try:
