@@ -2,7 +2,7 @@ The "CIDgravity connector" connects a lotus-miner to the CIDgravity service.
 This lighweight connector is executed locally by the lotus-miner process each time the lotus-miner receives a deal proposal.
 
 # Requirements 
-1. Get a CIDgravity account (contact@cidgravity.com)
+1. Get a CIDgravity account : https://cidgravity.com
 2. Depending of your setup :
         - Monolitic lotus : deploy CIDgravity Connector on your miner only (if you don't know what is split store, you probably run a Monolitic lotus)
         - Split Store lotus : deploy CID gravity Connector on all markets node instead of the miner
