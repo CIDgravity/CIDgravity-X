@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "1.6"
+VERSION = "1.7"
 
 ################################################################################
 # DEFAULT VALUES
@@ -233,6 +233,8 @@ def run():
     if CONFIG["logging"]["debug"]:
         log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
 
+    # XXX Verifier que le champs decision exist dans le json sinon ERROR
+
     # APPLY DECISION
     decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
 
@@ -303,16 +305,19 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     ###
     node_type = "Unknown"
     if 'LOTUS_MARKETS_PATH' in os.environ.keys():
-        node_type = "markets"
         config_path = os.environ['LOTUS_MARKETS_PATH']
+        if os.path.exists(config_path + "/boost.db"):
+            node_type = "boost"
+        else:
+            node_type = "lotus-markets"
     elif 'LOTUS_MINER_PATH' in os.environ.keys():
-        node_type = "miner or markets"
+        node_type = "lotus-miner or lotus-markets"
         config_path = os.environ['LOTUS_MINER_PATH']
     else:
-        node_type = "miner or markets"
+        node_type = "lotus-miner or lotus-markets"
         config_path = os.environ['HOME'] + "/.lotusminer"
 
-    Result.label(f"Lotus-{ node_type } environment")
+    Result.label(f"{ node_type } environment")
 
     # Check config file exist
     config_file = config_path + "/config.toml"
@@ -329,13 +334,13 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     Result.success()
 
-    Result.label(f"Lotus-{node_type} get-ask")
+    Result.label(f"{node_type} get-ask")
     # GET API URL
     try:
         with open(config_path + "/api", "r") as text_file:
             api_line = text_file.read()
     except Exception as exception:
-        Result.exit_failed(f'Cannot read {config_path + "/api"} : { exception }', f"verify the process is running { node_type }", f"pgrep lotus")
+        Result.exit_failed(f'Cannot read {config_path + "/api"} : { exception }', f"verify the process is running { node_type }", f"epgrep \"(boost|lotus)\"")
     else:
         api = api_line.split("/")
         getask_url = "http://" + api[2] + ":" + api[4] + "/rpc/v0"
@@ -362,7 +367,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label(f"Filter activated on lotus-{node_type}")
+    Result.label(f"Filter activated on {node_type}")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
@@ -378,7 +383,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label(f"RetrievalFilter activated on lotus-{node_type}")
+    Result.label(f"RetrievalFilter activated on {node_type}")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
