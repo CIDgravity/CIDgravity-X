@@ -1,5 +1,5 @@
 [api]
-endpoint = "https://api.cidgravity.com/api/proposal/check"
+endpoint = "https://api.cidgravity.com"
 token = "YOUR_API_TOKEN"
 
 [logging]

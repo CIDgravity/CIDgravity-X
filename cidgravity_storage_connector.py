@@ -30,8 +30,9 @@ import sys
 import os.path
 import argparse
 import datetime
+from urllib.parse import urlparse
 
-VERSION = "1.7"
+VERSION = "2.0"
 
 ################################################################################
 # DEFAULT VALUES
@@ -179,10 +180,10 @@ def decision(value, internal_message, external_message=""):
 
     decision_msg = f'Deal {value}ed{external_message}'
 
-    # LOG DECISION AND REASON
+    # LOG DECISION AND REASON
     log(internal_message, value)
 
-    # EXTERNAL MESSAGE AND DECISION
+    # EXTERNAL MESSAGE AND DECISION
     print(decision_msg, end="")
     sys.exit(exit_value)
 
@@ -197,8 +198,28 @@ def run():
         deal_proposal = json.load(sys.stdin)
     except Exception as exception:
         decision(DEFAULT_BEHAVIOR, f"Error : Connector unable to parse the deal proposal : {exception}", "Error")
+
     if CONFIG["logging"]["debug"]:
         log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
+
+    # EXTRACT Proposal.Label field
+    try:
+        label = deal_proposal['Proposal']['Label']
+    except Exception as exception:
+        decision(DEFAULT_BEHAVIOR, f"Error : Connector unable to find label field : {exception}", "Error")
+    if CONFIG["logging"]["debug"]:
+        log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
+
+    # DEFINE THE ENDPOINT ACCORDING TO LABEL VALUE (proposal checker or status checker)
+    hostname = urlparse(CONFIG["api"]["endpoint"]).hostname
+
+    if hostname is None:
+        decision(DEFAULT_BEHAVIOR, f"Invalid configuration : endpoint must begin with https:// and be a valid root url", "Error")
+
+    if label.startswith('cidg-keep-alive'):
+        endpoint = "https://" + hostname + "/api/v1/status-checker/proposal/check"
+    else:
+        endpoint = "https://" + hostname + "/api/proposal/check"
 
     # SET HEADERS
     headers = {
@@ -212,7 +233,7 @@ def run():
     try:
         # Module is imported here to be able to return default behavior
         import requests
-        response = requests.post(CONFIG["api"]["endpoint"], json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
+        response = requests.post(endpoint, json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
     except Exception as exception:
         decision(DEFAULT_BEHAVIOR, f"Error  : connecting API failed : { exception }", "Error")
 
@@ -289,8 +310,14 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION,
     }
+
+    hostname = urlparse(CONFIG["api"]["endpoint"]).hostname
+
+    if hostname is None:
+        Result.exit_failed(f"Invalid configuration : endpoint must begin with https:// and be a valid root url", "", "")
+
     try:
-        response = requests.post(CONFIG["api"]["endpoint"] + "/ping", data=None, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
+        response = requests.post("https://" + hostname + "/api/proposal/check/ping", data=None, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
     except requests.exceptions.RequestException  as exception:
         Result.exit_failed(f'API error : { exception }', "", "")
 
