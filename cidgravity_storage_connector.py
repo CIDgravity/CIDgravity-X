@@ -216,8 +216,8 @@ def run():
     if hostname is None:
         decision(DEFAULT_BEHAVIOR, f"Invalid configuration : endpoint must begin with https:// and be a valid root url", "Error")
 
-    if label.startswith('cidg-keep-alive'):
-        endpoint = "https://" + hostname + "/api/v1/status-checker/proposal/check"
+    if label.startswith('cidg-miner-status-check'):
+        endpoint = "https://" + hostname + "/api/v1/miner-status-check/proposal/check"
     else:
         endpoint = "https://" + hostname + "/api/proposal/check"
 
