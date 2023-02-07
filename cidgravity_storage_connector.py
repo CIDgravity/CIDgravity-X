@@ -41,14 +41,15 @@ VERSION = "2.0"
 TIMEOUT_CONNECT = 2
 TIMEOUT_READ = 5
 
-# DEFAULT COFNIG LOCATION
+# DEFAULT CONFIG LOCATION
 DEFAULT_CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.toml"
 
-# MANDATORY FIELDS IN CONFIG FILE
+# MANDATORY FIELDS IN CONFIG FILE (IF VALUE IS EMPTY = CONFIG FIELD MANDATORY)
 CONFIG = {
     'api': {
-        'endpoint': 'https://api.cidgravity.com/api/proposal/check',
-        'token': ''
+        'token': '',
+        'endpoint_proposal_check': 'https://api.cidgravity.com',
+        'endpoint_miner_status_check': 'https://service.cidgravity.com'
     },
     'logging': {
         'log_file': '/var/log/lotus/cidgravity_storage_connector.log',
@@ -149,8 +150,8 @@ def load_config_file(abs_path, default_behavior):
     except Exception as exception:
         raise ConfigFileException(default_behavior, f'Cannot load { abs_path } : { exception }')
 
-    # VERIFY THAT ALL TOML MANDATORY FILEDS EXIST
-    for section_name, section in  CONFIG.items():
+    # VERIFY THAT ALL TOML MANDATORY FIELDS EXIST
+    for section_name, section in CONFIG.items():
         for variable_name, value in section.items():
             try:
                 new_value = new_config[section_name][variable_name]
@@ -210,16 +211,14 @@ def run():
     if CONFIG["logging"]["debug"]:
         log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
 
-    # DEFINE THE ENDPOINT ACCORDING TO LABEL VALUE (proposal checker or status checker)
-    hostname = urlparse(CONFIG["api"]["endpoint"]).hostname
-
-    if hostname is None:
-        decision(DEFAULT_BEHAVIOR, f"Invalid configuration : endpoint must begin with https:// and be a valid root url", "Error")
-
+    # DEFINE THE ENDPOINT ACCORDING TO LABEL VALUE
+    # DEFAULT VALUE OR CONFIG.TOML VALUE IS SET DURING THE LOAD_CONFIG_FILE FUNCTION
     if label.startswith('cidg-miner-status-check'):
-        endpoint = "https://" + hostname + "/api/v1/miner-status-check/proposal/check"
+        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status-check/proposal/check"
     else:
-        endpoint = "https://" + hostname + "/api/proposal/check"
+        endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
+
+    print(endpoint)
 
     # SET HEADERS
     headers = {
@@ -444,7 +443,7 @@ if __name__ == "__main__":
         check()
         sys.exit(0)
 
-    # DEFINE DEFAULT BEHAVIOR IN CASE ERRORS OCCURED
+    # DEFINE DEFAULT BEHAVIOR IN CASE ERRORS OCCURED
     DEFAULT_BEHAVIOR = "reject" if ARGS.reject else "accept"
 
     # LOAD CONFIG FILE

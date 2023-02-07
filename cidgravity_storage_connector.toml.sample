@@ -1,5 +1,6 @@
 [api]
-endpoint = "https://api.cidgravity.com"
+endpoint_proposal_check = "https://api.cidgravity.com"
+endpoint_miner_status_check = "https://service.cidgravity.com"
 token = "YOUR_API_TOKEN"
 
 [logging]
