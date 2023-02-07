@@ -218,8 +218,6 @@ def run():
     else:
         endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
 
-    print(endpoint)
-
     # SET HEADERS
     headers = {
         'Authorization': CONFIG["api"]["token"],
