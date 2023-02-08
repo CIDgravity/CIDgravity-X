@@ -4,9 +4,12 @@ This lighweight connector is executed locally by the lotus-miner process each ti
 # Requirements 
 1. Get a CIDgravity account : https://cidgravity.com
 2. Depending of your setup :
+        - Boost : deploy CIDgravity Connector on the boost node server
         - Monolitic lotus : deploy CIDgravity Connector on your miner only (if you don't know what is split store, you probably run a Monolitic lotus)
         - Split Store lotus : deploy CID gravity Connector on all markets node instead of the miner
 3. Set your get-ask prices to 0 and size to the widest range : 
+        1. Boost : using the boost UI
+        2. Lotus : 
 ```
 lotus-miner storage-deals set-ask --price 0 --verified-price 0 --min-piece-size 256 --max-piece-size MINER_SEC_SIZE
 ```
@@ -31,11 +34,11 @@ nano ./cidgravity_storage_connector.toml
 ```
 ./cidgravity_storage_connector.py --check
 ```
-4. Enable "CIDgravity connector" in lotus-miner by adding the following line to .lotusminer/config.toml under the [Dealmaking] section
+4. Enable "CIDgravity connector" in lotus-miner or boost config.toml under the [Dealmaking] section
 ```
 Filter = "ABSOLUTE_PATH/cidgravity_storage_connector.py --reject"
 RetrievalFilter = "ABSOLUTE_PATH/cidgravity_storage_connector.py --reject"
 ```
-5. Restart lotus-miner
+5. Restart boost or lotus-miner
 
 DONE :) you can now enjoy CIDgravity
