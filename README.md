@@ -7,9 +7,9 @@ This lighweight connector is executed locally by the lotus-miner process each ti
         - Boost : deploy CIDgravity Connector on the boost node server
         - Monolitic lotus : deploy CIDgravity Connector on your miner only (if you don't know what is split store, you probably run a Monolitic lotus)
         - Split Store lotus : deploy CID gravity Connector on all markets node instead of the miner
-3. Set your get-ask prices to 0 and size to the widest range : 
-        1. Boost : using the boost UI
-        2. Lotus : 
+3. Set your get-ask prices to 0 and size to the widest range :
+  - Boost : using the boost UI
+  - Lotus : 
 ```
 lotus-miner storage-deals set-ask --price 0 --verified-price 0 --min-piece-size 256 --max-piece-size MINER_SEC_SIZE
 ```
