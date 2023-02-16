@@ -68,7 +68,7 @@ class Result:
     MAGENTA = '\033[35m'
     ENDC = '\033[0m'
 
-    NUMBER_OF_STEPS = 7
+    NUMBER_OF_STEPS = 9
     STEP = 1
 
     def success(string=""):
@@ -97,7 +97,7 @@ class Result:
 
     def label(string):
         """ display a label"""
-        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<35} '.format(string), end="")
+        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<45} '.format(string), end="")
         Result.STEP += 1
 
     def allgood():
@@ -105,7 +105,7 @@ class Result:
         print(Result.MAGENTA + '''
  _________________________________________________
 / All set! the connector is properly configured.  \\
-\ Don't forget to restart the miner OR the market /
+\          Don't forget to restart boost          /
  -------------------------------------------------
         \   ^__^
          \  (\033[05moo\033[0m\033[35m)\_______
@@ -113,7 +113,6 @@ class Result:
                 ||----w |
                 ||     ||
 ''' + Result.ENDC)
-
 
 class ConfigFileException(Exception):
     """ ConfigFile Exception Class """
@@ -125,7 +124,7 @@ class ConfigFileException(Exception):
         super().__init__(self.message)
 
 class LogFileException(ConfigFileException):
-    pass
+    """ Custom Logger Exception Class """
 
 def log(msg, code="", level="INFO"):
     """ logging decision and debug to a local file """
@@ -135,7 +134,6 @@ def log(msg, code="", level="INFO"):
             print('{0:<20} {1:<6} {2:<12} {3:>}'.format(output_date, level, code, msg), file=logfile)
     except:
         pass
-
 
 def load_config_file(abs_path, default_behavior):
     """ LOAD CONFIGURATION FILE """
@@ -170,12 +168,10 @@ def load_config_file(abs_path, default_behavior):
     if not isinstance(CONFIG["logging"]["debug"], bool):
         raise ConfigFileException(default_behavior, f"[logging][debug] is not a boolean : {type(CONFIG['logging']['debug'])}")
 
-
-
 def decision(value, internal_message, external_message=""):
     """ terminate script execution by printing messages and exiting with the appropriate code """
     exit_value = 0 if value == "accept" else 1
-    if (external_message != ""):
+    if external_message != "":
         external_message = f' | {external_message}'
 
     decision_msg = f'Deal {value}ed{external_message}'
@@ -186,8 +182,6 @@ def decision(value, internal_message, external_message=""):
     # EXTERNAL MESSAGE AND DECISION
     print(decision_msg, end="")
     sys.exit(exit_value)
-
-
 
 def run():
     """ check deal acceptance against api each time boost
@@ -204,19 +198,23 @@ def run():
 
     # EXTRACT Proposal.Label field, if not found consider an empty label (this is good enough to consider it as a proposal and not a miner status check)
     # Extract from legacy format
+    label = ""
     try:
-        label = deal_proposal['Proposal']['Label']
+        dealtype = deal_proposal['DealType']
     except Exception as exception:
-        log(msg="Unable to find Proposal/Label value", level="WARNING")
-        label = ""
-
-    # Extract from boost 2.X format
-    if label == "":
-        try:
-            label = deal_proposal['ClientDealProposal']['Proposal']['Label']
-        except Exception as exception:
-            log(msg="Unable to find Proposal/Label value", level="WARNING")
-            label = ""
+        log("Unable to identify deal type", "PARSE PROPOSAL", "WARNING")
+    else:
+        if dealtype == "storage":
+            # Extract from boost 2.X format
+            try:
+                label = deal_proposal['ClientDealProposal']['Proposal']['Label']
+            except Exception as exception:
+                try:
+                    # Extract for Label in legacy format
+                    label = deal_proposal['Proposal']['Label']
+                except Exception as exception:
+                    log("Unable to find /Proposal/Label value", "PARSE PROPOSAL", level="WARNING")
+                    label = ""
 
     # SELECT THE ENDPOINT ACCORDING TO LABEL VALUE
     # DEFAULT VALUE OR CONFIG.TOML VALUE IS SET DURING THE LOAD_CONFIG_FILE FUNCTION
@@ -399,7 +397,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label(f"Filter activated in {node_type}")
+    Result.label(f"[Dealmaking][Filter] activated")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
@@ -415,7 +413,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label(f"RetrievalFilter activated in {node_type}")
+    Result.label(f"[Dealmaking][RetrievalFilter] activated")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
@@ -428,6 +426,39 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
             Result.success()
         else:
             Result.exit_failed(f'"RetrievalFilter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
+    # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
+    ###
+    Result.label(f"[LotusDealmaking][Filter] activated")
+
+    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
+    try:
+        filter_storage = config["LotusDealmaking"]["Filter"]
+    except Exception as exception:
+        Result.exit_failed(f'Filter not set in  {config_file}', 'Add the following line to the [LotusDealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
+    else:
+        import re
+        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
+            Result.success()
+        else:
+            Result.exit_failed(f'"Filter" found in [LotusDealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [LotusDealmaking] section and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
+    # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
+    ###
+    Result.label(f"[LotusDealmaking][RetrievalFilter] activated")
+
+    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
+    try:
+        filter_retrieval = config["LotusDealmaking"]["RetrievalFilter"]
+    except Exception as exception:
+        Result.exit_failed(f'RetrievalFilter not set in  {config_file}', 'Add the following line to the [LotusDealmaking] section.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+    else:
+        import re
+        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_retrieval):
+            Result.success()
+        else:
+            Result.exit_failed(f'"RetrievalFilter" found in [LotusDealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [LotusDealmaking] section and run the --check again.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
 
 
     Result.allgood()
