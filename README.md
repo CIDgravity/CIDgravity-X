@@ -27,7 +27,7 @@ sudo -i -u <USER_RUNNING_BOOST_PROCESS>
 git clone https://github.com/CIDgravity/CIDgravity-X.git
 cd CIDgravity-X
 ```
-2. Add the CIDgravity authentication TOKEN (TOKEN is located at https://app.cidgravity.com under Settings/Other settings")
+2. Add the CIDgravity authentication <TOKEN> (located at https://app.cidgravity.com under Settings/Other settings")
 ```
 cp cidgravity_storage_connector.toml.sample cidgravity_storage_connector.toml
 nano ./cidgravity_storage_connector.toml
