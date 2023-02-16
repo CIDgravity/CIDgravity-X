@@ -37,10 +37,9 @@ nano ./cidgravity_storage_connector.toml
 ./cidgravity_storage_connector.py --check
 ```
 4. Enable "CIDgravity connector" in boost by adding the following lines to boost config (usually ~/.boost/config.toml) under the [Dealmaking] and [LotusDealmaking] section
+
 ```
 Filter = "<ABSOLUTE_PATH>/cidgravity_storage_connector.py --reject"
 RetrievalFilter = "<ABSOLUTE_PATH>/cidgravity_storage_connector.py --reject"
 ```
 5. Restart boost
-
-DONE :) you can now enjoy CIDgravity
