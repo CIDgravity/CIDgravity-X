@@ -1,7 +1,8 @@
 [api]
-endpoint = "https://api.cidgravity.com/api/proposal/check"
-token = "YOUR_API_TOKEN"
+# token = "CIDGRAVITY_MINER_API_TOKEN_HERE"
+# endpoint_proposal_check = "https://api.cidgravity.com"
+# endpoint_miner_status_check = "https://service.cidgravity.com"
 
 [logging]
-log_file = "/var/log/lotus/cidgravity_storage_connector.log"
-debug = true
+# log_file = "/var/log/lotus/cidgravity_storage_connector.log"
+# debug = false

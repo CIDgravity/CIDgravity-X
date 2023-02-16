@@ -30,8 +30,9 @@ import sys
 import os.path
 import argparse
 import datetime
+from urllib.parse import urlparse
 
-VERSION = "1.7"
+VERSION = "2.0"
 
 ################################################################################
 # DEFAULT VALUES
@@ -40,14 +41,15 @@ VERSION = "1.7"
 TIMEOUT_CONNECT = 2
 TIMEOUT_READ = 5
 
-# DEFAULT COFNIG LOCATION
+# DEFAULT CONFIG LOCATION
 DEFAULT_CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.toml"
 
-# MANDATORY FIELDS IN CONFIG FILE
+# MANDATORY FIELDS IN CONFIG FILE (IF VALUE IS EMPTY = CONFIG FIELD MANDATORY)
 CONFIG = {
     'api': {
-        'endpoint': 'https://api.cidgravity.com/api/proposal/check',
-        'token': ''
+        'token': '',
+        'endpoint_proposal_check': 'https://api.cidgravity.com',
+        'endpoint_miner_status_check': 'https://service.cidgravity.com'
     },
     'logging': {
         'log_file': '/var/log/lotus/cidgravity_storage_connector.log',
@@ -66,7 +68,7 @@ class Result:
     MAGENTA = '\033[35m'
     ENDC = '\033[0m'
 
-    NUMBER_OF_STEPS = 7
+    NUMBER_OF_STEPS = 9
     STEP = 1
 
     def success(string=""):
@@ -95,7 +97,7 @@ class Result:
 
     def label(string):
         """ display a label"""
-        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<35} '.format(string), end="")
+        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<45} '.format(string), end="")
         Result.STEP += 1
 
     def allgood():
@@ -103,7 +105,7 @@ class Result:
         print(Result.MAGENTA + '''
  _________________________________________________
 / All set! the connector is properly configured.  \\
-\ Don't forget to restart the miner OR the market /
+\          Don't forget to restart boost          /
  -------------------------------------------------
         \   ^__^
          \  (\033[05moo\033[0m\033[35m)\_______
@@ -111,7 +113,6 @@ class Result:
                 ||----w |
                 ||     ||
 ''' + Result.ENDC)
-
 
 class ConfigFileException(Exception):
     """ ConfigFile Exception Class """
@@ -123,7 +124,7 @@ class ConfigFileException(Exception):
         super().__init__(self.message)
 
 class LogFileException(ConfigFileException):
-    pass
+    """ Custom Logger Exception Class """
 
 def log(msg, code="", level="INFO"):
     """ logging decision and debug to a local file """
@@ -133,8 +134,6 @@ def log(msg, code="", level="INFO"):
             print('{0:<20} {1:<6} {2:<12} {3:>}'.format(output_date, level, code, msg), file=logfile)
     except:
         pass
-
-
 
 def load_config_file(abs_path, default_behavior):
     """ LOAD CONFIGURATION FILE """
@@ -148,8 +147,8 @@ def load_config_file(abs_path, default_behavior):
     except Exception as exception:
         raise ConfigFileException(default_behavior, f'Cannot load { abs_path } : { exception }')
 
-    # VERIFY THAT ALL TOML MANDATORY FILEDS EXIST
-    for section_name, section in  CONFIG.items():
+    # VERIFY THAT ALL TOML MANDATORY FIELDS EXIST
+    for section_name, section in CONFIG.items():
         for variable_name, value in section.items():
             try:
                 new_value = new_config[section_name][variable_name]
@@ -169,27 +168,23 @@ def load_config_file(abs_path, default_behavior):
     if not isinstance(CONFIG["logging"]["debug"], bool):
         raise ConfigFileException(default_behavior, f"[logging][debug] is not a boolean : {type(CONFIG['logging']['debug'])}")
 
-
-
 def decision(value, internal_message, external_message=""):
     """ terminate script execution by printing messages and exiting with the appropriate code """
     exit_value = 0 if value == "accept" else 1
-    if (external_message != ""):
+    if external_message != "":
         external_message = f' | {external_message}'
 
     decision_msg = f'Deal {value}ed{external_message}'
 
-    # LOG DECISION AND REASON
+    # LOG DECISION AND REASON
     log(internal_message, value)
 
-    # EXTERNAL MESSAGE AND DECISION
+    # EXTERNAL MESSAGE AND DECISION
     print(decision_msg, end="")
     sys.exit(exit_value)
 
-
-
 def run():
-    """ check deal acceptance against api each time lotus
+    """ check deal acceptance against api each time boost
     calls the script and provide the proposal json on stdin"""
 
     # GET STDIN JSON PROPOSAL
@@ -197,8 +192,36 @@ def run():
         deal_proposal = json.load(sys.stdin)
     except Exception as exception:
         decision(DEFAULT_BEHAVIOR, f"Error : Connector unable to parse the deal proposal : {exception}", "Error")
+
     if CONFIG["logging"]["debug"]:
         log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
+
+    # EXTRACT Proposal.Label field, if not found consider an empty label (this is good enough to consider it as a proposal and not a miner status check)
+    # Extract from legacy format
+    label = ""
+    try:
+        dealtype = deal_proposal['DealType']
+    except Exception as exception:
+        log("Unable to identify deal type", "PARSE PROPOSAL", "WARNING")
+    else:
+        if dealtype == "storage":
+            # Extract from boost 2.X format
+            try:
+                label = deal_proposal['ClientDealProposal']['Proposal']['Label']
+            except Exception as exception:
+                try:
+                    # Extract for Label in legacy format
+                    label = deal_proposal['Proposal']['Label']
+                except Exception as exception:
+                    log("Unable to find /Proposal/Label value", "PARSE PROPOSAL", level="WARNING")
+                    label = ""
+
+    # SELECT THE ENDPOINT ACCORDING TO LABEL VALUE
+    # DEFAULT VALUE OR CONFIG.TOML VALUE IS SET DURING THE LOAD_CONFIG_FILE FUNCTION
+    if label.startswith('cidg-miner-status-check'):
+        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status-check/proposal/check"
+    else:
+        endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
 
     # SET HEADERS
     headers = {
@@ -212,7 +235,7 @@ def run():
     try:
         # Module is imported here to be able to return default behavior
         import requests
-        response = requests.post(CONFIG["api"]["endpoint"], json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
+        response = requests.post(endpoint, json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
     except Exception as exception:
         decision(DEFAULT_BEHAVIOR, f"Error  : connecting API failed : { exception }", "Error")
 
@@ -233,17 +256,19 @@ def run():
     if CONFIG["logging"]["debug"]:
         log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
 
-    # XXX Verifier que le champs decision exist dans le json sinon ERROR
+    # Extract API RESPONSE VALUE
+    try:
+        decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
+    except Exception as exception:
+        decision(DEFAULT_BEHAVIOR, f"Error : decision not found in API response : { exception } { response.content }", "Error")
 
     # APPLY DECISION
-    decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
+    full_external_message = (api_result['externalMessage']) if api_result["externalMessage"] != "" else ""
+    if api_result['customMessage'] != "" and full_external_message != "":
+        full_external_message += " | "
+    full_external_message += api_result['customMessage']
 
-    fullExternalMessage = (api_result['externalMessage']) if api_result["externalMessage"] != "" else ""
-    if api_result['customMessage'] != "" and fullExternalMessage != "":
-        fullExternalMessage += " | "
-    fullExternalMessage += api_result['customMessage']
-
-    decision(decision_value, api_result['internalMessage'], fullExternalMessage)
+    decision(decision_value, api_result['internalMessage'], full_external_message)
 
 def check():
     """ CHECK PROCESS EXECUTED WHEN USING --check """
@@ -289,8 +314,14 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION,
     }
+
+    hostname = urlparse(CONFIG["api"]["endpoint_proposal_check"]).hostname
+
+    if hostname is None:
+        Result.exit_failed(f"Invalid configuration : endpoint must begin with https:// and be a valid root url", "", "")
+
     try:
-        response = requests.post(CONFIG["api"]["endpoint"] + "/ping", data=None, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
+        response = requests.post("https://" + hostname + "/api/proposal/check/ping", data=None, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
     except requests.exceptions.RequestException  as exception:
         Result.exit_failed(f'API error : { exception }', "", "")
 
@@ -301,30 +332,29 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     else:
         Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "connectivity issue with the CIDgravity cloud platform.")
 
-    # VERIFY IF LOTUS-MARKETS EXIST
+    # VERIFY IF LOTUS-MARKETS VARIABLE EXIST
     ###
     node_type = "Unknown"
+    Result.label("Node type identification")
     if 'LOTUS_MARKETS_PATH' in os.environ.keys():
         config_path = os.environ['LOTUS_MARKETS_PATH']
         if os.path.exists(config_path + "/boost.db"):
             node_type = "boost"
         else:
-            node_type = "lotus-markets"
-    elif 'LOTUS_MINER_PATH' in os.environ.keys():
-        node_type = "lotus-miner or lotus-markets"
-        config_path = os.environ['LOTUS_MINER_PATH']
-    else:
-        node_type = "lotus-miner or lotus-markets"
-        config_path = os.environ['HOME'] + "/.lotusminer"
+            Result.exit_failed(f'LOTUS_MARKETS_PATH exists but not set to boost homedir', "when LOTUS_MARKETS_PATH is set, it should point to boost home dir", 'id\nexport "LOTUS_MARKETS_PATH=THIS_NODE_BOOST_HOME_DIR"')
 
-    Result.label(f"{ node_type } environment")
+    elif os.path.exists(os.environ['HOME'] + "/.boost/boost.db"):
+        config_path = os.environ['HOME'] + "/.boost"
+        node_type = "boost"
+    else:
+        Result.exit_failed(f'Cannot identify node type', "ensure this command run under the same user as boost. If you use another location than ~/.boost ensure that LOTUS_MARKETS_PATH is properly set prior running this command", 'id\nexport "LOTUS_MARKETS_PATH=XXX"')
 
     # Check config file exist
     config_file = config_path + "/config.toml"
     try:
         open(config_file, 'r').close()
     except Exception as exception:
-        Result.exit_failed(f'Cannot load { config_file } : { exception }', "ensure you are running this command from the same user as lotus. If you use another location than ~/.lotusminer ensure that LOTUS_MINER_PATH or LOTUS_MARKETS_PATH is properly set prior running this command", 'id\nexport "LOTUS_MINER_PATH=XXX"')
+        Result.exit_failed(f'Cannot load { config_file } : { exception }', "ensure this command run under the same user as boost. If you use another location than ~/.boost ensure that LOTUS_MARKETS_PATH is properly set prior running this command", 'id\nexport "LOTUS_MARKETS_PATH=XXX"')
 
     # Load config file
     try:
@@ -332,7 +362,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     except Exception as exception:
         Result.exit_failed(f'Cannot load { config_file } : { exception }', f"verify that config_file is in a proper toml format", f"nano {config_file}")
 
-    Result.success()
+    Result.success(node_type)
 
     Result.label(f"{node_type} get-ask")
     # GET API URL
@@ -340,7 +370,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         with open(config_path + "/api", "r") as text_file:
             api_line = text_file.read()
     except Exception as exception:
-        Result.exit_failed(f'Cannot read {config_path + "/api"} : { exception }', f"verify the process is running { node_type }", f"epgrep \"(boost|lotus)\"")
+        Result.exit_failed(f'Cannot read {config_path + "/api"} : { exception }', f"verify the process is running { node_type }", "pgrep -a boostd")
     else:
         api = api_line.split("/")
         getask_url = "http://" + api[2] + ":" + api[4] + "/rpc/v0"
@@ -350,24 +380,24 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     try:
         getask = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
     except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " +  getask_url)
+        Result.exit_failed(f'API error : { exception }', "verify boost API is accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " +  getask_url)
 
     # GET SECTORSIZE
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [getask["Miner"]], "id": 3})
     try:
         miner_sector_size = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]
     except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify the miner API are accessible on the local machine", 'curl -v -X PST --data \'{ "method": "Filecoin.ActorSectorSize", "params": ["' + getask["Miner"] + '"], "id": 3 }\' ' + getask_url)
+        Result.exit_failed(f'API error : { exception }', "verify boost API is accessible on the local machine", 'curl -v -X PST --data \'{ "method": "Filecoin.ActorSectorSize", "params": ["' + getask["Miner"] + '"], "id": 3 }\' ' + getask_url)
 
     # VERIFY GET ASK
     if getask['Price'] != "0" or getask['VerifiedPrice'] != "0" or getask['MinPieceSize'] != 256 or getask['MaxPieceSize'] != miner_sector_size:
-        Result.exit_failed(f'GET-ASK price has to be set to 0 and your accepting size to min=256B and max={miner_sector_size}', "set the prices and sizes by typing", f'lotus-miner storage-deals set-ask --price 0 --verified-price 0 --min-piece-size 256 --max-piece-size {miner_sector_size}')
+        Result.exit_failed(f'GET-ASK price has to be set to 0 and your accepting size to min=256B and max={miner_sector_size}', "set the prices and sizes via the boost", f'Connect the boost UI/Settings menu')
     else:
         Result.success()
 
     # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label(f"Filter activated on {node_type}")
+    Result.label(f"[Dealmaking][Filter] activated")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
@@ -383,7 +413,7 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
 
     # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label(f"RetrievalFilter activated on {node_type}")
+    Result.label(f"[Dealmaking][RetrievalFilter] activated")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
@@ -396,6 +426,39 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
             Result.success()
         else:
             Result.exit_failed(f'"RetrievalFilter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
+    # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
+    ###
+    Result.label(f"[LotusDealmaking][Filter] activated")
+
+    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
+    try:
+        filter_storage = config["LotusDealmaking"]["Filter"]
+    except Exception as exception:
+        Result.exit_failed(f'Filter not set in  {config_file}', 'Add the following line to the [LotusDealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
+    else:
+        import re
+        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
+            Result.success()
+        else:
+            Result.exit_failed(f'"Filter" found in [LotusDealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [LotusDealmaking] section and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
+    # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
+    ###
+    Result.label(f"[LotusDealmaking][RetrievalFilter] activated")
+
+    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
+    try:
+        filter_retrieval = config["LotusDealmaking"]["RetrievalFilter"]
+    except Exception as exception:
+        Result.exit_failed(f'RetrievalFilter not set in  {config_file}', 'Add the following line to the [LotusDealmaking] section.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+    else:
+        import re
+        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_retrieval):
+            Result.success()
+        else:
+            Result.exit_failed(f'"RetrievalFilter" found in [LotusDealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [LotusDealmaking] section and run the --check again.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+
 
 
     Result.allgood()
@@ -417,7 +480,7 @@ if __name__ == "__main__":
         check()
         sys.exit(0)
 
-    # DEFINE DEFAULT BEHAVIOR IN CASE ERRORS OCCURED
+    # DEFINE DEFAULT BEHAVIOR IN CASE ERRORS OCCURED
     DEFAULT_BEHAVIOR = "reject" if ARGS.reject else "accept"
 
     # LOAD CONFIG FILE
