@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "2.0"
+VERSION = "2.1"
 
 ################################################################################
 # DEFAULT VALUES
@@ -42,6 +42,7 @@ TIMEOUT_READ = 5
 
 # DEFAULT CONFIG LOCATION
 DEFAULT_CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.toml"
+DEFAULT_LOG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.log"
 
 # MANDATORY FIELDS IN CONFIG FILE
 CONFIG = {
@@ -52,7 +53,7 @@ CONFIG = {
         'endpoint_miner_status_check': 'https://service.cidgravity.com'
     },
     'logging': {
-        'log_file': '/var/log/lotus/cidgravity_storage_connector.log',
+        'log_file': DEFAULT_LOG_FILE,
         'debug': False
     }
 }
@@ -159,7 +160,16 @@ def load_config_file(abs_path, default_behavior):
             try:
                 new_value = new_config[section_name][variable_name]
             except Exception as exception:
-                if value == '':
+                # If API/token or API/tokenList is set that's fine we can proceed
+                if section_name == "api" and variable_name == "token":
+                    if "api" in new_config and "tokenList" in new_config["api"]:
+                        continue
+                elif section_name == "api" and variable_name == "tokenList":
+                    if "api" in new_config and "token" in new_config["api"]:
+                        continue
+
+                # If a param is empty in the default configuration it's mandatory so lets rise an error
+                if value in ('', []):
                     raise ConfigFileException(default_behavior,
                                               "[" + section_name + "][" + variable_name + "] missing in config file")
             else:
@@ -231,31 +241,26 @@ def run():
     else:
         endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
 
-    # LOTUS / VENUS : If only tokenList is set in config, use VENUS (SEND PROPOSAL ACCORDING PROVIDER FIELD)
-    # OTHERWISE USE LOTUS (SEND PROPOSAL USING TOKEN)
-    provider = ""
+    # Set token based on API/token and API/tokenList
     token = CONFIG["api"]["token"]
-
-    # EXTRACT PROVIDER FIELD FROM STDIN PROPOSAL
-    # Legacy location
-    if "Proposal" in deal_proposal:
-        if "Provider" in deal_proposal['Proposal']:
+    if len(token) == 0:
+        # Get providerID from proposal
+        provider = ""
+        try:
+            # provider location for legacy deals
             provider = deal_proposal['Proposal']['Provider']
-
-    # Boost v2.0 and 2.1
-    if "ClientDealProposal" in deal_proposal:
-        if "Proposal" in deal_proposal['ClientDealProposal']:
-            if "Provider" in deal_proposal['ClientDealProposal']['Proposal']:
+        except Exception as exception:
+            try:
+                # format_version = v2.0.0 / 2.1.0 or 2.2.0
                 provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
+            except:
+                decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported proposal format", "Error")
 
-    # IF WE NEED TO USE VENUS, UPDATE THE TOKEN VALUE
-    if "tokenList" in CONFIG["api"]:
         if len(CONFIG["api"]["tokenList"]) > 0:
             token = get_valid_token_for_provider(provider)
 
-            if token == "" or token is None:
+            if token is None:
                 decision(DEFAULT_BEHAVIOR, f"Error  : no valid token found to send the proposal", "Error")
-                return
 
     # SET HEADERS
     headers = {
@@ -306,8 +311,8 @@ def run():
     decision(decision_value, api_result['internalMessage'], full_external_message)
 
 
-def standard_check():
-    # Verify that required modules are installed
+def common_check():
+    ''' Verify that required modules are installed'''
     Result.label(f"Required python3 modules")
 
     try:
@@ -342,13 +347,14 @@ def standard_check():
         Result.success()
 
 
-def api_connectivity_check(tokenId, token):
+def api_connectivity_check(token_id, token):
+    ''' Check API connectivity '''
     import requests
 
-    if tokenId != -1:
-        Result.label(f'CIDgravity API connectivity for token {tokenId}')
+    if token_id != -1:
+        Result.label(f'CIDg API connectivity for token {token_id}')
     else:
-        Result.label('CIDgravity API connectivity')
+        Result.label('CIDg API connectivity')
 
     headers = {
         'Authorization': token,
@@ -375,6 +381,7 @@ def api_connectivity_check(tokenId, token):
 
 
 def get_valid_token_for_provider(provider):
+    ''' return for the token associated to the provider '''
     import re
 
     # SEARCH FOR VALID TOKEN FOR PROVIDER
@@ -393,22 +400,30 @@ def get_valid_token_for_provider(provider):
 
 
 def check_venus():
-    standard_check()
+    ''' run check specific to venus '''
+    Result.NUMBER_OF_STEPS = 3
+    common_check()
 
-    if 'tokenList' in CONFIG["api"]:
-        if len(CONFIG["api"]['tokenList']) > 0:
-            for tokenId, token in enumerate(CONFIG["api"]["tokenList"]):
-                api_connectivity_check(tokenId, token)
-        else:
-            Result.label('CIDgravity API connectivity')
-            Result.exit_failed("There is no valid token provided in 'tokenList'. Edit your config file ")
+    if len(CONFIG["api"]["token"]) > 0:
+        Result.label('CIDgravity API connectivity')
+        Result.exit_failed("[api][token] set, for VENUS only set [api][tokenList] and comment [api][token]. Edit your config file ")
+
+    if len(CONFIG["api"]['tokenList']) > 0:
+        for token_id, token in enumerate(CONFIG["api"]["tokenList"]):
+            api_connectivity_check(token_id, token)
     else:
-        Result.label("CIDgravity API connectivity")
-        Result.exit_failed("Missing 'tokenList' in your configuration file. Edit your config file")
+        Result.label('CIDgravity API connectivity')
+        Result.exit_failed("There is no valid token provided in 'tokenList'. Edit your config file ")
 
 
 def check_lotus():
-    standard_check()
+    ''' run check specific to lotus '''
+    common_check()
+
+    if len(CONFIG["api"]["token"]) == 0:
+        Result.label('CIDgravity API connectivity')
+        Result.exit_failed("[api][token] not set. Edit your config file ")
+
     api_connectivity_check(-1, CONFIG["api"]["token"])
 
     # VERIFY IF LOTUS-MARKETS VARIABLE EXIST
@@ -463,9 +478,7 @@ def check_lotus():
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
     try:
         getask = \
-            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)[
-                "result"][
-                "Ask"]
+            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
     except Exception as exception:
         Result.exit_failed(f'API error : {exception}', "verify the miner API are accessible on the local machine",
                            "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " + getask_url)
@@ -533,8 +546,8 @@ if __name__ == "__main__":
                         help="config file absolute path (default : " + DEFAULT_CONFIG_FILE + ")",
                         default=DEFAULT_CONFIG_FILE, metavar="PATH")
     GROUP.add_argument("--version", action='version', version=VERSION)
-    GROUP.add_argument("--check_lotus", help="check connector for LOTUS environment", action="store_true")
-    GROUP.add_argument("--check_venus", help="check connector for VENUS environment", action="store_true")
+    GROUP.add_argument("--check-lotus", help="check connector for LOTUS environment", action="store_true")
+    GROUP.add_argument("--check-venus", help="check connector for VENUS environment", action="store_true")
     GROUP.add_argument("--reject", help="reject all incoming deals if an error occurs", action="store_true")
     GROUP.add_argument("--accept", help="accept all incoming deals if an error occurs", action="store_true")
     ARGS = PARSER.parse_args()
