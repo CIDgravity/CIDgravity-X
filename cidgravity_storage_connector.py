@@ -237,8 +237,16 @@ def run():
     token = CONFIG["api"]["token"]
 
     # EXTRACT PROVIDER FIELD FROM STDIN PROPOSAL
-    if "Provider" in deal_proposal['Proposal']:
-        provider = deal_proposal['Proposal']['Provider']
+    # Legacy location
+    if "Proposal" in deal_proposal:
+        if "Provider" in deal_proposal['Proposal']:
+            provider = deal_proposal['Proposal']['Provider']
+
+    # Boost v2.0 and 2.1
+    if "ClientDealProposal" in deal_proposal:
+        if "Proposal" in deal_proposal['ClientDealProposal']:
+            if "Provider" in deal_proposal['ClientDealProposal']['Proposal']:
+                provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
 
     # IF WE NEED TO USE VENUS, UPDATE THE TOKEN VALUE
     if "tokenList" in CONFIG["api"]:

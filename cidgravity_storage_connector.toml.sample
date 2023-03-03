@@ -1,9 +1,13 @@
 [api]
+# Use only for BOST/LOTUS implementation
 # token = "CIDGRAVITY_MINER_API_TOKEN_HERE"
-# tokenList = ["YOUR_CIDGRAVITY_FIRST_API_TOKEN", "YOUR_CIDGRAVITY_SECOND_API_TOKEN"]
-# endpoint_proposal_check = "https://api.cidgravity.com"
-# endpoint_miner_status_check = "https://service.cidgravity.com"
+
+# Use only for VENUS implementation
+# tokenList = [
+#    "CIDGRAVITY_FIRST_API_TOKEN",
+#    "CIDGRAVITY_SECOND_API_TOKEN"
+#    ]
 
 [logging]
-log_file = "/var/log/lotus/cidgravity_storage_connector.log"
-debug = false
+#log_file = "/var/log/lotus/cidgravity_storage_connector.log"
+#debug = false
