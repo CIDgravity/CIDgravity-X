@@ -260,7 +260,7 @@ def run():
             token = get_valid_token_for_provider(provider)
 
             if token is None:
-                decision(DEFAULT_BEHAVIOR, f"Error  : no valid token found to send the proposal", "Error")
+                decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "Error")
 
     # SET HEADERS
     headers = {
