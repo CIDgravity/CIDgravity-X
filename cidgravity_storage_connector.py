@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "2.1"
+VERSION = "2.2"
 
 ################################################################################
 # DEFAULT VALUES
@@ -202,7 +202,7 @@ def decision(value, internal_message, external_message=""):
 
 
 def run():
-    """ check deal acceptance against api each time boost
+    """ check deal acceptance against api each time a proposal is received
     calls the script and provide the proposal json on stdin"""
 
     # GET STDIN JSON PROPOSAL
@@ -237,34 +237,37 @@ def run():
     # SELECT THE ENDPOINT ACCORDING TO LABEL VALUE
     # DEFAULT VALUE OR CONFIG.TOML VALUE IS SET DURING THE LOAD_CONFIG_FILE FUNCTION
     if label.startswith('cidg-miner-status-check'):
-        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status-check/proposal/check"
+        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status/check"
     else:
         endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
 
+    # Get providerID from proposal
+    provider = ""
+    try:
+        # provider location for legacy deals
+        provider = deal_proposal['Proposal']['Provider']
+    except Exception as exception:
+        try:
+            # format_version = v2.0.0 / 2.1.0 or 2.2.0
+            provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
+        except:
+            decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported proposal format", "Error")
+
+     
     # Set token based on API/token and API/tokenList
     token = CONFIG["api"]["token"]
     if len(token) == 0:
-        # Get providerID from proposal
-        provider = ""
-        try:
-            # provider location for legacy deals
-            provider = deal_proposal['Proposal']['Provider']
-        except Exception as exception:
-            try:
-                # format_version = v2.0.0 / 2.1.0 or 2.2.0
-                provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
-            except:
-                decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported proposal format", "Error")
-
         if len(CONFIG["api"]["tokenList"]) > 0:
             token = get_valid_token_for_provider(provider)
-
-            if token is None:
-                decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "Error")
+    
+        if (token is None) or (len(token) == 0):
+            decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "Error")
 
     # SET HEADERS
     headers = {
-        'Authorization': token,
+        'Authorization': token,   # Back
+        'X-API-KEY': token,       # Kong
+        'X-Address-ID': provider, # Kong
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION,
         'X-CIDgravity-DefaultBehavior': DEFAULT_BEHAVIOR
