@@ -23,7 +23,7 @@ sudo apt install python3-toml python3-requests
 # Get Started
 1. Install the connector
 ```
-sudo -i -u <USER_RUNNING_BOOST_PROCESS>
+sudo -i -u "<USER_RUNNING_BOOST_PROCESS>"
 git clone https://github.com/CIDgravity/CIDgravity-X.git
 cd CIDgravity-X
 ```
