@@ -30,9 +30,8 @@ import sys
 import os.path
 import argparse
 import datetime
-from urllib.parse import urlparse
 
-VERSION = "2.0"
+VERSION = "2.2"
 
 ################################################################################
 # DEFAULT VALUES
@@ -43,19 +42,22 @@ TIMEOUT_READ = 5
 
 # DEFAULT CONFIG LOCATION
 DEFAULT_CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.toml"
+DEFAULT_LOG_FILE = os.path.dirname(os.path.realpath(__file__)) + "/cidgravity_storage_connector.log"
 
-# MANDATORY FIELDS IN CONFIG FILE (IF VALUE IS EMPTY = CONFIG FIELD MANDATORY)
+# MANDATORY FIELDS IN CONFIG FILE
 CONFIG = {
     'api': {
         'token': '',
+        'tokenList': [],
         'endpoint_proposal_check': 'https://api.cidgravity.com',
         'endpoint_miner_status_check': 'https://service.cidgravity.com'
     },
     'logging': {
-        'log_file': '/var/log/lotus/cidgravity_storage_connector.log',
+        'log_file': DEFAULT_LOG_FILE,
         'debug': False
     }
 }
+
 
 class Result:
     """ a very simple class to display and format the --check results """
@@ -68,7 +70,7 @@ class Result:
     MAGENTA = '\033[35m'
     ENDC = '\033[0m'
 
-    NUMBER_OF_STEPS = 9
+    NUMBER_OF_STEPS = 7
     STEP = 1
 
     def success(string=""):
@@ -89,7 +91,7 @@ class Result:
 
     def failed(string):
         """ display a failed tag """
-        print(f"[{Result.RED}Failed {Result.ENDC}] {string}")
+        print(f"[{Result.RED}Failed{Result.ENDC}] {string}")
 
     def command(command):
         """ display a command"""
@@ -97,7 +99,8 @@ class Result:
 
     def label(string):
         """ display a label"""
-        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<45} '.format(string), end="")
+        print(f'{Result.GREY}{Result.STEP}/{Result.NUMBER_OF_STEPS} - {Result.ENDC}' + '{0:<35} '.format(string),
+              end="")
         Result.STEP += 1
 
     def allgood():
@@ -118,13 +121,16 @@ class ConfigFileException(Exception):
     """ ConfigFile Exception Class """
     decision_value = None
     message = None
+
     def __init__(self, value, internal_message):
         self.decision_value = value
         self.message = "Failed to load Config file : " + internal_message
         super().__init__(self.message)
 
+
 class LogFileException(ConfigFileException):
     """ Custom Logger Exception Class """
+
 
 def log(msg, code="", level="INFO"):
     """ logging decision and debug to a local file """
@@ -134,6 +140,7 @@ def log(msg, code="", level="INFO"):
             print('{0:<20} {1:<6} {2:<12} {3:>}'.format(output_date, level, code, msg), file=logfile)
     except:
         pass
+
 
 def load_config_file(abs_path, default_behavior):
     """ LOAD CONFIGURATION FILE """
@@ -145,7 +152,7 @@ def load_config_file(abs_path, default_behavior):
         import toml
         new_config = toml.load(abs_path)
     except Exception as exception:
-        raise ConfigFileException(default_behavior, f'Cannot load { abs_path } : { exception }')
+        raise ConfigFileException(default_behavior, f'Cannot load {abs_path} : {exception}')
 
     # VERIFY THAT ALL TOML MANDATORY FIELDS EXIST
     for section_name, section in CONFIG.items():
@@ -153,8 +160,18 @@ def load_config_file(abs_path, default_behavior):
             try:
                 new_value = new_config[section_name][variable_name]
             except Exception as exception:
-                if value == '':
-                    raise ConfigFileException(default_behavior, "[" + section_name + "][" + variable_name + "] missing in config file")
+                # If API/token or API/tokenList is set that's fine we can proceed
+                if section_name == "api" and variable_name == "token":
+                    if "api" in new_config and "tokenList" in new_config["api"]:
+                        continue
+                elif section_name == "api" and variable_name == "tokenList":
+                    if "api" in new_config and "token" in new_config["api"]:
+                        continue
+
+                # If a param is empty in the default configuration it's mandatory so lets rise an error
+                if value in ('', []):
+                    raise ConfigFileException(default_behavior,
+                                              "[" + section_name + "][" + variable_name + "] missing in config file")
             else:
                 CONFIG[section_name][variable_name] = new_value
 
@@ -183,8 +200,9 @@ def decision(value, internal_message, external_message=""):
     print(decision_msg, end="")
     sys.exit(exit_value)
 
+
 def run():
-    """ check deal acceptance against api each time boost
+    """ check deal acceptance against api each time a proposal is received
     calls the script and provide the proposal json on stdin"""
 
     # GET STDIN JSON PROPOSAL
@@ -219,13 +237,37 @@ def run():
     # SELECT THE ENDPOINT ACCORDING TO LABEL VALUE
     # DEFAULT VALUE OR CONFIG.TOML VALUE IS SET DURING THE LOAD_CONFIG_FILE FUNCTION
     if label.startswith('cidg-miner-status-check'):
-        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status-check/proposal/check"
+        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status/check"
     else:
         endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
 
+    # Get providerID from proposal
+    provider = ""
+    try:
+        # provider location for legacy deals
+        provider = deal_proposal['Proposal']['Provider']
+    except Exception as exception:
+        try:
+            # format_version = v2.0.0 / 2.1.0 or 2.2.0
+            provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
+        except:
+            decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported proposal format", "Error")
+
+     
+    # Set token based on API/token and API/tokenList
+    token = CONFIG["api"]["token"]
+    if len(token) == 0:
+        if len(CONFIG["api"]["tokenList"]) > 0:
+            token = get_valid_token_for_provider(provider)
+    
+        if (token is None) or (len(token) == 0):
+            decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "Error")
+
     # SET HEADERS
     headers = {
-        'Authorization': CONFIG["api"]["token"],
+        'Authorization': token,   # Back
+        'X-API-KEY': token,       # Kong
+        'X-Address-ID': provider, # Kong
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION,
         'X-CIDgravity-DefaultBehavior': DEFAULT_BEHAVIOR
@@ -237,12 +279,13 @@ def run():
         import requests
         response = requests.post(endpoint, json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"Error  : connecting API failed : { exception }", "Error")
+        decision(DEFAULT_BEHAVIOR, f"Error  : connecting API failed : {exception}", "Error")
 
     # MANAGE HTTP ERROR
     if response.status_code != 200:
         if CONFIG["logging"]["debug"]:
-            log(json.dumps(dict(response.headers), indent=4, sort_keys=True) + "\n" + str(response.content), "API_RESPONSE", "DEBUG")
+            log(json.dumps(dict(response.headers), indent=4, sort_keys=True) + "\n" + str(response.content),
+                "API_RESPONSE", "DEBUG")
         if DEFAULT_BEHAVIOR == "accept":
             decision(DEFAULT_BEHAVIOR, f"Error : API code : {response.status_code} - {response.reason}", "")
         else:
@@ -252,7 +295,7 @@ def run():
     try:
         api_result = response.json()
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"Error : unable to parse API response : { exception } { response.content }", "Error")
+        decision(DEFAULT_BEHAVIOR, f"Error : unable to parse API response : {exception} {response.content}", "Error")
     if CONFIG["logging"]["debug"]:
         log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
 
@@ -270,16 +313,11 @@ def run():
 
     decision(decision_value, api_result['internalMessage'], full_external_message)
 
-def check():
-    """ CHECK PROCESS EXECUTED WHEN USING --check """
-    print(f"""
-This will guide you and check the {Result.NUMBER_OF_STEPS} remaining small steps to get "CIDgravity connector" fully deployed and functionnal
-IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
-""")
 
-    # verify required modules are installed
-    ###
+def common_check():
+    ''' Verify that required modules are installed'''
     Result.label(f"Required python3 modules")
+
     try:
         import json
         import sys
@@ -288,52 +326,110 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         import datetime
         import requests
         import toml
+        import re
     except Exception as exception:
-        Result.exit_failed(f"loading python3 modules : {exception}", "install the missing packages", 'sudo apt install python3-requests python3-toml')
+        Result.exit_failed(f"loading python3 modules : {exception}", "install the missing packages",
+                           'sudo apt install python3-requests python3-toml python3-regex')
     else:
         Result.success()
 
-    # CHECK CONFIG FILE
-    ###
+    # Check the config file
     Result.label("CIDgravity config File")
+
     try:
         load_config_file(ARGS.c, True)
     except LogFileException as exception:
-        Result.exit_failed(exception.message, "review logfile access permissions or configure another logfile path in cidgravity_storage_connector.toml")
+        Result.exit_failed(exception.message,
+                           "review logfile access permissions or configure another logfile path in "
+                           "cidgravity_storage_connector.toml")
     except ConfigFileException as exception:
-        Result.exit_failed(exception.message, "create a configfile directly from the template and add your token inside", f"cp {ARGS.c}.sample {ARGS.c}")
+        Result.exit_failed(exception.message,
+                           "create a configfile directly from the template and add your token inside",
+                           f"cp {ARGS.c}.sample {ARGS.c}")
     else:
         Result.success()
 
-    # VERIFY API CONNECTIVITY TO CID gravity
-    ###
 
-    Result.label("CIDgravity API connectivity")
+def api_connectivity_check(token_id, token):
+    ''' Check API connectivity '''
+    import requests
+
+    if token_id != -1:
+        Result.label(f'CIDg API connectivity for token {token_id}')
+    else:
+        Result.label('CIDg API connectivity')
+
     headers = {
-        'Authorization': CONFIG["api"]["token"],
+        'Authorization': token,
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION,
     }
-
-    hostname = urlparse(CONFIG["api"]["endpoint_proposal_check"]).hostname
-
-    if hostname is None:
-        Result.exit_failed(f"Invalid configuration : endpoint must begin with https:// and be a valid root url", "", "")
-
     try:
-        response = requests.post("https://" + hostname + "/api/proposal/check/ping", data=None, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
-    except requests.exceptions.RequestException  as exception:
-        Result.exit_failed(f'API error : { exception }', "", "")
+        response = requests.post(CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check/ping", data=None, headers=headers,
+                                 timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
+    except requests.exceptions.RequestException as exception:
+        Result.exit_failed(f'API error : {exception}', "", "")
 
     if response.status_code == 200:
         Result.success({response.content.decode('utf-8')})
     elif response.status_code == 401:
-        Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "edit your config file and add the CID gravity token inside. You find the CIDgravity token under [Settings]/OtherSettings on the CIDgravity app", f"nano { ARGS.c }")
+        Result.exit_failed(
+            f'Connection to {CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check/ping"} : {response.status_code} - {response.reason}',
+            "edit your config file and add the CID gravity token inside. You find the CIDgravity token under [Settings]/OtherSettings on the CIDgravity app",
+            f"nano {ARGS.c}")
     else:
-        Result.exit_failed(f'Connection to {CONFIG["api"]["endpoint"] + "/ping"} : {response.status_code} - {response.reason}', "connectivity issue with the CIDgravity cloud platform.")
+        Result.exit_failed(
+            f'Connection to {CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check/ping"} : {response.status_code} - {response.reason}',
+            "connectivity issue with the CIDgravity cloud platform.")
+
+
+def get_valid_token_for_provider(provider):
+    ''' return for the token associated to the provider '''
+    import re
+
+    # SEARCH FOR VALID TOKEN FOR PROVIDER
+    for token in CONFIG["api"]["tokenList"]:
+        try:
+            match = re.search('^[^-]*', token)
+
+            if match:
+                if match.group(0) == provider:
+                    return token
+        except AttributeError:
+            pass
+
+    # IF NOT FOUND, RETURN NONE, WE WILL HANDLE AN ERROR
+    return None
+
+
+def check_venus():
+    ''' run check specific to venus '''
+    Result.NUMBER_OF_STEPS = 3
+    common_check()
+
+    if len(CONFIG["api"]["token"]) > 0:
+        Result.label('CIDgravity API connectivity')
+        Result.exit_failed("[api][token] set, for VENUS only set [api][tokenList] and comment [api][token]. Edit your config file ")
+
+    if len(CONFIG["api"]['tokenList']) > 0:
+        for token_id, token in enumerate(CONFIG["api"]["tokenList"]):
+            api_connectivity_check(token_id, token)
+    else:
+        Result.label('CIDgravity API connectivity')
+        Result.exit_failed("There is no valid token provided in 'tokenList'. Edit your config file ")
+
+
+def check_lotus():
+    ''' run check specific to lotus '''
+    common_check()
+
+    if len(CONFIG["api"]["token"]) == 0:
+        Result.label('CIDgravity API connectivity')
+        Result.exit_failed("[api][token] not set. Edit your config file ")
+
+    api_connectivity_check(-1, CONFIG["api"]["token"])
 
     # VERIFY IF LOTUS-MARKETS VARIABLE EXIST
-    ###
     node_type = "Unknown"
     Result.label("Node type identification")
     if 'LOTUS_MARKETS_PATH' in os.environ.keys():
@@ -356,11 +452,16 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     except Exception as exception:
         Result.exit_failed(f'Cannot load { config_file } : { exception }', "ensure this command run under the same user as boost. If you use another location than ~/.boost ensure that LOTUS_MARKETS_PATH is properly set prior running this command", 'id\nexport "LOTUS_MARKETS_PATH=XXX"')
 
+    # Requirements checks passed, import libs
+    import toml
+    import requests
+
     # Load config file
     try:
         config = toml.load(config_file)
     except Exception as exception:
-        Result.exit_failed(f'Cannot load { config_file } : { exception }', f"verify that config_file is in a proper toml format", f"nano {config_file}")
+        Result.exit_failed(f'Cannot load {config_file} : {exception}',
+                           f"verify that config_file is in a proper toml format", f"nano {config_file}")
 
     Result.success(node_type)
 
@@ -370,7 +471,8 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
         with open(config_path + "/api", "r") as text_file:
             api_line = text_file.read()
     except Exception as exception:
-        Result.exit_failed(f'Cannot read {config_path + "/api"} : { exception }', f"verify the process is running { node_type }", "pgrep -a boostd")
+        Result.exit_failed(f'Cannot read {config_path + "/api"} : {exception}',
+                           f"verify the process is running {node_type}", f"epgrep \"(boost|lotus)\"")
     else:
         api = api_line.split("/")
         getask_url = "http://" + api[2] + ":" + api[4] + "/rpc/v0"
@@ -378,14 +480,18 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     # GET MARKETASK
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
     try:
-        getask = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
+        getask = \
+            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
     except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify boost API is accessible on the local machine", "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " +  getask_url)
+        Result.exit_failed(f'API error : {exception}', "verify the miner API are accessible on the local machine",
+                           "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " + getask_url)
 
     # GET SECTORSIZE
     jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [getask["Miner"]], "id": 3})
     try:
-        miner_sector_size = json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]
+        miner_sector_size = \
+            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)[
+                "result"]
     except Exception as exception:
         Result.exit_failed(f'API error : { exception }', "verify boost API is accessible on the local machine", 'curl -v -X PST --data \'{ "method": "Filecoin.ActorSectorSize", "params": ["' + getask["Miner"] + '"], "id": 3 }\' ' + getask_url)
 
@@ -419,49 +525,21 @@ IN CASE OF FAILURE MAKE CORRECTION AND RE-RUN THIS COMMAND UNTIL ITS SUCCESSFUL
     try:
         filter_retrieval = config["Dealmaking"]["RetrievalFilter"]
     except Exception as exception:
-        Result.exit_failed(f'RetrievalFilter not set in  {config_file}', 'Add the following line to the [Dealmaking] section.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
+        Result.exit_failed(f'RetrievalFilter not set in  {config_file}',
+                           'Add the following line to the [Dealmaking] section.',
+                           f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
     else:
         import re
         if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_retrieval):
             Result.success()
         else:
-            Result.exit_failed(f'"RetrievalFilter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [Dealmaking] section and run the --check again.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
-
-    # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
-    ###
-    Result.label(f"[LotusDealmaking][Filter] activated")
-
-    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
-    try:
-        filter_storage = config["LotusDealmaking"]["Filter"]
-    except Exception as exception:
-        Result.exit_failed(f'Filter not set in  {config_file}', 'Add the following line to the [LotusDealmaking] section.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
-    else:
-        import re
-        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_storage):
-            Result.success()
-        else:
-            Result.exit_failed(f'"Filter" found in [LotusDealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [LotusDealmaking] section and run the --check again.', f'Filter = "{os.path.realpath(__file__)} {config_option}--reject"')
-
-    # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
-    ###
-    Result.label(f"[LotusDealmaking][RetrievalFilter] activated")
-
-    config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
-    try:
-        filter_retrieval = config["LotusDealmaking"]["RetrievalFilter"]
-    except Exception as exception:
-        Result.exit_failed(f'RetrievalFilter not set in  {config_file}', 'Add the following line to the [LotusDealmaking] section.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
-    else:
-        import re
-        if re.match(f'^{os.path.realpath(__file__)}[ ]*--(accept|reject)[ ]*$', filter_retrieval):
-            Result.success()
-        else:
-            Result.exit_failed(f'"RetrievalFilter" found in [LotusDealmaking] section of {config_file}, but doesn\'t match standard lines', 'Add the following line to the [LotusDealmaking] section and run the --check again.', f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
-
-
+            Result.exit_failed(
+                f'"RetrievalFilter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines',
+                'Add the following line to the [Dealmaking] section and run the --check again.',
+                f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
 
     Result.allgood()
+
 
 if __name__ == "__main__":
     # SET COMMANDLINES ARGUMENTS
@@ -471,13 +549,17 @@ if __name__ == "__main__":
                         help="config file absolute path (default : " + DEFAULT_CONFIG_FILE + ")",
                         default=DEFAULT_CONFIG_FILE, metavar="PATH")
     GROUP.add_argument("--version", action='version', version=VERSION)
-    GROUP.add_argument("--check", help="check connector environment", action="store_true")
+    GROUP.add_argument("--check-lotus", help="check connector for LOTUS environment", action="store_true")
+    GROUP.add_argument("--check-venus", help="check connector for VENUS environment", action="store_true")
     GROUP.add_argument("--reject", help="reject all incoming deals if an error occurs", action="store_true")
     GROUP.add_argument("--accept", help="accept all incoming deals if an error occurs", action="store_true")
     ARGS = PARSER.parse_args()
 
-    if ARGS.check:
-        check()
+    if ARGS.check_lotus:
+        check_lotus()
+        sys.exit(0)
+    elif ARGS.check_venus:
+        check_venus()
         sys.exit(0)
 
     # DEFINE DEFAULT BEHAVIOR IN CASE ERRORS OCCURED

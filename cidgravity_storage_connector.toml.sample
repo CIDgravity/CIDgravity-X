@@ -1,8 +1,16 @@
 [api]
+# get the CIDgravity token from https://app.cidgravity.com on the page [Settings][Others]
+#
+#
+# for BOOST/LOTUS implementation (when set it supersedes tokenList)
 # token = "CIDGRAVITY_MINER_API_TOKEN_HERE"
-# endpoint_proposal_check = "https://api.cidgravity.com"
-# endpoint_miner_status_check = "https://service.cidgravity.com"
+
+# for VENUS only
+# tokenList = [
+#    "CIDGRAVITY_FIRST_API_TOKEN",
+#    "CIDGRAVITY_SECOND_API_TOKEN"
+#    ]
 
 [logging]
-# log_file = "/var/log/lotus/cidgravity_storage_connector.log"
+# log_file = "CIGGRAVITY_LOCATION/cidgravity_storage_connector.log"
 # debug = false
