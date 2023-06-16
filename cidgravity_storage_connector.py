@@ -214,60 +214,73 @@ def run():
     if CONFIG["logging"]["debug"]:
         log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
 
-    # EXTRACT Proposal.Label field, if not found consider an empty label (this is good enough to consider it as a proposal and not a miner status check)
-    # Extract from legacy format
-    label = ""
-    try:
+    # EXTRACT Dealtype : storage/retrieval/empty
+    if deal_proposal['DealType']:
         dealtype = deal_proposal['DealType']
-    except Exception as exception:
-        log("Unable to identify deal type", "PARSE PROPOSAL", "WARNING")
     else:
-        if dealtype == "storage":
-            # Extract from boost 2.X format
+        dealtype = ""
+        log("Unable to identify deal type", "PARSE PROPOSAL", "WARNING")
+
+
+    # EXTRACT providerID from proposal
+    if dealtype == "storage":
+        try:
+            # provider location for legacy deals
+            provider = deal_proposal['Proposal']['Provider']
+        except Exception as exception:
             try:
-                label = deal_proposal['ClientDealProposal']['Proposal']['Label']
-            except Exception as exception:
-                try:
-                    # Extract for Label in legacy format
-                    label = deal_proposal['Proposal']['Label']
-                except Exception as exception:
-                    log("Unable to find /Proposal/Label value", "PARSE PROPOSAL", level="WARNING")
-                    label = ""
+                # format_version = v2.0.0 / 2.1.0 or 2.2.0
+                provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
+            except:
+                decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported storage proposal format", "Error")
+    else:
+        # No provider fields in retrieval proposals
+        provider = ""
+
 
     # SELECT THE ENDPOINT ACCORDING TO LABEL VALUE
+    # EXTRACT Proposal.Label field, if not found consider an empty label (this is good enough to consider it as a proposal and not a miner status check)
+    # Extract from legacy format
+    if dealtype == "storage":
+        # Extract from boost 2.X format
+        try:
+            label = deal_proposal['ClientDealProposal']['Proposal']['Label']
+        except Exception as exception:
+            try:
+                # Extract for Label in legacy format
+                label = deal_proposal['Proposal']['Label']
+            except Exception as exception:
+                log("Unable to find /Proposal/Label value", "PARSE PROPOSAL", level="WARNING")
+                label = ""
+    else:
+        label = ""
+
     # DEFAULT VALUE OR CONFIG.TOML VALUE IS SET DURING THE LOAD_CONFIG_FILE FUNCTION
     if label.startswith('cidg-miner-status-check'):
         endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status/check"
     else:
         endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
 
-    # Get providerID from proposal
-    provider = ""
-    try:
-        # provider location for legacy deals
-        provider = deal_proposal['Proposal']['Provider']
-    except Exception as exception:
-        try:
-            # format_version = v2.0.0 / 2.1.0 or 2.2.0
-            provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
-        except:
-            decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported proposal format", "Error")
 
-     
     # Set token based on API/token and API/tokenList
     token = CONFIG["api"]["token"]
     if len(token) == 0:
-        if len(CONFIG["api"]["tokenList"]) > 0:
+        if len(CONFIG["api"]["tokenList"]) < 1:
+            decision(DEFAULT_BEHAVIOR, f"Error  : No token found in the config file", "Error")
+        else:
             token = get_valid_token_for_provider(provider)
-    
-        if (token is None) or (len(token) == 0):
-            decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "Error")
+            if token is None:
+                decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "Error")
+    else:
+        # Try to find the provider in the token in case of retrieval (does not work on venus)
+        if provider == "" and token.startswith("f0") and "-" in token:
+            provider = token.split("-", 1)[0]
 
     # SET HEADERS
     headers = {
         'Authorization': token,   # Back
         'X-API-KEY': token,       # Kong
-        'X-Address-ID': provider, # Kong
+        'X-Address-ID': provider, # Kong (empty for venus on retrieval)
         'X-CIDgravity-Agent': 'CIDgravity-storage-Connector',
         'X-CIDgravity-Version': VERSION,
         'X-CIDgravity-DefaultBehavior': DEFAULT_BEHAVIOR
@@ -409,7 +422,7 @@ def check_venus():
 
     if len(CONFIG["api"]["token"]) > 0:
         Result.label('CIDgravity API connectivity')
-        Result.exit_failed("[api][token] set, for VENUS only set [api][tokenList] and comment [api][token]. Edit your config file ")
+        Result.exit_failed("[api][token] set, for VENUS only set [api][tokenList] and comment out [api][token]. Edit your config file ")
 
     if len(CONFIG["api"]['tokenList']) > 0:
         for token_id, token in enumerate(CONFIG["api"]["tokenList"]):
@@ -418,6 +431,7 @@ def check_venus():
         Result.label('CIDgravity API connectivity')
         Result.exit_failed("There is no valid token provided in 'tokenList'. Edit your config file ")
 
+    Result.allgood()
 
 def check_lotus():
     ''' run check specific to lotus '''
