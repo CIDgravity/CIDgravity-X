@@ -433,8 +433,8 @@ def check_venus():
 
     Result.allgood()
 
-def check_lotus():
-    ''' run check specific to lotus '''
+def check_boost():
+    ''' run check specific to boost '''
     common_check()
 
     if len(CONFIG["api"]["token"]) == 0:
@@ -486,7 +486,7 @@ def check_lotus():
             api_line = text_file.read()
     except Exception as exception:
         Result.exit_failed(f'Cannot read {config_path + "/api"} : {exception}',
-                           f"verify the process is running {node_type}", f"epgrep \"(boost|lotus)\"")
+                           f"verify the process is running {node_type}", f"epgrep \"boost\"")
     else:
         api = api_line.split("/")
         getask_url = "http://" + api[2] + ":" + api[4] + "/rpc/v0"
@@ -563,14 +563,14 @@ if __name__ == "__main__":
                         help="config file absolute path (default : " + DEFAULT_CONFIG_FILE + ")",
                         default=DEFAULT_CONFIG_FILE, metavar="PATH")
     GROUP.add_argument("--version", action='version', version=VERSION)
-    GROUP.add_argument("--check-lotus", help="check connector for LOTUS environment", action="store_true")
+    GROUP.add_argument("--check-boost", help="check connector for BOOST environment", action="store_true")
     GROUP.add_argument("--check-venus", help="check connector for VENUS environment", action="store_true")
     GROUP.add_argument("--reject", help="reject all incoming deals if an error occurs", action="store_true")
     GROUP.add_argument("--accept", help="accept all incoming deals if an error occurs", action="store_true")
     ARGS = PARSER.parse_args()
 
-    if ARGS.check_lotus:
-        check_lotus()
+    if ARGS.check_boost:
+        check_boost()
         sys.exit(0)
     elif ARGS.check_venus:
         check_venus()
