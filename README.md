@@ -6,7 +6,7 @@ This lighweight connector is executed locally by the markets node daemon each ti
 |Node           |Supported|
 |---------------|---------|
 |boost          | ✅      |
-|damocles(venus)| ✅      |
+|droplet(venus)| ✅      |
 |lotus-markets. | ❌      |
 
 # Requirements
@@ -50,11 +50,19 @@ RetrievalFilter = "<ABSOLUTE_PATH>/cidgravity_storage_connector.py --reject"
     
 3. Restart boost
     
-## Venus
+## Droplet (Venus)
 
 1. Run the check process 
 ```
 ./cidgravity_storage_connector.py --check-venus  
 ```
 2. Enable "CIDgravity connector"
+
+Add the following lines to droplet config (under path `~/.droplet/config.toml` by default) in the [CommonProvider] section (for more details, please refer to documentation [here](https://github.com/ipfs-force-community/droplet/blob/master/docs/en/droplet-configurations.md))
+```
+Filter = "<ABSOLUTE_PATH>/cidgravity_storage_connector.py --reject"
+RetrievalFilter = "<ABSOLUTE_PATH>/cidgravity_storage_connector.py --reject"
+```
+
+3. Restart droplet
 
