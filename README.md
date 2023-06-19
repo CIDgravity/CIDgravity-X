@@ -7,7 +7,7 @@ This lighweight connector is executed locally by the markets node daemon each ti
 |---------------|---------|
 |boost          | ✅      |
 |droplet(venus)| ✅      |
-|lotus-markets. | ❌      |
+|lotus-markets | ❌      |
 
 # Requirements
 1. Get a CIDgravity account : https://cidgravity.com
