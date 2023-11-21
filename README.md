@@ -11,7 +11,7 @@ This lighweight connector is executed locally by the markets node daemon each ti
 
 # Requirements
 1. Get a CIDgravity account : https://cidgravity.com
-2. Set your get-ask prices to 0 and size to the widest range via the BoostUI or Venus Settings :
+2. Set the miner get-ask prices to 0 and size to the widest range via the BoostUI(:8080/settings) or Venus Settings :
     - Price          = 0
     - Verified Price = 0
     - Min Piece Size = 256
