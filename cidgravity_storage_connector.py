@@ -209,7 +209,7 @@ def run():
     try:
         deal_proposal = json.load(sys.stdin)
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"Error : Connector unable to parse the deal proposal : {exception}", "Error")
+        decision(DEFAULT_BEHAVIOR, f"Error : Connector unable to parse the deal proposal : {exception}", "SERVICE_UNAVAILABLE: please retry later")
 
     if CONFIG["logging"]["debug"]:
         log(json.dumps(deal_proposal, indent=4, sort_keys=True), "CLIENT_REQ", "DEBUG")
@@ -232,7 +232,7 @@ def run():
                 # format_version = v2.0.0 / 2.1.0 or 2.2.0
                 provider = deal_proposal['ClientDealProposal']['Proposal']['Provider']
             except:
-                decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported storage proposal format", "Error")
+                decision(DEFAULT_BEHAVIOR, f"Error  : cannot find provider in the proposal / unsupported storage proposal format", "SERVICE_UNAVAILABLE: please retry later")
     else:
         # No provider fields in retrieval proposals
         provider = ""
@@ -266,11 +266,11 @@ def run():
     token = CONFIG["api"]["token"]
     if len(token) == 0:
         if len(CONFIG["api"]["tokenList"]) < 1:
-            decision(DEFAULT_BEHAVIOR, f"Error  : No token found in the config file", "Error")
+            decision(DEFAULT_BEHAVIOR, f"Error  : No token found in the config file", "SERVICE_UNAVAILABLE: please retry later")
         else:
             token = get_valid_token_for_provider(provider)
             if token is None:
-                decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "Error")
+                decision(DEFAULT_BEHAVIOR, f"Error  : no token found for provider {provider}", "SERVICE_UNAVAILABLE: please retry later")
     else:
         # Try to find the provider in the token in case of retrieval (does not work on venus)
         if provider == "" and token.startswith("f0") and "-" in token:
@@ -292,23 +292,23 @@ def run():
         import requests
         response = requests.post(endpoint, json=deal_proposal, headers=headers, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ))
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"Error  : connecting API failed : {exception}", "Error")
+        decision(DEFAULT_BEHAVIOR, f"Error  : connecting API failed : {exception}", "SERVICE_UNAVAILABLE: please retry later")
 
     # MANAGE HTTP ERROR
     if response.status_code != 200:
         if CONFIG["logging"]["debug"]:
-            log(json.dumps(dict(response.headers), indent=4, sort_keys=True) + "\n" + str(response.content),
+            log(json.dumps(dict(response.headers), indent=4, sort_keys=True) + "\n" + str(response.content.decode(errors='replace')),
                 "API_RESPONSE", "DEBUG")
         if DEFAULT_BEHAVIOR == "accept":
             decision(DEFAULT_BEHAVIOR, f"Error : API code : {response.status_code} - {response.reason}", "")
         else:
-            decision(DEFAULT_BEHAVIOR, f"Error : API code : {response.status_code} - {response.reason}", "Error")
+            decision(DEFAULT_BEHAVIOR, f"Error : API code : {response.status_code} - {response.reason}", "SERVICE_UNAVAILABLE: please retry later")
 
     # READ API RESPONSE
     try:
         api_result = response.json()
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"Error : unable to parse API response : {exception} {response.content}", "Error")
+        decision(DEFAULT_BEHAVIOR, f"Error : unable to parse API response : {exception} {response.content}", "SERVICE_UNAVAILABLE: please retry later")
     if CONFIG["logging"]["debug"]:
         log(json.dumps(api_result, indent=4, sort_keys=True), "API_RESPONSE", "DEBUG")
 
@@ -316,7 +316,7 @@ def run():
     try:
         decision_value = DEFAULT_BEHAVIOR if api_result["decision"] == "error" else api_result["decision"]
     except Exception as exception:
-        decision(DEFAULT_BEHAVIOR, f"Error : decision not found in API response : { exception } { response.content }", "Error")
+        decision(DEFAULT_BEHAVIOR, f"Error : decision not found in API response : { exception } { response.content }", "SERVICE_UNAVAILABLE: please retry later")
 
     # APPLY DECISION
     full_external_message = (api_result['externalMessage']) if api_result["externalMessage"] != "" else ""
