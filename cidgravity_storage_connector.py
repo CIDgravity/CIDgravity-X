@@ -257,7 +257,7 @@ def run():
 
     # DEFAULT VALUE OR CONFIG.TOML VALUE IS SET DURING THE LOAD_CONFIG_FILE FUNCTION
     if label.startswith('cidg-miner-status-check'):
-        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/api/v1/miner-status/check"
+        endpoint = CONFIG["api"]["endpoint_miner_status_check"] + "/private/v1/miner-status-checker/check"
     else:
         endpoint = CONFIG["api"]["endpoint_proposal_check"] + "/api/proposal/check"
 
