@@ -31,7 +31,7 @@ import os.path
 import argparse
 import datetime
 
-VERSION = "2.2"
+VERSION = "3.0.1-rc1"
 
 ################################################################################
 # DEFAULT VALUES
@@ -435,6 +435,7 @@ def check_venus():
 
 def check_boost():
     ''' run check specific to boost '''
+    Result.NUMBER_OF_STEPS = 6
     common_check()
 
     if len(CONFIG["api"]["token"]) == 0:
@@ -479,41 +480,41 @@ def check_boost():
 
     Result.success(node_type)
 
-    Result.label(f"{node_type} get-ask")
-    # GET API URL
-    try:
-        with open(config_path + "/api", "r") as text_file:
-            api_line = text_file.read()
-    except Exception as exception:
-        Result.exit_failed(f'Cannot read {config_path + "/api"} : {exception}',
-                           f"verify the process is running {node_type}", f"epgrep \"boost\"")
-    else:
-        api = api_line.split("/")
-        getask_url = "http://" + api[2] + ":" + api[4] + "/rpc/v0"
-
-    # GET MARKETASK
-    jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
-    try:
-        getask = \
-            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
-    except Exception as exception:
-        Result.exit_failed(f'API error : {exception}', "verify the miner API are accessible on the local machine",
-                           "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " + getask_url)
-
-    # GET SECTORSIZE
-    jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [getask["Miner"]], "id": 3})
-    try:
-        miner_sector_size = \
-            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)[
-                "result"]
-    except Exception as exception:
-        Result.exit_failed(f'API error : { exception }', "verify boost API is accessible on the local machine", 'curl -v -X PST --data \'{ "method": "Filecoin.ActorSectorSize", "params": ["' + getask["Miner"] + '"], "id": 3 }\' ' + getask_url)
-
-    # VERIFY GET ASK
-    if getask['Price'] != "0" or getask['VerifiedPrice'] != "0" or getask['MinPieceSize'] != 256 or getask['MaxPieceSize'] != miner_sector_size:
-        Result.exit_failed(f'GET-ASK price has to be set to 0 and your accepting size to min=256B and max={miner_sector_size}', "set the prices and sizes via the boost", f'Connect the boost UI/Settings menu')
-    else:
-        Result.success()
+#    Result.label(f"{node_type} get-ask")
+#    # GET API URL
+#    try:
+#        with open(config_path + "/api", "r") as text_file:
+#            api_line = text_file.read()
+#    except Exception as exception:
+#        Result.exit_failed(f'Cannot read {config_path + "/api"} : {exception}',
+#                           f"verify the process is running {node_type}", f"epgrep \"boost\"")
+#    else:
+#        api = api_line.split("/")
+#        getask_url = "http://" + api[2] + ":" + api[4] + "/rpc/v0"
+#
+#    # GET MARKETASK
+#    jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.MarketGetAsk", "params": [], "id": 3})
+#    try:
+#        getask = \
+#            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)["result"]["Ask"]
+#    except Exception as exception:
+#        Result.exit_failed(f'API error : {exception}', "verify the miner API are accessible on the local machine",
+#                           "curl -v -X PST --data '{ \"method\": \"Filecoin.MarketGetAsk\", \"id\": 3 }' " + getask_url)
+#
+#    # GET SECTORSIZE
+#    jsondata = json.dumps({"jsonrpc": "2.0", "method": "Filecoin.ActorSectorSize", "params": [getask["Miner"]], "id": 3})
+#    try:
+#        miner_sector_size = \
+#            json.loads(requests.post(getask_url, data=jsondata, timeout=(TIMEOUT_CONNECT, TIMEOUT_READ)).content)[
+#                "result"]
+#    except Exception as exception:
+#        Result.exit_failed(f'API error : { exception }', "verify boost API is accessible on the local machine", 'curl -v -X PST --data \'{ "method": "Filecoin.ActorSectorSize", "params": ["' + getask["Miner"] + '"], "id": 3 }\' ' + getask_url)
+#
+#    # VERIFY GET ASK
+#    if getask['Price'] != "0" or getask['VerifiedPrice'] != "0" or getask['MinPieceSize'] != 256 or getask['MaxPieceSize'] != miner_sector_size:
+#        Result.exit_failed(f'GET-ASK price has to be set to 0 and your accepting size to min=256B and max={miner_sector_size}', "set the prices and sizes via the boost", f'Connect the boost UI/Settings menu')
+#    else:
+#        Result.success()
 
     # VERIFY IF THE STORAGE DEAL FILTER IS CONFIGURED IN config.toml
     ###
