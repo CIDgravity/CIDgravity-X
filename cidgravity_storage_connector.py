@@ -478,8 +478,6 @@ def check_boost():
         Result.exit_failed(f'Cannot load {config_file} : {exception}',
                            f"verify that config_file is in a proper toml format", f"nano {config_file}")
 
-    Result.success(node_type)
-
 #    Result.label(f"{node_type} get-ask")
 #    # GET API URL
 #    try:
@@ -534,14 +532,15 @@ def check_boost():
 
     # VERIFY IF THE RETRIEVAL DEAL FILTER IS CONFIGURED IN config.toml
     ###
-    Result.label(f"[Dealmaking][RetrievalFilter] activated")
+    Result.label(f"[Retrievals][Graphsync][RetrievalFilter] activated")
 
     config_option = "" if ARGS.c == DEFAULT_CONFIG_FILE else f"-c {ARGS.c} "
     try:
-        filter_retrieval = config["Dealmaking"]["RetrievalFilter"]
+        filter_retrieval = config["Retrievals"]["Graphsync"]["RetrievalFilter"]
+
     except Exception as exception:
         Result.exit_failed(f'RetrievalFilter not set in  {config_file}',
-                           'Add the following line to the [Dealmaking] section.',
+                           'Add the following line to the [Retrievals][Graphsync] section.',
                            f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
     else:
         import re
@@ -549,8 +548,8 @@ def check_boost():
             Result.success()
         else:
             Result.exit_failed(
-                f'"RetrievalFilter" found in [Dealmaking] section of {config_file}, but doesn\'t match standard lines',
-                'Add the following line to the [Dealmaking] section and run the --check again.',
+                f'"RetrievalFilter" found in [Retrievals][Graphsync] section of {config_file}, but doesn\'t match standard lines',
+                'Add the following line to the [Retrievals][Graphsync] section and run the --check again.',
                 f'RetrievalFilter = "{os.path.realpath(__file__)} {config_option}--reject"')
 
     Result.allgood()
