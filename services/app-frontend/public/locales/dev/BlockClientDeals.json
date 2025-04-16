@@ -1,0 +1,13 @@
+{
+    "header": "Block client {{clientName}}",
+    "body": {
+        "dealsWillBeRejected": "This action will automatically reject all deals from this client.<br /> To process you must enter a custom message that will be send to the client",
+        "blockReason": {
+            "placeholder": "Your deals are blocked because of ..."
+        }
+    },
+    "button": {
+        "proceed": "Proceed",
+        "close": "Close"
+    }
+}

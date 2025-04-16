@@ -1,0 +1,281 @@
+{
+    "filter": {
+        "timeRange": {
+            "placeholder": "Select a time range",
+            "24hours": "Last 24 hours",
+            "7days": "Last 7 days",
+            "30days": "Last 30 days",
+            "3months": "Last 3 months"
+        },
+        "unit": {
+            "placeholder": "Select a unit for the charts",
+            "dealsCount": "Number of deals",
+            "volume": "Volume (TiB)"
+        }
+    },
+    "button": {
+        "refresh": "Refresh"
+    },
+    "retool": {
+        "currentStatus": {
+            "title": "Current status (instant)",
+            "awaitingPublished": {
+                "title": "Awaiting publish",
+                "tooltip": "deals accepted by CIDgravity but not published yet. Only apply to deals manage by CIDgravity."
+            },
+            "sealing": {
+                "title": "Under sealing",
+                "tooltip": "deals published on chain but not active yet. (this applies to any deals processed, whether utilizing CIDgravity or not.)"
+            },
+            "active": {
+                "title": "Completed",
+                "tooltip": "data successfully processed and store by SPs. (this applies to any deals processed, whether utilizing CIDgravity or not.)"
+            },
+            "activeUniqueCid": {
+                "title": "Onboarded (unique CID)",
+                "tooltip": "Data successfully processed and stored by service providers (SPs) for unique piece CID. This applies to any deals processed, whether utilizing CIDgravity or not."
+            },
+            "remainingDatacapNotLocked": {
+                "title": "Remaining Datacap not locked",
+                "tooltip": "available onchain datacap - current deals awaiting being published"
+            },
+            "balance": {
+                "title": "Address balance",
+                "tooltip": "",
+                "unit": "FIL"
+            }
+        },
+        "overLastTimerange": {
+            "title": "Over the ",
+            "rightFirstTimeRatio": {
+                "title": "Right first time ratio",
+                "tooltip": "explanation"
+            },
+            "publishedExpired": {
+                "title": "Published expired",
+                "tooltip": "deals which failed during the sealing stage"
+            },
+            "slashed": {
+                "title": "Slashed",
+                "tooltip": "data lost or removed by SP"
+            },
+            "expired": {
+                "title": "Expired",
+                "tooltip": "data related to deals that have reached their expiration date during the selected timerange"
+            },
+            "noMoreCopies": {
+                "title": "No more copies",
+                "tooltip": "data (PieceCID) where the final copy has been lost (either removed or expired) within the chosen time range"
+            },
+            "onboardedVolumeUnique": {
+                "title": "Onboarded volume unique PieceCID",
+                "tooltip": "unique data successfully upload over the timerange"
+            },
+            "onboardedVolumeReplicas": {
+                "title": "Onboarded volume with replicas",
+                "tooltip": "the cumulative data volume successfully onboarded encompassing all replicas over the timerange"
+            },
+            "averageSealingTime": {
+                "title": "Average sealing duration",
+                "tooltip": "average time between sp published the deal and the deal is active"
+            },
+            "averageOnboardingTime": {
+                "title": "Average onboarding duration",
+                "tooltip": "average time between the deal is sent to SP and deal is active (including download time)"
+            }
+        },
+        "quantityOfDataOnboarded": {
+            "title": "Data onboarded"
+        },
+        "acceptedDeals": {
+            "title": "Accepted deals metrics",
+            "transferType": {
+                "title": "By transfer type"
+            },
+            "dealSize": {
+                "title": "By size"
+            },
+            "filPlusStatus": {
+                "title": "Verified (Fil+) / unverified"
+            },
+            "dealDuration": {
+                "title": "By duration"
+            }
+        },
+        "rejectedDeals": {
+            "title": "Rejected deals metrics",
+            "transferType": {
+                "title": "By transfer type"
+            },
+            "dealSize": {
+                "title": "By size"
+            },
+            "filPlusStatus": {
+                "title": "Verified (Fil+) / unverified"
+            },
+            "dealDuration": {
+                "title": "By duration"
+            }
+        },
+        "numberOfCopy": {
+            "title": "Number of copies",
+            "legend": {
+                "copies": "copies",
+                "copy": "copy"
+            }
+        },
+        "volumePerProvider": {
+            "title": "Volume per provider",
+            "downloadAsCsv": "CSV"
+        },
+        "forecast": {
+            "title": "Forecast",
+            "lastExpiration": "last expiration",
+            "networkConsumption": {
+                "title": "Forecast network consumption"
+            },
+            "networkExpiration": {
+                "title": "Forecast network expiration"
+            }
+        },
+        "history": {
+            "dataReceivedWithCurrentStatus": {
+                "title": "Data received by current status"
+            },
+            "acceptedDealsRejectedReasons": {
+                "title": "Accepted / rejected proposals"
+            },
+            "top10ProvidersRejectedDeals": {
+                "title": "Top 10 providers (rejected deals)"
+            },
+            "top10ProvidersAcceptedDeals": {
+            "title": "Top 10 providers (accepted deals)"
+            },
+            "title": "Historical deal proposal metrics",
+            "acceptedDealsByType": {
+                "title": "Accepted deals by transfer type"
+            },
+            "rejectedDealsByType": {
+                "title": "Rejected deals by transfer type"
+            },
+            "acceptedDealsFilPlus": {
+                "title": "Accepted deals Verified (Fil+) / unverified"
+            },
+            "rejectedDealsAverageSize": {
+                "title": "Rejected deals by size"
+            },
+            "acceptedDealsAverageSize": {
+                "title": "Accepted deals by size"
+            },
+            "rejectedDealsFilPlus": {
+                "title": "Rejected deals Verified (Fil+) / unverified"
+            }
+        },
+        "providerStats": {
+            "title": "Provider stats"
+        },
+        "offChainProviderStats": {
+            "title": "CIDgravity provider stats"
+        },
+        "axisUnits": {
+            "volume": "Volume (TiB)",
+            "numberOfDeal": "Number of deals",
+            "numberOfCid": "Number of PieceCID"
+        },
+        "onAndOffChainStatus": {
+            "active": "Sucessfully onboarded",
+            "publishedExpired": "Published expired",
+            "slashed": "Slashed",
+            "published": "Published",
+            "expired": "Expired",
+            "neverPublished": "Never published",
+            "onChain": "Published on time",
+            "awaitingPublished": "Awaiting published",
+            "accepted": "Accepted",
+            "reject": "Rejected"
+        },
+        "providersRatios": {
+            "title": "Provider success ratios"
+        },
+        "displayUnit": {
+            "cid": "PieceCID",
+            "tib": "TiB",
+            "deals": "deals",
+            "volume": "Volume (TiB)",
+            "numberOfDeal": "Number of deal",
+            "day": "day",
+            "days": "days",
+            "hour": "hour",
+            "hours": "hours",
+            "minutes": "minutes",
+            "minute": "minute"
+        },
+        "columns": {
+            "provider": "Provider",
+            "providerName": "Provider name",
+            "stagingSuccessRatio": "Staging",
+            "provingSuccessRatio": "Proving",
+            "sealingSuccessRatio": "Sealing",
+            "averageOnboardingTime": "Overall onboarding",
+            "averageSealingTime": "Average sealing",
+            "retrievalBotHttp": "Retrievalbot HTTP",
+            "retrievalBotBitswap": "Retrievalbot Bitswap",
+            "retrievalBotGraphsync": "Retrievalbot Graphsync"
+        },
+        "timeRange": {
+            "24hours": "last 24 hours",
+            "30days": "last 30 days",
+            "3months": "last 3 months",
+            "7days": "last 7 days"
+        },
+        "transferTypes": {
+            "unkown": "Unkown",
+            "libp2p": "Libp2p-HTTP",
+            "http": "HTTP",
+            "graphsync": "Graphsync",
+            "manual": "Manual"
+        },
+        "dealSize": {
+            "1073741824": "1 GiB",
+            "2147483648": "2 GiB",
+            "4294967296": "4 GiB",
+            "8589934592": "8 GiB",
+            "17179869184": "16 GiB",
+            "34359738368": "32 GiB",
+            "68719476736": "64 GiB",
+            "-1": "< 1 GiB"
+        },
+        "reasons": {
+            "accept": "Accepted",
+            "busy": "Busy",
+            "serviceUnavailable": "Service unavailable",
+            "clientNotAuthorized": "Client not authorized",
+            "dealTypeNotAccepted": "Deal type not accepted",
+            "reject": "Rejected",
+            "invalidClientAddress": "Invalid client address",
+            "pieceCidDuplicated": "Piece CID duplicated",
+            "priceTooLow": "Price too low",
+            "startEpochTooEarly": "Start epoch too early"
+        },
+        "filPlusStatus": {
+            "true": "Verified",
+            "false": "Unverified"
+        },
+        "dealDuration": {
+            "<= 12": "≤ 12 months",
+            "> 12": "> 12 months",
+            "> 24": "> 24 months",
+            "> 36": "> 36 months"
+        },
+        "columnsTooltips": {
+            "stagingRatio": "Success ratio between the deal is sent to the provider and published on chain. it typically covers file transfer and packing",
+            "sealingRatio": "Success ratio between the deal is published on chain and fully sealed.",
+            "provingRatio": "Percentage of active deals decreased due to data slashing or early termination.",
+            "averageSealingTime": "Average time between the deal is published on chain and and fully sealed.",
+            "averageOnboardingTime": "Average of the total time between the deal is sent to the provider and and fully sealed."
+        },
+        "noRowsFound": "No data",
+        "noDataAvailable": "No data",
+        "unknownValue": "N/A"
+    }
+}

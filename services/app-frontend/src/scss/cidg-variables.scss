@@ -1,0 +1,19 @@
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import '../../node_modules/bootstrap/scss/functions';
+
+// 2. Include any default variable overrides here
+$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import '../../node_modules/bootstrap/scss/variables';
+$cidg-dark-blue: #000b44;
+$font-size-base: 0.875rem;
+
+// Export scss variables to JS
+:export {
+    successColor: $success;
+    warningColor: $warning;
+    blue: $cidg-dark-blue;
+}

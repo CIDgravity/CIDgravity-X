@@ -1,0 +1,23 @@
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+cidgravity-ticker
+
+# Dependency directories (remove the comment below to include it)
+vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# IDE files
+.vscode/
+
+# config files
+./config.toml
+
+# env file
+.env
+.qodo

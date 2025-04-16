@@ -1,0 +1,11 @@
+{
+    "inputSearch": {
+        "placeholder": "Search by provider or proposal uid then PRESS ENTER"
+    },
+    "dateRangePicker": {
+        "placeholder": "From ({{dateFormat}}) - To ({{dateFormat}})"
+    },
+    "status": {
+        "placeholder": "All status"
+    }
+}

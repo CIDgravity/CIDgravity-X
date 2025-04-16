@@ -1,0 +1,12 @@
+{
+    "header": "Remove the miner with address {{addressId}}",
+    "body": {
+        "willUnlinkFromYourAccount": "You are about to unlink this miner from your CIDgravity account. This action will result in the removal of your access to all of its information.",
+        "beCareful": "Be careful",
+        "signNewMessage": "To recover his access, you will have to sign a new message"
+    },
+    "button": {
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+    }
+}

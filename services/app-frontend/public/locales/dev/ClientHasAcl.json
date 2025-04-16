@@ -1,0 +1,10 @@
+{
+    "header": "Delete client {{clientName}}",
+    "body": {
+        "clientHasLinkedAcl": "The client {{clientName}} is configured in the Retrieval [whitelist/blacklist] access control. Remove these references first before deleting the client."
+    },
+    "button": {
+        "goToRetrievalAclPage": "Go to Retrieval ACLs",
+        "cancel": "Cancel"
+    }
+}

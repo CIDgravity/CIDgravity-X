@@ -1,0 +1,82 @@
+{
+    "mixGroupName": "Mix policy group",
+    "title": "Onboarding policy management",
+    "subtitle": "Onboarding policy will allow to define criterias to onboard data",
+    "premium": {
+        "title": "Premium content",
+        "subtitle": "Creating custom onboarding group or the import/export feature are accessible only to clients with enterprise offers",
+        "button": "Upgrade to unlock custom groups"
+    },
+    "settings": {
+        "title": "Policy settings",
+        "priority": {
+            "label": "Priority",
+            "tooltip": "Explanation here",
+            "options": {
+                "numberOfCopies": "Number of copies",
+                "policyRespected": "Policy respected"
+            }
+        }
+    },
+    "table": {
+        "name": {
+            "title": "Name"
+        },
+        "providers": {
+            "title": "Providers",
+            "all": "All"
+        },
+        "numberOfCopies": {
+            "title": "Number of copies",
+            "copy_zero": "copies",
+            "copy_one": "copy",
+            "copy_two": "copies",
+            "copy_few": "copies",
+            "copy_many": "copies",
+            "copy_other": "copies"
+        },
+        "edit": {
+            "tooltip": "Edit the policy group"
+        },
+        "delete": {
+            "tooltip": "Delete this policy group"
+        }
+    },
+    "notification": {
+        "success": {
+            "onUpdatePolicySettings": "Policy settings successfully saved",
+            "onDeletePolicyGroup": "Policy group successfully deleted",
+            "onImportPolicy": "Onboardng policy successfully imported"
+        },
+        "error": {
+            "onUpdatePolicySettings": "Unable to save policy settings. Try later or reach out to CIDgravity team",
+            "onDeletePolicyGroup": "Unable to delete policy group. Try later or reach out to CIDgravity team",
+            "onImportPolicy": "Unable to import onboarding policy. Try later or each out to CIDgravity team",
+            "EMPTY_REQUEST_BODY": "Policy is mandatory",
+            "PROVIDER_BLACKLISTED": "One provider is currently blacklisted. Remove it from blacklist before adding to a policy group",
+            "NUMBER_OF_GROUP_LIMIT_EXCEEDED": "You can't import more than 10 policy group",
+            "GROUP_MUST_CONTAINS_AT_LEAST_ONE_PROVIDER": "Import error: a group must contain at least one provider",
+            "GROUP_NAME_MUST_BE_UNIQUE": "Import error: group name must be unique",
+            "PROVIDER_DUPLICATED_IN_OTHER_GROUP": "Import error: provider can only be in one group at a time",
+            "NUMBER_OF_COPIES_GREATER_THAN_PROVIDERS": "Import error: number of copies can't be greater can number of providers",
+            "GROUP_NAME_ALREADY_USED": "Import error: group name is already used",
+            "PROVIDER_ALREADY_USED": "Import error: provider is already in another existing group",
+            "INVALID_PROVIDER_ADDRESS": "Import error: one provider address is invalid",
+            "NOT_SHORT_ADDRESS": "Import error: one provider address is not a short address",
+            "NOT_FOUND_ON_CHAIN": "Import error: one provider address doesn't exist on chain",
+            "GROUP_NAME_CONTAINS_RESERVED_WORD_MIX": "Reserved word \"Mix\" is not allowed in group name"
+        }
+    },
+    "initOnboardingPolicy": {
+        "title": "You must configure your onboarding policy settings before using this feature."
+    },
+    "error": {
+        "generic": "Unable to load policy groups. Try later or reach out to CIDgravity team."
+    },
+    "button": {
+        "saveSettings": "Save",
+        "importExportFromJson": "Import / export from JSON",
+        "new": "Create new group",
+        "initOnboardingPolicy": "Initialize mix policy group"
+    }
+}

@@ -1,0 +1,30 @@
+/public/locales/*
+!public/locales/dev
+
+# Frontend Stuff
+node_modules
+build
+src/config/constants.js
+.env
+webapp
+.vim
+
+# Project Stuff
+.env
+node_modules
+
+# Other Stuff
+backup/
+pkg/
+install/update-db-no-backup.sh
+install/config.env
+install/postgres
+install.old/
+*.orig  # merge relicats
+
+
+# IDE Files and Folders
+.idea/
+.vscode/
+.lvimrc
+cidgravity-app.code-workspace

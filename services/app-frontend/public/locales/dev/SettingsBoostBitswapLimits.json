@@ -1,0 +1,40 @@
+{
+    "client": {
+        "bitswap": {
+            "title": "Booster bitswap limits",
+            "description": "booster-bitswap can be configured to fetch its config from CIDgravity; these settings will be synced automatically. <1>boost documentation</1> <br /> The magic happen when you start booster-bitswap with 2 additional parameters:",
+            "recentActivity": {
+                "title": "Recent activity from boost bitswap",
+                "lastCheck": "Last request received on {{datetime}}",
+                "noMostRecentActivity": "No recent activity"
+            },
+            "simultaneousRequests": {
+                "label": "Simultaneous retrievals",
+                "info": "Number of simultaneous requests allowed across all clients "
+            },
+            "simultaneousRequestsPerPeer": {
+                "info": "Number of simultaneous retrievals allowed per Peer ID",
+                "label": "Simultaneous requests per Peer ID"
+            },
+            "button": {
+                "save": "Save"
+            },
+            "maxBandwidth": {
+                "label": "Max bandwidth",
+                "info": "Max bandwidth allocated to Bitswap (in Bytes/sec)",
+                "unit": {
+                    "B": "B",
+                    "KB": "KB",
+                    "GB": "GB",
+                    "MB": "MB"
+                }
+            }
+        }
+    },
+    "zeroMeanNoLimits": "0 means unlimited",
+    "validation": {
+        "isInvalidValue": "Invalid value",
+        "isNotPositiveValue": "Must be a positive integer",
+        "isRequiredValue": "Mandatory field"
+    }
+}

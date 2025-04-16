@@ -1,0 +1,82 @@
+{
+    "title": "Manage my addresses",
+    "minerAddress": {
+        "title": "Miner addresses",
+        "table": {
+            "empty": "You haven't claimed any miner address yet",
+            "friendlyName": {
+                "title": "Friendly name"
+            },
+            "addressId": {
+                "title": "Address ID"
+            },
+            "actorType": {
+                "title": "Actor type"
+            },
+            "aclOffers": {
+                "title": "Account type",
+                "offer-sp-free": "Free",
+                "offer-sp-premium": "Premium"
+            },
+            "access": {
+                "tooltip": "View access rights"
+            },
+            "delete": {
+                "tooltip": "Delete this address"
+            }
+        },
+        "error": {
+            "generic": "Unable to load your miner addresses. Try again in few minutes!"
+        }
+    },
+    "clientAddress": {
+        "title": "Client addresses",
+        "table": {
+            "empty": "You haven't claimed any address yet",
+            "friendlyName": {
+                "title": "Friendly name"
+            },
+            "addressId": {
+                "title": "Address ID"
+            },
+            "longAddress": {
+                "title": "Long address"
+            },
+            "actorType": {
+                "title": "Actor type"
+            },
+            "aclOffers": {
+                "title": "Account type",
+                "offer-client-free": "Free",
+                "offer-client-premium": "Premium"
+            },
+            "access": {
+                "tooltip": "View access rights"
+            },
+            "delete": {
+                "tooltip": "Delete this address"
+            }
+        },
+        "errors": {
+            "generic": "Unable to load your client addresses. Try again in few minutes!"
+        }
+    },
+    "button": {
+        "claimNewAddress": {
+            "label": "Claim new address",
+            "tooltip": {
+                "onMaximumReached": "You have reached the maximum number of claimed addresses"
+            }
+        }
+    },
+    "notification": {
+        "success": {
+            "onDeleteAddress": "Address deleted successfully!",
+            "onRemoveAccess": "Access successfully removed!"
+        },
+        "error": {
+            "onDeleteAddress": "Unable to delete address. Try later or reach out to CIDgravity team",
+            "onRemoveAccess": "Unable to remove access on this address for this user. Try later or reach out to CIDgravity team"
+        }
+    }
+}

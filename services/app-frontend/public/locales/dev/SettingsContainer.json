@@ -1,0 +1,96 @@
+{
+    "title": "Manage miner settings",
+    "client": {
+        "maintenanceMode": {
+            "title": "Maintenance mode",
+            "label": "Enable/disable maintenance mode",
+            "info": "When maintenance mode is activated, all incoming deal proposals are rejected"
+        },
+        "unknownClient": {
+            "title": "Unknown clients",
+            "label": "Accept storage deals from unknown clients",
+            "info": "When deactivated, all storage deals from unknown clients are rejected"
+        }
+    },
+    "other": {
+        "connector": {
+            "title": "CIDgravity connector",
+            "info": "The \"CIDgravity connector\" connects a lotus-miner to the CIDgravity <br/> service. This lightweight connector is executed locally by the lotus-miner <br/> process each time the lotus-miner receives a deal proposal.",
+            "downloadLink": "Download the connector",
+            "mostRecentActivity": "Miner agent ({{agent}}) version: {{version}} (last seen {{datetime}})",
+            "mostRecentActivityError": "Something wrong : {{errorCode}} (last seen {{lastCheck}})",
+            "noMostRecentActivity": "No recent activity",
+            "activityErrorCodes": {
+                "SENT": "Test proposal sent",
+                "ERR_SENT": "Test proposal sent",
+                "ERR_NO_PEER_ID_SET_ON_CHAIN": "Peer ID not published on chain",
+                "ERR_NO_MULTI_ADDRESS_SET_ON_CHAIN": "Multiaddr not published on chain",
+                "ERR_INVALID_MULTI_ADDRESS_IN_MINER_INFO": "Wrong multiaddr format",
+                "ERR_CONNECT_MINER_PEER_ID": "Can't reach your miner peer ID",
+                "ERR_CIDGRAVITY_SIDE": "CIDgravity connectivity test service is unavailable.",
+                "ERR_DEAL_PROTOCOL_UNSUPPORTED": "Deal protocols unsupported",
+                "ERR_NO_MATCHING_DEAL_PROTOCOL_SUPPORTED": "Deal protocols incompatible",
+                "ERR_CIDGRAVITY_CONNECTOR_MISCONFIGURED": "CIDgravity connector not deployed or misconfigured",
+                "ERR_TIMEOUT": "CIDgravity connectivity test service is unavailable.",
+                "ERR_GET_ASK": "Retrieving miner storage ask",
+                "ERR_GET_ASK_PRICES_NOT_SET_TO_ZERO": "Get ask storage pricing misconfigured",
+                "ERR_GET_ASK_SIZES_NOT_PROPERLY_SET": "Get ask storage piece size misconfigured",
+                "ERR_SEND_PROPOSAL": "Can't send the deal proposal",
+                "ERR_CIDGRAVITY_INVALID_CONNECTOR_TYPE": "Wrong CIDgravity connector used",
+                "ERR_CIDGRAVITY_INVALID_CONNECTOR_VERSION": "Wrong CIDgravity connector version used"
+            },
+            "token": {
+                "title": "CIDgravity connector key",
+                "regenerate": "Disable and regenerate this token",
+                "subtitle": "Add this api key to the CIDgravity connector deployed on the miner"
+            }
+        },
+        "minerStatusCheck": {
+            "title": "Automatic status check",
+            "label": "I want CIDgravity to check the availability of my miner regularly",
+            "info": "If you activate this option, we will send proposals at regular intervals, in order to check the configuration and availability of your miner"
+        },
+        "friendlyName": {
+            "title": "Friendly name",
+            "button": {
+                "save": "Save"
+            }
+        },
+        "customMessage": {
+            "title": "Custom message",
+            "info": "This message will be sent back to the client whenever a deal is rejected",
+            "placeholder": "For any questions or special pricing, please contact me on Slack",
+            "button": {
+                "save": "Save"
+            }
+        }
+    },
+    "notification": {
+        "info": {
+            "onMinerStatusCheckTestLoading": "We are checking your miner reachability before enabling this service, this can take few seconds to complete"
+        },
+        "success": {
+            "onUpdateSettings": "Settings have been saved!",
+            "onUpdateMaintenanceMode": {
+                "enabled": "Your maintenance mode has been enabled, don't forget to disabled it when you are done with it!",
+                "disabled": "Your maintenance mode has been disabled, good job!"
+            },
+            "onUpdateCustomMessage": "Your custom messages has been saved!",
+            "onUpdateFriendlyName": "Your address friendly name has been updated!",
+            "onRegenerateConnectorToken": "Token has been regenerated!",
+            "onMinerStatusCheckChanged": "Automatic status check successfully enabled !"
+        },
+        "error": {
+            "onUpdateSettings": "Unable to save your settings. Try later or reach out to CIDgravity team",
+            "onUpdateMaintenanceMode": "Unable to update your maintenance mode. Try later or reach out to CIDgravity team",
+            "onUpdateCustomMessage": "Unable to save your custom message. Try later or reach out to CIDgravity team",
+            "onUpdateFriendlyName": "Unable to save your friendly name. Try later or reach out to CIDgravity team",
+            "onRegenerateConnectorToken": "Unable to regenerate the connector token. Try later or reach out to CIDgravity team",
+            "onMinerStatusCheckServiceUnavailable": "We can't enable the service because service isn't available at the moment. Please try again later",
+            "onMinerStatusCheckNotReachable": "We can't enable the service because your miner isn't reachable. Go to Help Center > Diagnosis for more details"
+        }
+    },
+    "error": {
+        "generic": "Unable to retrieve your account details. Try later or reach out to CIDgravity team!"
+    }
+}

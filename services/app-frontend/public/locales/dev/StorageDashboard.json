@@ -1,0 +1,203 @@
+{
+    "filter": {
+        "timeRange": {
+            "placeholder": "Select a time range",
+            "60minutes": "Last 60 minutes",
+            "24hours": "Last 24 hours",
+            "30days": "Last 30 days",
+            "3months": "Last 3 months",
+            "specificDate": "Select specific date"
+        },
+        "datePicker": {
+            "placeholder": "Select custom date"
+        },
+        "unit": {
+            "placeholder": "Select a unit for the charts",
+            "numberOfProposals": "Number of proposals",
+            "cumulativeRawSize": "Cumulative raw size",
+            "qualityAdjustedPower": "Quality adjusted power"
+        }
+    },
+    "button": {
+        "refresh": "Refresh"
+    },
+    "retool": {
+        "reasons": {
+            "accept": "Accepted",
+            "maintenance": "Maintenance mode",
+            "sizeRateLimit": "Rate limit - Cumulative size",
+            "invalidProposal": "Invalid proposal",
+            "rateLimit": "Rate limit - Number of proposals",
+            "reject": "No matching pricing rules",
+            "startEpochBelowSealingBuffer": "Below min. start epoch",
+            "storageAcceptanceLogic": "Acceptance logic not passed",
+            "noFundsLeft": "No funds left",
+            "clientBlocked": "Client blocked",
+            "noSpaceLeft": "No space left",
+            "error": "Error",
+            "blacklist": "Client blacklisted"
+        },
+        "totalAcceptedDealsWithReasons": {
+            "title": "Accepted / rejected proposals"
+        },
+        "displayUnit": {
+            "deals": "deals",
+            "tib": "TiB"
+        },
+        "volumePerClient": {
+            "title": "Distribution per client",
+            "downloadAsCsv": "CSV"
+        },
+        "top10ClientsAccepted": {
+            "title": "Top 10 clients (accepted deals)"
+        },
+        "top10ClientsRejected": {
+            "title": "Top 10 clients (rejected deals)"
+        },
+        "top10PricingModels": {
+            "title": "Top 10 pricing models"
+        },
+        "acceptedDeals": {
+            "title": "Accepted deal proposal metrics",
+            "transferType": {
+                "title": "By transfer type"
+            },
+            "dealDuration": {
+                "title": "By duration"
+            },
+            "filPlusStatus": {
+                "title": "Verified (Fil+) / unverified"
+            },
+            "dealSize": {
+                "title": "By deal size"
+            }
+        },
+        "rejectedDeals": {
+            "transferType": {
+                "title": "By transfer type"
+            },
+            "filPlusStatus": {
+                "title": "Verified (Fil+) / unverified"
+            },
+            "dealDuration": {
+                "title": "By duration"
+            },
+            "dealSize": {
+                "title": "By size"
+            },
+            "title": "Rejected deal proposal metrics"
+        },
+        "history": {
+            "top10PricingModels": {
+                "title": "Top 10 pricing models"
+            },
+            "acceptedDealsRejectedReasons": {
+                "title": "Accepted / rejected proposals"
+            },
+            "title": "Historical deal proposal metrics",
+            "top10ClientsForAcceptedDeals": {
+                "title": "Top 10 clients (accepted deals)"
+            },
+            "top10ClientsForRejectedDeals": {
+                "title": "Top 10 clients (rejected deals)"
+            },
+            "acceptedDealsByType": {
+                "title": "Accepted deals by transfer type"
+            },
+            "rejectedDealsByType": {
+                "title": "Rejected deals by transfer type"
+            },
+            "acceptedDealsFilPlus": {
+                "title": "Accepted deals Verified (Fil+) / unverified"
+            },
+            "rejectedDealsAverageSize": {
+                "title": "Rejected deals by size"
+            },
+            "acceptedDealsAverageSize": {
+                "title": "Accepted deals by size"
+            },
+            "rejectedDealsFilPlus": {
+                "title": "Rejected deals Verified (Fil+) / unverified"
+            }
+        },
+        "transferTypes": {
+            "unkown": "Unkown",
+            "libp2p": "Libp2p-HTTP",
+            "http": "HTTP",
+            "graphsync": "Graphsync",
+            "manual": "Manual"
+        },
+        "dealSize": {
+            "1073741824": "1 GiB",
+            "2147483648": "2 GiB",
+            "4294967296": "4 GiB",
+            "8589934592": "8 GiB",
+            "17179869184": "16 GiB",
+            "34359738368": "32 GiB",
+            "68719476736": "64 GiB",
+            "-1": "< 1 GiB"
+        },
+        "filPlusStatus": {
+            "true": "Verified",
+            "false": "Unverified"
+        },
+        "dealDuration": {
+            "<= 12": "≤ 12 months",
+            "> 12": "> 12 months",
+            "> 24": "> 24 months",
+            "> 36": "> 36 months"
+        },
+        "columnsName": {
+            "pricingModelName": "Pricing model",
+            "numberOfProposals": "Number of proposals",
+            "cumulativeRawSize": "RAW power (TiB)",
+            "qualityAdjustedPower": "Cumulative QAP (TiB)",
+            "fromAddress": "From address",
+            "clientName": {
+                "name": "Client name",
+                "tooltip": {
+                    "createdAfterDealProcessed": "Client was created after deal processed",
+                    "source": "source",
+                    "clickOnCellToCreateClient": "Click to add this new client",
+                    "on": "on",
+                    "proposedFrom": "name proposed by"
+                },
+                "unknown": "Unknown"
+            }
+        },
+        "axisUnits": {
+            "numberOfProposals": "Number of proposals",
+            "cumulativeRawSize": "RAW size (TiB)",
+            "qualityAdjustedPower": "Cumulative QAP (TiB)"
+        },
+        "noRowsFound": "No data",
+        "noDataAvailable": "No data",
+        "totalAcceptedDealsSizeWithReasons": {
+            "title": "Accepted / rejected proposals"
+        },
+        "modals": {
+            "createAsClient": {
+                "title": "Create a new client",
+                "description": "This action will create a new client with the default pricing model and storage acceptance logic.<br /><br />The name and address will be automatically set, based on the following information :",
+                "noteEditClientTitle": "Note",
+                "noteEditClientDescription": "This information can be edited later from the client page."
+            },
+            "createAsClientSuccess": {
+                "title": "Client creation",
+                "description": "Client successfully created.",
+                "noteEditClientTitle": "Note",
+                "noteEditClientDescription": "This information can be edited later from the client page."
+            },
+            "createAsClientError": {
+                "title": "Client creation",
+                "description": "An error occurred while creating the client.",
+                "noteContactSupportTitle": "Note",
+                "noteContactSupportDescription": "Please try again later or contact the CIDgravity team."
+            },
+            "button": {
+                "continue": "Create",
+                "cancel": "Cancel"
+            }
+        }
+    }
+}

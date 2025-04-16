@@ -1,0 +1,18 @@
+[API]
+    ListenPort = "8080"
+
+[LOGS]
+    Level = "error"
+    OutputLogsAsJson = true
+
+[DATABASE]
+    Uri = "mongodb://foo:bar:foo"
+    Database = "foo"
+    ConnectionTimeout = "10s"
+    RequestTimeout = "300s"
+    SlowThresholdLogs = "1ms"
+    CollectionName = "foo_bar"
+    
+[EXCHANGE]
+    PairsToFetch = ["FIL_USD"]
+    FetchPeriod = "60s"

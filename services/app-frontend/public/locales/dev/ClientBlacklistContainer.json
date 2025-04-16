@@ -1,0 +1,50 @@
+{
+    "title": "Blacklist management",
+    "subtitle": "This page allow to blacklist provider from onboarding data",
+    "premium": {
+        "title": "Premium content",
+        "subtitle": "This feature is accessible only to clients with enterprise offers<br />It allow to blacklist specific provider from being used in Onboarding policy",
+        "button": "Upgrade to unlock Blacklist"
+    },
+    "searchForm": {
+        "searchInput": {
+            "placeholder": "Search a provider in blacklist ..."
+        }
+    },
+    "table": {
+        "address": {
+            "title": "Provider address"
+        },
+        "comment": {
+            "title": "Comment"
+        },
+        "addedOn": {
+            "title": "Added on"
+        },
+        "delete": {
+            "tooltip": "Remove from blacklist"
+        }
+    },
+    "validation": {
+        "invalidProviderShortAddress": "Provider address must be a short address",
+        "providerAddressInvalidOnChain": "Provider address is invalid onchain",
+        "internalErrorWhileCheckingProviderAddress": "Internal error while checking address. Please try again in a few minutes or contact the CIDgravity team.",
+        "addressAlreadyInBlacklist": "This provider address is already blacklisted",
+        "addressUsedInPolicyGroup": "This provider address is used is a policy group. You must remove it before adding to blacklist"
+    },
+    "notification": {
+        "success": {
+            "onRemoveFromBlacklist": "Address successfully removed from blacklist."
+        },
+        "error": {
+            "onRemoveFromBlacklist": "An error occured while removing address from blacklist. Please try again in a few minutes or contact the CIDgravity team.",
+            "onInsertAddressToBlacklist": "An error occurred while adding address to blacklist. Please try again in a few minutes or contact the CIDgravity team."
+        }
+    },
+    "empty": {
+        "title": "There are no blacklisted addresses under your account. You can use the form above to add the first one"
+    },
+    "error": {
+        "generic": "An error occurred retrieving blacklisted addresses. Please try again in a few minutes or contact the CIDgravity team."
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "unableToRemove": {
+        "header": "Unable to remove storage acceptance logic {{acceptanceLogicName}}",
+        "body": {
+            "needToUpdateClientsAcceptanceLogic": "Before removing, you need to change the storage acceptance logic of all clients currently attached to it. <br /><br /> List of clients using this logic:<br />"
+        }
+    },
+    "removeConfirmation": {
+        "header": "Remove pricing model {{acceptanceLogicName}}",
+        "body": {
+            "willRemoveThisAcceptanceLogic": "Do you really want to remove this storage acceptance logic, this action cannot be undone!"
+        }
+    },
+    "button": {
+        "cancel": "Cancel",
+        "close": "Close",
+        "confirm": "Confirm"
+    }
+}

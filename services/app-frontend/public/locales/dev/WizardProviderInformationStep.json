@@ -1,0 +1,48 @@
+{
+    "title": "Configure provider information",
+    "subtitle": "These informations will help identification of this address when working with clients",
+    "beCareful": "Be careful:",
+    "subtitleKYC": "All of this information can be subject to KYS",
+    "entityNameField": {
+        "label": "Entity name *"
+    },
+    "entityTypeField": {
+        "label": "Entity type *",
+        "options": {
+            "organization": "Organization",
+            "company": "Company",
+            "individual": "Individual"
+        }
+    },
+    "entityCountryField": {
+        "label": "Country *"
+    },
+    "entityWebsiteField": {
+        "label": "Company website *"
+    },
+    "contactFullNameField": {
+        "label": "Contact full name *"
+    },
+    "contactEmailField": {
+        "label": "E-mail address *"
+    },
+    "contactSlackField": {
+        "label": "Slack handle *"
+    },
+    "validation": {
+        "isEntityNameValidString": "Entity name has invalid value",
+        "isEntityNameMandatory": "Entity name is mandatory",
+        "isEntityTypeValidString": "Entity type has invalid value",
+        "isEntityTypeMandatory": "Entity type is mandatory",
+        "isEntityCountryValidString": "Entity country has invalid value",
+        "isEntityCountryMandatory": "Entity country is mandatory",
+        "isEntityWebsiteValidUrl": "Entity website must be a valid URL",
+        "isEntityWebsiteMandatory": "Entity website is mandatory",
+        "isContactFullNameValidString": "Contact full name has invalid value",
+        "isContactFullNameMandatory": "Contact full name is mandatory",
+        "isContactEmailValid": "E-mail address must be a valid e-mail",
+        "isContactEmailMandatory": "E-mail address is mandatory",
+        "isContactSlackValidString": "Slack username has invalid value",
+        "isContactSlackMandatory": "Slack username is mandatory"
+    }
+}

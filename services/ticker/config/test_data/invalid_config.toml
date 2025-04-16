@@ -1,0 +1,11 @@
+[API]
+    ListenPort = 8080
+
+[LOGS]
+    Level = "info"
+    OutputLogsAsJson = true
+
+[EXCHANGE]
+    PairsToFetch = ["BTC_USD"]
+    FetchPeriod = 30
+    MaxParallelExchangesToFetch = "2"

@@ -1,0 +1,58 @@
+[API]
+    # Port on which this service runs
+    # Default value = "3047"
+    # ListenPort = "3047"
+
+[LOGS]
+    # Specific for application logs
+    # Available values are: error, warn, info, debug
+    # Default value = "debug"
+    # Level = "debug"
+
+    # Display every logs in JSON format, useful when using a log parser such as Loki
+    # Default value = false
+    # OutputLogsAsJSON = false
+
+[DATABASE]
+    URI = ""
+    Database = ""
+    CollectionName = ""
+
+    # Timeout for MongoDB connection
+    # Must be a valid duration like "5s" = 5 seconds
+    # Default value = "10s"
+    # ConnectionTimeout = "10s"
+
+    # Define the maximum number of open connections to the database 
+    # Default value = 20
+    # MaxConnection = 20
+
+    # Define the maximum number of parallel requests to the database 
+    # Default value = 20
+    # MaxPoolSize = 20
+
+    # Duration threshold from which requests exceeding it will be added to the logs
+    # Default value = "1ms"
+    # SlowThresholdLogs = "1ms"
+
+    # Max timeout allowed to complete a DB request, after this, the request will be canceled (avoid long running requests)
+    # Must be a valid duration like "5s" = 5 seconds
+    # Default value = "" (no timeout)
+    # RequestTimeout = ""
+
+[EXCHANGE]
+
+    # List of pairs to fetch from exchanges.
+    # Must be the same for all exchanges, will be converted individually in the codebase
+    # Available values: FIL_USD
+    # Default value = ["FIL_USD"]
+    PairsToFetch = ["FIL_USD"]
+
+    # Duration between two fetches from each exchange for each pair
+    # Default value = "60s"
+    # FetchPeriod = "60s"
+
+    # Maximum number of exchanges to fetch in parallel
+    # This value corresponds to the number of exchanges configured to fetch them all at the same time, without duplication.
+    # Default value = 6
+    # MaxParallelExchangesToFetch = 6

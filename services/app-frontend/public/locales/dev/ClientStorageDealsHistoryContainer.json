@@ -1,0 +1,35 @@
+{
+    "title": "Storage history",
+    "subtitle": "Logs of all storage deal proposals sent.",
+    "table": {
+        "empty": "Your history is currently empty.",
+        "noMatch": "Your search did not match any storage proposals.",
+        "dealStatus": {
+            "title": "Status"
+        },
+        "provider": {
+            "title": "Provider"
+        },
+        "providerName": {
+            "title": "Provider name",
+            "unknown": "N/A"
+        },
+        "datetime": {
+            "title": "Received at"
+        },
+        "sealingDuration": {
+            "title": "Sealing duration",
+            "tooltip": "The average processing time for storage providers from the publication of the deal on the chain to its effective onboarding."
+        },
+        "overallDuration": {
+            "title": "Overall duration",
+            "tooltip": "The average duration from when the deal is sent to the storage provider to its effective onboarding, encompassing all stages: Acceptance, Downloading, Packing, and Sealing. This precise KPI can only consider deals that utilize CIDgravity."
+        },
+        "inspect": {
+            "tooltip": "Inspect deal proposal"
+        }
+    },
+    "error": {
+        "generic": "Unable to load data. Try again in a few minutes or contact CIDgravity team!"
+    }
+}

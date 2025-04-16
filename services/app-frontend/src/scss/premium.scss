@@ -1,0 +1,33 @@
+.premium-message-section {
+    background-color: #E5E4E2;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, #f8e1bb 1px, #f8f7f4 9px);
+}
+
+.premium-section {
+    background-color: #E5E4E2;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(255,158,0,.5) 1px, rgba(255,255,255,.5) 9px);
+}
+
+.custom-cidg-premium-button {
+    background-color: #ff9e00;
+    border: none;
+    color: white;
+}
+
+div[disabled] {
+    pointer-events: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    opacity: 0.5;
+}
+
+div[disabled] button {
+    opacity: 1 !important;
+}
+
+
+.custom-cidg-premium-button:hover {
+    background-color: #6c757d;
+    color: white;
+}

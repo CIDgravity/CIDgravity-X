@@ -1,0 +1,41 @@
+{
+    "title": "Access control list for retrieval market",
+    "subtitle": "Manage access control by blacklisting/whitelisting client Peer IDs.",
+    "error": {
+        "unableToFetchClients": "Unable to perform necessary actions to display ACLs (reason: unable to retrieve client list). Try again in a few minutes and reach out to our team on Slack if it still doesn't work!",
+        "unableToFetchCurrentBehavior": "Unable to perform necessary actions to display ACLs (reason: unable to retrieve default behavior). Try again in a few minutes and reach out to our team on Slack if it still doesn't work!",
+        "unableToFetchWhitelist": "Unable to perform necessary actions to display ACLs (reason: unable to retrieve whitelist). Try again in a few minutes and reach out to our team on Slack if it still doesn't work!",
+        "unableToFetchBlacklist": "Unable to perform necessary actions to display ACLs (reason: unable to retrieve blacklist). Try again in a few minutes and reach out to our team on Slack if it still doesn't work!"
+    },
+    "validation": {
+        "whitelist": {
+            "isSelectedElemAlreadyInWhitelist": "The selected element is already in your whitelist",
+            "isSelectedElemEmpty": "This field is mandatory",
+            "isSelectedPeerIdInvalid": "Peer ID does't match valid format"
+        },
+        "blacklist": {
+            "isSelectedElemEmpty": "This field is mandatory",
+            "isSelectedElemAlreadyInBlacklist": "The selected element is already in your blacklist",
+            "isSelectedPeerIdInvalid": "Peer ID does't match valid format"
+        }
+    },
+    "notification": {
+        "success": {
+            "onApplyAcl": "ACLs applied successfully"
+        },
+        "error": {
+            "onApplyAcl": "Unable to apply ACL changes. Try later or reach out to CIDgravity team"
+        }
+    },
+    "prompt": {
+        "onLeavingWithUnsavedChanges": "There are unsaved changes. Are you sure you want to leave this page?"
+    },
+    "button": {
+        "apply_zero": "Apply",
+        "apply_one": "Apply {{count}} change",
+        "apply_two": "Apply {{count}} changes",
+        "apply_few": "Apply {{count}} changes",
+        "apply_many": "Apply {{count}} changes",
+        "apply_other": "Apply {{count}} changes"
+    }
+}

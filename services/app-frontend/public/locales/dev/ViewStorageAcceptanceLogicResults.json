@@ -1,0 +1,12 @@
+{
+    "header": "Inspect storage acceptance logic results",
+    "body": {
+        "acceptanceLogicUsed": "The acceptance logic used to evaluate this deal proposal is : {{acceptanceLogicName}}",
+        "solvedVarsExplanation": "You can see below the contents of the logic used, with all the variables replaced at the time of its analysis"
+    },
+    "button": {
+        "viewAcceptanceLogic": "View acceptance logic used",
+        "simulateInPlayground": "Simulate in playground",
+        "close": "Close"
+    }
+}

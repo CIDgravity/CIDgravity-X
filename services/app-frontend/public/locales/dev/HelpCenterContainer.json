@@ -1,0 +1,30 @@
+{
+    "title": "Help center",
+    "diagnosis": {
+        "title": "Diagnosis",
+        "description": "Test the end-to-end connectivity between CIDgravity and your miner",
+        "goToDiagnosisPage": "Run diagnosis"
+    },
+    "docs": {
+        "title": "Documentation",
+        "description": "Access guides on installing and using CIDgravity",
+        "readDocumentation": "Read documentation"
+    },
+    "community": {
+        "title": "Community",
+        "joinSlack": "Join our Slack",
+        "description": "Join our community to ask questions, get help, or discuss all things with fellow storage providers, developers and experts.<br /><br />You will also have DM access to the CIDgravity team."
+    },
+    "issue": {
+        "title": "Issues",
+        "createIssueOnGithub": "Create an issue directly on <1>Github</1>"
+    },
+    "training": {
+        "title": "Training",
+        "bookCallWithExpert": "Struggling to use CIDgravity or to get the most of it? Book a 30 minutes one-on-one with our expert.<br /><br />He will answer all your questions, assist you troubleshooting or simply run a complete demo of the product.",
+        "formDefaultMessage": "Hi, I book this time to know more on how to use CIDgravity, talk to you soon."
+    },
+    "button": {
+        "book": "Book"
+    }
+}

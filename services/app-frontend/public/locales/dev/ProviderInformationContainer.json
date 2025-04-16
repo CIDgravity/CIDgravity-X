@@ -1,0 +1,17 @@
+{
+    "title": "Provider information",
+    "subtitle": "These informations will help identification of this address when working with clients",
+    "beCareful": "Be careful:",
+    "subtitleKYC": "All of this information can be subject to KYS",
+    "notification": {
+        "success": {
+            "isProviderInformationUpdated": "Provider information has been updated successfully!"
+        },
+        "error": {
+            "isProviderInformationFailed": "Something wrong while updating provider information. Try again in few minutes!"
+        }
+    },
+    "error": {
+        "generic": "Unable to retrieve your account details. Try later or reach out to CIDgravity team!"
+    }
+}

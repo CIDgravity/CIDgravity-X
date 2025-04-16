@@ -1,0 +1,38 @@
+{
+    "mixGroupName": "Mix policy group",
+    "title": {
+        "initOrMixGroupEdit": "Configure mix policy group",
+        "new": "Create a new policy group",
+        "edit": "Edit a policy group"
+    },
+    "premium": {
+        "title": "Premium content",
+        "subtitle": "Onboarding policy custom group is accessible only to clients with enterprise offers",
+        "button": "Upgrade",
+        "backButton": "Go back to policy"
+    },
+    "error": {
+        "isPolicyGroupNotExistingOrNotAllowed": "The policy group you ask doesn't exist or you are not allowed to perform this operation"
+    },
+    "button": {
+        "backToGroupList": "Go back to list"
+    },
+    "validation": {
+        "onInitPolicySettings": "Unable to initialize policy settings. Try later or each out to CIDgravity team",
+        "onCreatePolicyGroup": "Unable to create the policy group. Try later or reach out to CIDgravity team",
+        "onUpdatePolicyGroup": "Unable to update the policy group. Try later or reach out to CIDgravity team",
+        "isNameAlreadyUsed": "Policy group name already used, it must be unique for all your groups",
+        "atLeastOneProviderIsRequired": "At least one provider is required to create a group",
+        "atLeastOneProviderIsNotFilled": "All providers fields are required",
+        "isMoreThanNumberOfProviders": "Number of copy can't be > number of providers in group",
+        "groupNameCannotContainMixWord": "Reserved word \"Mix\" is not allowed in group name"
+    },
+    "notification": {
+        "error": {
+            "isAddressCantBeAddedOneMoreTime": "{{provider}} cannot be added more than one time",
+            "isAddressInvalidOrNotOnChain": "{{provider}} is not a valid short provider address",
+            "isAddressGenericError": "{{provider}} cannot be added, please try later or contact CIDgravity",
+            "isAddressNotAddressIdFormat": "{{provider}} must be a short address (address ID)"
+        }
+    }
+}

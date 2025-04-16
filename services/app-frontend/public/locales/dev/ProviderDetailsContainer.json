@@ -1,0 +1,86 @@
+{
+    "title": "{{ providerAddress }} information",
+    "information": {
+        "entityType": {
+            "values": {
+                "organization": "organization",
+                "company": "company",
+                "individual": "individual"
+            }
+        },
+        "isVerified": {
+            "title": "Identity verified",
+            "tooltip": "The identity has been successfully verified by CIDgravity."
+        }, 
+        "isNotVerified": {
+            "title": "Identity not verified",
+            "tooltip": "CIDgravity cannot verify the provider's identity, so we are unable to guarantee its authenticity."
+        },
+        "notAvailable": "KYS information not available"
+    },
+    "status": {
+        "isProviderReadyToAcceptedDeals": {
+            "title": "Is the provider ready to accept deals from you?",
+            "yes": "Yes",
+            "no": "No"
+        },
+        "availability": {
+            "notAvailable": "N/A",
+            "storage": {
+                "title": "Storage Availability (Past 7 Days)"
+            },
+            "retrieval": {
+                "title": "Retrieval Availability (Past 7 Days)"
+            }
+        }
+    },
+    "pricing": {
+        "title": "Pricing",
+        "subtitle": "These are the pricing that will apply to deals sent to this provider.<br />Rules are analyzed sequentially, starting from the top and moving down.",
+        "noRulesApplied": "No pricing defined for your address",
+        "columns": {
+            "transferType": {
+                "title": "Transfer type",
+                "values": {
+                    "any": "Any",
+                    "graphsync": "Graphsync",
+                    "libp2p": "Libp2p",
+                    "manual": "Manual",
+                    "http": "HTTP"
+                }
+            },
+            "verified": {
+                "title": "Verified",
+                "values": {
+                    "true": "Yes",
+                    "false": "No",
+                    "any": "Any"
+                }
+            },
+            "dealSize": {
+                "title": "Min / max deal size"
+            },
+            "dealDuration": {
+                "title": "Min / max duration"
+            },
+            "dealPrice": {
+                "title": "Price",
+                "unit": {
+                    "filGibEpoch": "FIL/GiB/Epoch",
+                    "usdTib30d": "USD/TiB/30d"
+                },
+                "equivalenceUnit": {
+                    "filTibMonth": "FIL/TiB/month",
+                    "attofilGiBEpoch": "attoFIL/GiB/Epoch"
+                }
+            }
+        }
+    },
+    "button": {
+        "viewOnFilscan": "View on Filscan.io"
+    },
+    "error": {
+        "notClaimed": "The provider details are not available",
+        "generic": "Unable to load provider details. Try later or reach out to CIDgravity team."
+    }
+}

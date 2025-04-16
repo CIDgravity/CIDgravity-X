@@ -1,0 +1,9 @@
+{
+    "placeholder": "Value",
+    "unit": {
+        "B": "B",
+        "KiB": "KiB",
+        "MiB": "MiB",
+        "GiB": "GiB"
+    }
+}

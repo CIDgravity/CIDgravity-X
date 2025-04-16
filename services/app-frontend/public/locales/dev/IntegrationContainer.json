@@ -1,0 +1,7 @@
+{
+    "title": "Integrations management",
+    "subtitle": "Control Filecoin brokers settings and deals acceptance directly from CIDgravity.",
+    "error": {
+        "generic": "Unable to load connected integrations for your account. Try later or reach out to CIDgravity team"
+    }
+}

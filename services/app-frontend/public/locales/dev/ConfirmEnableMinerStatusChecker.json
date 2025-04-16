@@ -1,0 +1,14 @@
+{
+    "header": "Enable automatic status check",
+    "body": {
+        "minerDataWillBeCollected": "By activating this service, CIDgravity will regularly send deal proposals to check the status of your miner.<br />As a result, several data can be retrieved during these tests:",
+        "sealingPipelineStatus": "Status of your sealing pipeline (sector states)",
+        "walletStatus": "Status of your wallets (Escrow, Collateral, PubMsg)",
+        "storageStatus": "Status of your storage pipeline (TotalAvailable, Tagged, Staged and Free)",
+        "testBeforeEnabling": "Before continuing, we will send a test. The service will be activated only if everything is working correctly"
+    },
+    "button": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "title": "Import information from another address",
+    "subtitle": "Because you have already claimed another addresses, you can import data from one of them",
+    "doYouWantToImportRadio": {
+        "label": "Do you want to import from another address ?",
+        "noOption": "No (default pricing model will be created)",
+        "yesOption": "Yes"
+    },
+    "addressSelect": {
+        "placeholder": "Select the miner to import data from"
+    },
+    "validation": {
+        "isAddressSelectionMandatory": "To import data, this field is required"
+    }
+}

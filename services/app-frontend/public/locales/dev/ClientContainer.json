@@ -1,0 +1,106 @@
+{
+    "title": "Client management",
+    "subtitle": "Give specific price to your favourite clients, keep their contact information and get reports.",
+    "button": {
+        "newClient": "Create new client",
+        "modifyLimits": "Modify"
+    },
+    "globalLimits": {
+        "sizeUnits": {
+            "B_zero": "{{count}} B",
+            "B_one": "{{count}} B",
+            "B_two": "{{count}} B",
+            "B_few": "{{count}} B",
+            "B_many": "{{count}} B",
+            "B_other": "{{count}} B",
+            "GiB_zero": "{{count}} GiB",
+            "GiB_one": "{{count}} GiB",
+            "GiB_two": "{{count}} GiB",
+            "GiB_few": "{{count}} GiB",
+            "GiB_many": "{{count}} GiB",
+            "GiB_other": "{{count}} GiB",
+            "TiB_zero": "{{count}} TiB",
+            "TiB_one": "{{count}} TiB",
+            "TiB_two": "{{count}} TiB",
+            "TiB_few": "{{count}} TiB",
+            "TiB_many": "{{count}} TiB",
+            "TiB_other": "{{count}} TiB",
+            "MiB_zero": "{{count}} MiB",
+            "MiB_one": "{{count}} MiB",
+            "MiB_two": "{{count}} MiB",
+            "MiB_few": "{{count}} MiB",
+            "MiB_many": "{{count}} MiB",
+            "MiB_other": "{{count}} MiB"
+        },
+        "storage": {
+            "storageDeals": "Number of storage deals",
+            "unlimited": "unlimited",
+            "cumulativeStorageDeals": "Cumulative storage deal",
+            "deals": "{{count}} deal",
+            "deals_zero": "{{count}} deal",
+            "deals_one": "{{count}} deal",
+            "deals_two": "{{count}} deals",
+            "deals_few": "{{count}} deals",
+            "deals_many": "{{count}} deals",
+            "deals_other": "{{count}} deals"
+        },
+        "retrieval": {
+            "retrievalDeals": "Number of retrieval deals",
+            "unlimited": "unlimited",
+            "deals": "{{count}} deal",
+            "deals_zero": "{{count}} deal",
+            "deals_one": "{{count}} deal",
+            "deals_two": "{{count}} deals",
+            "deals_few": "{{count}} deals",
+            "deals_many": "{{count}} deals",
+            "deals_other": "{{count}} deals"
+        }
+    },
+    "table": {
+        "columns": {
+            "clientName": {
+                "title": "Client Name"
+            },
+            "pricingModel": {
+                "title": "Pricing Model",
+                "defaultBadge": "default"
+            },
+            "storageAcceptanceLogic": {
+                "title": "Storage acceptance logic",
+                "default": "Default applied",
+                "defaultBadge": "default"
+            },
+            "currentStorageRateLimit": {
+                "title": "Current storage rate limits",
+                "tooltip": "Storage deal rate / limit for ACCEPTED deals"
+            }
+        },
+        "tooltip": {
+            "editClient": "Edit the client details",
+            "deleteClient": "Delete this client",
+            "sendEmail": "Send an e-mail",
+            "blockClient": "Block client",
+            "unblockClient": "Unblock client"
+        }
+    },
+    "errors": {
+        "unableToLoad": "Unable to load existing clients. Try again in few minutes!",
+        "noClientFound": "You haven't any client under your account.",
+        "addPricingModelBefore": "Before add a new client, be careful to create your pricing models"
+    },
+    "notification": {
+        "success": {
+            "onRemoveClient": "The client has been completely removed",
+            "onUnblockClient": "This client has been unblocked, deals go through rules engine!",
+            "onBlockClient": {
+                "other": "All deals from {{clientName}} will be rejected and client will be informed"
+            }
+        },
+        "error": {
+            "onCheckHasAssociatedAcl": "This client has associated ACL entries. Remove it before deleting this client",
+            "onRemoveClient": "Unable to delete client - please try later or contact CIDgravity team",
+            "onUnblockClient": "Something wrong while unlocking this client. Report to CIDgravity team!",
+            "onBlockClient": "Something wrong while blocking this client. Report to CIDgravity team!"
+        }
+    }
+}

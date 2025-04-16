@@ -1,0 +1,78 @@
+.tabs {
+    background-color: #fff;
+    box-shadow: 0 3px 10px 4px rgba(0, 0, 0, 0.04);
+    padding-right: 0.3rem;
+    padding-left: 0.3rem;
+    border-radius: 5px;
+    margin-bottom: 20px;
+
+    * {
+        z-index: 0;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 60x;
+        width: 33%;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: color 0.15s ease-in;
+        color: #777;
+
+        .nav-link {
+            text-decoration: none;
+            color: #777 !important;
+            text-transform: uppercase;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+            transition-duration: 0.6s;
+
+            &.active {
+                background-color: #e6eef9;
+                z-index: 1;
+                border-radius: 5px;
+                transition: 0.25s ease-out;
+            }
+
+            &.disabled {
+                color: #c0c0c0;
+                z-index: 1;
+                border-radius: 5px;
+                transition: 0.25s ease-out;
+                cursor: default;
+            }
+        }
+    }
+
+    .disabled {
+        cursor: default;
+    }
+
+    .tabs-icon {
+        color: #777;
+        margin-right: 5px;
+    }
+}
+
+.tab_content {
+    padding: 20px 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e5e5e5 !important;
+    box-shadow: 0 3px 10px 4px rgba(0, 0, 0, 0.04);
+    border-radius: 0.3rem;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    color: #4a4a4a;
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1.5;
+}

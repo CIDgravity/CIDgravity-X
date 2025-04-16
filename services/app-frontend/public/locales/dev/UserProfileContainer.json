@@ -1,0 +1,25 @@
+{
+    "title": "Manage my account",
+    "profile": {
+        "connectionStatus": "Connected as {{name}}",
+        "updatedAt": "Updated at {{datetime}}",
+        "email": {
+            "isVerified": "Your email is verified",
+            "isNotVerified": "Your email is not verified"
+        }
+    },
+    "user": {
+        "email": {
+            "label": "Email"
+        },
+        "nickname": {
+            "label": "Nickname"
+        },
+        "userId": {
+            "label": "User ID"
+        }
+    },
+    "error": {
+        "unableToFetchUserDetails": "Unable to retrieve your account details. Please try again or contact our technical support!"
+    }
+}

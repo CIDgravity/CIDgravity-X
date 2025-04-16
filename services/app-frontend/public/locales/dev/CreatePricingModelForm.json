@@ -1,0 +1,119 @@
+{
+    "general": {
+        "title": "General informations",
+        "subtitle": "Fill main informations on the pricing model",
+        "name": {
+            "label": "Pricing model name *"
+        },
+        "currency": {
+            "label": "Currency",
+            "placeholder": "Pricing model currency",
+            "options": {
+                "attofil_gib_epoch": "AttoFIL / GiB / Epoch",
+                "usd_tib_month": "USD / TiB / Month"
+            }
+        },
+        "fallback": {
+            "label": "Fallback to default pricing model",
+            "info": {
+                "isNotDefault": "If selected, when a deal proposal is received and no rules match, the proposal will go through the default pricing model",
+                "isDefault": "Setting disabled: this pricing model is the default pricing model"
+            }
+        }
+    },
+    "rule": {
+        "title": "Manage rules that compose the model",
+        "subtitle": "When a new deal proposal is received, the set of rules defined below is applied, starting from the top. The rule engine stops and accepts the deal at the first matching rule.<br />If no rules match, the fallback setting above decides whether or not the default pricing model is applied, else the deal proposal is rejected.<br />If the default pricing model doesn't match either, the deal is rejected.",
+        "type": {
+            "label": "Type *",
+            "info": "Manual = offline / Graphsync = online",
+            "option": {
+                "any": "Any",
+                "manual": "Manual",
+                "graphsync": "Graphsync",
+                "http": "Http",
+                "libp2p": "Libp2p"
+            }
+        },
+        "isVerified": {
+            "label": "Is verified *",
+            "option": {
+                "any": "Any",
+                "true": "True",
+                "false": "False"
+            }
+        },
+        "size": {
+            "label": "Size *",
+            "info": "Min size allowed{{newLine}}Max size allowed",
+            "min": {
+                "placeholder": "Min",
+                "unit": {
+                    "B": "B",
+                    "KiB": "KiB",
+                    "MiB": "MiB",
+                    "GiB": "GiB"
+                }
+            },
+            "max": {
+                "placeholder": "Max",
+                "unit": {
+                    "B": "B",
+                    "KiB": "KiB",
+                    "MiB": "MiB",
+                    "GiB": "GiB"
+                }
+            }
+        },
+        "duration": {
+            "label": "Duration *",
+            "info": "Min duration allowed{{newLine}}Max duration allowed",
+            "min": {
+                "placeholder": "Min",
+                "unit": {
+                    "day": "Days",
+                    "epoch": "Epochs"
+                }
+            },
+            "max": {
+                "placeholder": "Max",
+                "unit": {
+                    "day": "Days",
+                    "epoch": "Epochs"
+                }
+            }
+        },
+        "price": {
+            "label": "Price *",
+            "info": "Must be specified in attoFil / GiB / epoch",
+            "priceConversionUnit": "Fil / TiB / 30D",
+            "placeholder": {
+                "attoFilGiBEpoch": "attoFIL/GiB/Epoch",
+                "USDCentsTibMonth": "USD/TiB/Month"
+            },
+            "priceConversionUnitAttoFilPerGibPerEpoch": "attoFil / GiB / Epoch"
+        }
+    },
+    "button": {
+        "addNewRule": "Add a new rule",
+        "update": "Update",
+        "create": "Create"
+    },
+    "validation": {
+        "name": {
+            "typeError": "Must be a valid string",
+            "required": "Pricing model name is mandatory",
+            "matches": "Can only contain letters, numbers and underscore"
+        }
+    },
+    "notification": {
+        "success": {
+            "onCreateDefaultPricingModel": "Default pricing model successfully created",
+            "onCreatePricingModel": "Pricing model successfully created",
+            "onUpdatePricingModel": "Pricing model successfully updated"
+        },
+        "error": {
+            "generic": "Unable to create/update the pricing model. Try later or reach out to CIDgravity team"
+        }
+    }
+}

@@ -1,0 +1,85 @@
+@use 'sass:map';
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Trade+Winds&display=swap');
+@import 'cidg-variables.scss';
+
+.cidg-top-navbar {
+    background: $light;
+    width: 100%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    .navbar-text {
+        color: $body-color;
+    }
+
+    // This enables positioning the caret! will be useful when we use bootstrap for the sidebar
+    // https://stackoverflow.com/q/41024505/11046178
+    // https://stackoverflow.com/a/68357738/11046178
+    // .dropdown-toggle::after {
+    //     position: absolute;
+    //     top: calc(50% + 1px);
+    //     left: -1px;
+    // }
+    //
+    a,
+    span {
+        color: $body-color;
+        border: none;
+        outline: none;
+        transition: none;
+    }
+
+    .dropdown-item:hover {
+        background: $cidg-dark-blue;
+        a,
+        span {
+            color: $white;
+        }
+    }
+
+    .dropdown-item-danger {
+        color: $danger;
+    }
+
+    .dropdown-item-danger:hover {
+        background: $danger;
+        color: $white;
+    }
+
+    .dropdown-menu {
+        font-size: $font-size-base;
+    }
+
+    // old-school caret
+    // TODO stop using px, actually center it, rely on built-in bootstrap caret?
+    // .dropdown-menu::before {
+    //     content: "";
+    //     position: absolute;
+    //     top: -16px;
+    //     right: 11px;
+    //     border: 9px solid;
+    //     border-color: transparent transparent $white transparent;
+    // }
+
+    .profile {
+        border-radius: 50%;
+        width: 40px;
+    }
+
+    @include media-breakpoint-down(md) {
+        width: 100%;
+        .navitem-profile-friendlyAndAddress {
+            display: none;
+        }
+        .navitem-filprice {
+            display: none;
+        }
+        .navitem-basefee {
+            display: none;
+        }
+    }
+    @include media-breakpoint-up(md) {
+        .navitem-profile-addressOnly {
+            display: none;
+        }
+    }
+}

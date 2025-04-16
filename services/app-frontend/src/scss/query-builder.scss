@@ -1,0 +1,63 @@
+@use 'sass:map';
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Trade+Winds&display=swap');
+@import 'cidg-variables.scss';
+
+.query-builder {
+    margin: 0px 0px 20px 0px !important;
+}
+
+.group {
+    background: #f8f9fa !important;
+    border: 1px solid #e5e5e5 !important;
+    box-shadow: 0 3px 10px 4px rgba(0, 0, 0, 0.04) !important;
+    border-radius: 0.3rem !important;
+    color: #4a4a4a !important;
+    padding: 10px !important;
+    font-size: 1em !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+.rule {
+    background: #f8f9fa !important;
+    border: 1px solid #e5e5e5 !important;
+    box-shadow: 0 3px 10px 4px rgba(0, 0, 0, 0.04) !important;
+    border-radius: 0.3rem !important;
+    color: #4a4a4a !important;
+    padding: 10px !important;
+    font-size: 1.1em !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+.rule--fieldsrc {
+    margin-right: 20px !important;
+}
+
+.rule--func--arg-sep {
+    vertical-align: middle !important;
+}
+
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn.dropdown-toggle-split:first-child,
+.btn-group > .btn-group:not(:last-child) > .btn,
+.btn-group > .btn:nth-child(n + 3),
+.btn-group > :not(.btn-check) + .btn,
+.btn-group > .btn-group:not(:first-child) > .btn {
+    border-radius: 0.375rem !important;
+}
+
+.btn-group > .btn,
+.btn-group-vertical > .btn {
+    margin-right: 10px !important;
+}
+
+// CSS for simplified mode to hide every unecessary controls on query builder
+.simplifiedMode .rule--drag-handler,
+.simplifiedMode .rule--header,
+.simplifiedMode .group--actions--tr,
+.simplifiedMode .group--drag-handler,
+.simplifiedMode .rule--fieldsrc,
+.simplifiedMode .widget--valuesrc {
+    display: none !important;
+}

@@ -1,0 +1,85 @@
+{
+    "clientName": {
+        "label": "Client name *",
+        "placeholder": "ACME Corporation"
+    },
+    "email": {
+        "label": "E-mail"
+    },
+    "slackUsername": {
+        "label": "Slack username"
+    },
+    "startEpochSealingBuffer": {
+        "title": "Start epoch sealing buffer",
+        "description": "Minimum start epoch buffer to give time for sealing of sector with deal, any deals below that time, will be rejected. Value expressed in HOURS.",
+        "switchLabel": "Override global settings"
+    },
+    "storageAcceptanceLogic": {
+        "title": "Storage acceptance logic",
+        "description": "Select a specific storage acceptance logic for this client. If none is selected, the default will be applied"
+    },
+    "storageDealRates": {
+        "title": "Storage deal rates",
+        "description": "Define deal rates limit allowed per hour (0 = unlimited)",
+        "numberOfDeal": {
+            "label": "Number of deal"
+        },
+        "cumulativeDealSize": {
+            "label": "Cumulative deal size (in GiB)"
+        }
+    },
+    "manageClientAddresses": {
+        "title": "Manage client addresses",
+        "description": "Enter all addresses the client will send deals from",
+        "select": {
+            "placeholder": "Type an address and press enter to add it ..."
+        },
+        "addressChecks": {
+            "description": "After you hit enter, wait for the address validation",
+            "loading": "Address being verified, please wait"
+        }
+    },
+    "manageClientPeerIds": {
+        "title": "Manage client Peer IDs",
+        "description": "Enter all the Peer IDs the clients will retrieve data from",
+        "select": {
+            "placeholder": "Type a Peer ID and press enter to add it ..."
+        },
+        "peerIdChecks": {
+            "description": "After you hit enter, wait for the Peer ID validation",
+            "loading": "The Peer ID is being verified, please wait"
+        }
+    },
+    "button": {
+        "loading": "Loading",
+        "createClient": "Create client",
+        "updateClient": "Update client"
+    },
+    "validation": {
+        "isNameValidString": "Name must be a valid string",
+        "isNameFieldMandatory": "Client name is mandatory",
+        "isNameFieldInvalid": "Can only contain letters, numbers and underscore",
+        "isEmailValidString": "E-mail must be a valid string",
+        "isEmailValidFormat": "Check that email is a valid one",
+        "isSlackValidString": "Slack username must be a valid string",
+        "isHourlyDealLimitValidType": "Must be a valid integer",
+        "isHourlyDealLimitPositive": "Must be a positive number",
+        "isHourlyDealLimitMandatory": "Storage deal limit is mandatory",
+        "isHourlyDealSizeLimitValidType": "Must be a valid integer",
+        "isHourlyDealSizeLimitPositive": "Must be positive number",
+        "isHourlyDealSizeLimitMandatory": "Storage deal size rate limit is mandatory",
+        "isStartEpochSealingBufferValidType": "Must be a valid integer",
+        "isStartEpochSealingBufferPositive": "Must be a positive number",
+        "isStartEpochSealingBufferMandatory": "Start epoch sealing buffer is mandatory"
+    },
+    "notification": {
+        "success": {
+            "isClientSuccessfullyUpdated": "Client has been updated!",
+            "isClientSuccessfullyCreated": "Your client has been successfully added!"
+        },
+        "error": {
+            "hasClientCreationFailed": "Cannot add new client",
+            "hasClientUpdateFailed": "Cannot modify client"
+        }
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "general": {
+        "title": "General informations",
+        "subtitle": "Fill main informations about the onboarding policy group",
+        "name": {
+            "label": "Group name *"
+        },
+        "numberOfCopies": {
+            "label": "Number of copies *"
+        }
+    },
+    "providers": {
+        "title": "Providers management",
+        "subtitle": "You can add one or multiple providers to this group",
+        "notAvailableForMixGroupPolicy": "In the mix group, you can't add specific storage providers.<br />Providers will be automatically chosen from all those using CIDgravity",
+        "howToAddFirstProvider": "To add the first provider, you can click on \"Add provider\" button",
+        "field": {
+            "address": {
+                "label": "Provider short address",
+                "placeholder": "f010479"
+            },
+            "comment": {
+                "label": "Comment",
+                "placeholder": "Best provider"
+            }
+        }
+    },
+    "button": {
+        "addNewProvider": "Add a new provider",
+        "configure": "Configure",
+        "update": "Update",
+        "create": "Create"
+    },
+    "validation": {
+        "name": {
+            "typeError": "Must be a valid string",
+            "required": "Policy group name is mandatory",
+            "matches": "Can only contain letters, numbers and underscore",
+            "lengthTooShort": "Group name must be at least 3 char length"
+        },
+        "numberOfCopies": {
+            "typeError": "Must be a valid number",
+            "required": "Number of copies is mandatory",
+            "isUnderMinimunValue": "Minimun value is 1 copy"
+        }
+    },
+    "notification": {
+        "success": {
+            "onSaveMixPolicyGroup": "Mix policy group settings has been successfully saved",
+            "onCreatePolicyGroup": "Policy group successfully created",
+            "onUpdatePolicyGroup": "Policy group successfully updated"
+        },
+        "error": {
+            "generic": "Unable to create/update the policy group. Try later or reach out to CIDgravity team"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "title": "Sign a message to claim this address",
+    "subtitle": "This allows us to verify that you have the required permissions on it",
+    "runThisCommandStep": {
+        "label": "1. Run this command to sign a specific message",
+        "codeHighlight": {
+            "content": "lotus wallet sign {{workerKey}} {{hexMessage}}"
+        }
+    },
+    "putSignedMessageStep": {
+        "label": "2. Put your signed message below *"
+    },
+    "error": {
+        "isUnableToGenerateChallenge": "Something wrong while generating a challenge to sign, please try again or contact the CIDGravity support team",
+        "isUnableToCheckSignature": "Unable to verify your signed message"
+    },
+    "button": {
+        "next": "Next",
+        "previous": "Previous"
+    },
+    "validation": {
+        "isSignedMessageMandatory": "Signed message is required",
+        "isSignatureInvalidOrChallengeExpired": "Invalid signature or challenge expired"
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "header": "Regenerate your connector token",
+    "body": {
+        "yourTokenWillBeInvalidated": " You are about to regenerate your connector token, this action can't be undone! <br /> You can change your token if you think it is corrupted or used without your permission. <br /> <br />",
+        "beCareful": "Be careful:",
+        "dealProposalsWillNotBeProcessed": "your deals proposals will not be processed by our API until you change it in the configuration on your miner!"
+    },
+    "button": {
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+    }
+}

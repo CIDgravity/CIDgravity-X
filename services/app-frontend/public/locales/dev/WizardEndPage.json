@@ -1,0 +1,19 @@
+{
+    "minerAlreadyClaimed": {
+        "title": "Successfully claimed {{address}}"
+    },
+    "clientClaimed": {
+        "title":  "Successfully claimed {{address}}"
+    },
+    "wizardComplete": {
+        "title": "Claiming Completed",
+        "stepClaimAddress": "Step 1: Claim miner and configure default pricing",
+        "stepDeployConnector": "Step 2: Deploy CIDgravity-X connector to the miner",
+        "connectorTokenExplanation": "Add the following token to CIDgravity-X connector configuration on the miner."
+    },
+    "button": {
+        "testConnectivity": "Test end-to-end connectivity",
+        "goToDashboard": "Go to dashboard",
+        "deployConnector": "Deploy CIDgravity-X connector"
+    }
+}

@@ -1,0 +1,157 @@
+{
+    "dealStatusAndFilters": {
+        "allErrors":{
+            "sectionTitle": "Errors",
+            "dropdownName": "All errors"
+        },
+        "allSuccess":{
+            "sectionTitle": "Success",
+            "dropdownName": "All success"
+        },
+        "accept":{
+            "name": "Accepted",
+            "dropdownName": "Deal Accepted",
+            "tooltip": "The deal has been accepted by CIDgravity. Awaiting publication"
+        },
+        "accepted":{
+            "name": "Accepted",
+            "dropdownName": "Deal Accepted",
+            "tooltip": "The deal has been accepted by CIDgravity. Awaiting publication"
+        },
+        "published":{
+            "name": "Published",
+            "dropdownName": "Deal Published",
+            "tooltip": "The deal has been published on-chain. Awaiting confirmation of sealing"
+        },
+        "active":{
+            "name": "Active",
+            "dropdownName": "Deal Active",
+            "tooltip": "The deal is currently active on-chain."
+        },
+        "expired":{
+            "name": "Expired",
+            "dropdownName": "Deal Expired",
+            "tooltip": "The deal has expired."
+        },
+        "reject":{
+            "name": "Rejected",
+            "dropdownName": "Proposal Rejected - Any Reasons",
+            "tooltip": "The deal has been rejected."
+        },
+        "maintenance":{
+            "name": "Maintenance",
+            "dropdownName": "Proposal Rejected - Maintenance",
+            "tooltip": "In maintenance"
+        },
+        "curioBackPressure": {
+            "name": "Curio Back Pressure",
+            "dropdownName": "Proposal Rejected - Curio Back Pressure",
+            "tooltip": "Curio Back Pressure"
+        },
+        "noSpaceLeft":{
+            "name": "No space left",
+            "dropdownName": "Proposal Rejected - No space left",
+            "tooltip": "No space left"
+        },
+        "noFundsLeft":{
+            "name": "No funds left",
+            "dropdownName": "Proposal Rejected - No funds left",
+            "tooltip": "No funds left"
+        },
+        "sizeRateLimit":{
+            "name": "Size rate limit",
+            "dropdownName": "Proposal Rejected - Size rate limit",
+            "tooltip": "Reject due to deal size limit"
+        },
+        "rateLimit":{
+            "name": "Rate limit",
+            "dropdownName": "Proposal Rejected - Rate limit",
+            "tooltip": "Reject due to rate limit"
+        },
+        "storageAcceptanceLogic":{
+            "name": "Acceptance logic",
+            "dropdownName": "Proposal Rejected - Storage acceptance logic not passed",
+            "tooltip": "Storage acceptance logic not passed"
+        },
+        "error":{
+            "name": "Error",
+            "dropdownName": "Proposal Rejected - Error",
+            "tooltip": "Error"
+        },
+        "invalidProposal": {
+            "name": "Invalid proposal",
+            "dropdownName": "Proposal Rejected - Invalid proposal",
+            "tooltip": "Proposal format doesn't match requirements"
+        },
+        "clientBlocked":{
+            "name": "Client blocked",
+            "dropdownName": "Proposal Rejected - Client blocked",
+            "tooltip": "Rejected due to the client being blocked"
+        },
+        "blacklist":{
+            "name": "Blacklisted",
+            "dropdownName": "Proposal Rejected - Blacklist",
+            "tooltip": "Address blacklisted"
+        },
+        "startEpochBelowSealingBuffer":{
+            "name": "Start epoch sealing buffer",
+            "dropdownName": "Proposal Rejected - Start epoch too early",
+            "tooltip": "Reject due to start date below defined sealing buffer"
+        },
+        "neverPublished":{
+            "name": "Never published",
+            "dropdownName": "Sealing - Error Never Published",
+            "tooltip": "The deal has been accepted but never published on chain"
+        },
+        "publishedExpired": {
+            "name": "Published expired",
+            "dropdownName": "Sealing - Error Published-expired",
+            "tooltip": "The deal publication has expired."
+        },
+        "slashed":{
+            "name": "Slashed",
+            "dropdownName": "Onchain - Error slashed",
+            "tooltip": "The deal has been slashed."
+        },
+        "busy":{
+            "name": "Busy",
+            "dropdownName": "Proposal Rejected - Busy",
+            "tooltip": "Busy"
+        },
+        "serviceUnavailable":{
+            "name": "Service unavailable",
+            "dropdownName": "Proposal Rejected - Service unavailable",
+            "tooltip": "Service unavailable"
+        },
+        "clientNotAuthorized":{
+            "name": "Not authorized",
+            "dropdownName": "Proposal Rejected - Not authorized",
+            "tooltip": "Not authorized"
+        },
+        "clientNotEnoughtDatacap":{
+            "name": "Not enought datacap",
+            "dropdownName": "Proposal Rejected - Not enought datacap",
+            "tooltip": "Not enought datacap"
+        },
+        "dealTypeNotAccepted":{
+            "name": "Deal type not accepted",
+            "dropdownName": "Proposal Rejected - Deal type not accepted",
+            "tooltip": "Deal type not accepted"
+        },
+        "priceTooLow":{
+            "name": "Price too low",
+            "dropdownName": "Proposal Rejected - Price too low",
+            "tooltip": "Price too low"
+        },
+        "startEpochTooEarly":{
+            "name": "Start epoch too early",
+            "dropdownName": "Proposal Rejected - Start epoch too early",
+            "tooltip": "Reject due to start date too early"
+        },
+        "unsupportedTransferProtocol": {
+            "name": "Unsupported transfer protocol",
+            "dropdownName": "Proposal Rejected - Transfer protocol not supported",
+            "tooltip": "Curio doesn't support libp2p and graphsync transfer protocols"
+        }
+    }
+}

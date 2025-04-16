@@ -1,0 +1,76 @@
+{
+    "createClient": {
+        "title": "Create new client"
+    },
+    "editClient": {
+        "title": "Edit client"
+    },
+    "clientFromIntegrationWarn": "This client is a part of an integration.",
+    "pricingModel": {
+        "select": {
+            "label": "Select a pricing model",
+            "description": "Select it from the dropdown, if no model match your client, you can create a new one",
+            "noSelectedDefaultWillApply": "No pricing model selected, default model will be applied"
+        },
+        "details": {
+            "title": "{{pricingModelName}} details",
+            "ruleNumber": "Rule # {{ruleNumber}}",
+            "dealType": "Deal type",
+            "forVerifiedDeals": "For verified deals",
+            "forUnverifiedDeals": "For unverified deals",
+            "forBothVerifiedAndUnverified": "For both verified and unverified deals",
+            "priceLabel": "Price / TiB / 30D",
+            "priceUnit": {
+                "FIL": "FIL",
+                "USD": "USD"
+            },
+            "dealSize": "Deal size",
+            "dealDuration": "Deal duration",
+            "fallBackToDefaultPricing": {
+                "isDisabled": "Fall back to default pricing model : Disabled",
+                "isEnabled": "Fall back to default pricing model : Enabled",
+                "notApplicable": "Fall back to default pricing model : Not applicable"
+            }
+        }
+    },
+    "storageAcceptanceLogic": {
+        "title": "Acceptance logic",
+        "description": "Select from the dropdown or create a new one.",
+        "noSelectedDefaultWillApply": "No storage acceptance logic selected, default logic will be applied"
+    },
+    "error": {
+        "isAddressNotOnChain": "{{address}} (not on chain)",
+        "isClientNotExistingOrNotAllowed": "The client you ask doesn't exist or you are not allowed to perform this operation",
+        "ERR_DEFAULT_ACCEPTANCE_LOGIC_NOT_FOUND": "The default storage \"Acceptance logic\" cannot be found. Set an acceptance logic as default and try again or contact the CIDgravity team.",
+        "ERR_DEFAULT_PRICING_MODEL_NOT_FOUND": "The default storage \"Pricing model\" cannot be found. Set a pricing model as default and try again or contact the CIDgravity team.",
+        "ERR_CHECK_ADDRESS_FROM_HISTORY": "This address {{address}} is invalid or does not exist on chain.",
+        "ERR_ADDRESS_ALREADY_USED_FROM_HISTORY": "This address is already attached to an existing client."
+    },
+    "button": {
+        "createNewPricingModel": "New pricing model",
+        "createNewStorageAcceptanceLogic": "New acceptance logic",
+        "backToClientList": "Go back to your clients"
+    },
+    "validation": {
+        "isGenericErrorWhileAddingClient": "Something wrong while adding the client",
+        "isPricingModelSelectionMandatory": "You must select the rules model to be associated with this client!",
+        "isStorageAcceptanceLogicSelectionMandatory": "You must select the storage acceptance logic to be associated with this client",
+        "isAddressOrPeerIdFieldMandatory": "You must select at least one address or Peer ID for this client!",
+        "isClientNameAlreadyUsed": "Client name is already used, it must be unique for all your clients!"
+    },
+    "notification": {
+        "error": {
+            "isAddressCantBeAddedOneMoreTime": "{{address}} cannot be added more than one time",
+            "isAddressResolvesToAlreadyUsed": "{{address}} resolves to {{resolvedAddress}} and is already in the client address list",
+            "isAddressAlreadyConfigured": "{{address}} already configured on client",
+            "isAddressBlacklisted": "{{address}} is blacklisted, whitelist it before associating it to a client",
+            "isAddressNotOfTypeAccount": "{{address}} actor type is not account",
+            "isAddressGenericError": "{{address}} cannot be added, please try later or contact CIDgravity",
+            "isAddressInvalidFilecoinFormat": "{{address}} is not a valid Filecoin address",
+            "isAddressInvalidFormat": "{{address}} address type is not supported, use SECP256K1, ID or BLS address",
+            "isPeerIdAlreadyAdded": "{{peerId}} cannot be added more than one time",
+            "isPeerIdAlreadyConfigured": "{{peerId}} already configured on client",
+            "isPeerIdInvalidFormat": "{{peerId}} is not a valid Peer ID"
+        }
+    }
+}

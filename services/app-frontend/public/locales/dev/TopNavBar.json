@@ -1,0 +1,50 @@
+{
+    "ticker": {
+        "retrievingPrice": "Retrieving data ...",
+        "retrievingBaseFee": "Retrieving base fee ...",
+        "baseFee": "BaseFee"
+    },
+    "maintenanceMode": {
+        "switch": {
+            "tooltipEnabled": "Maintenance mode activated, all deals for {{address}} are rejected",
+            "tooltipAcceptingDeals": "CIDgravity is accepting deals"
+        }
+    },
+    "tenantSelector": {
+        "noAddress": "No address",
+        "noAddressSelected": "No address selected",
+        "providerCategory": "Providers",
+        "clientsCategory": "Clients",
+        "aclOffers": {
+            "premium": "Premium account",
+            "free": "Free account"
+        }
+    },
+    "userDropdownMenu": {
+        "account": "My account",
+        "addresses": "My addresses",
+        "logout": "Sign out"
+    },
+    "notification": {
+        "success": {
+            "onCheckNetwork": {
+                "restored": "Connection restored to CIDgravity services"
+            },
+            "onFirstNetworkConnection": {
+                "available": "Connection restored to CIDgravity services"
+            },
+            "onEnableMaintenanceMode": "Maintenance mode activated, all deals for {{address}} are rejected",
+            "onDisableMaintenanceMode": "CIDgravity is now accepting deals based on {{address}} settings",
+            "onSwitchTenant": "Switched to {{address}}"
+        },
+        "error": {
+            "onCheckNetwork": {
+                "lost": "No connection to CIDgravity services"
+            },
+            "onFirstNetworkConnection": {
+                "lost": "No connection to CIDgravity services"
+            },
+            "onErrorMaintenanceMode": "Unable to change maintenance mode for {{address}}, try again in few minutes or reach out to CIDgravity team"
+        }
+    }
+}

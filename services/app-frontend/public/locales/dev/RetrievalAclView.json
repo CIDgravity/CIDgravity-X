@@ -1,0 +1,55 @@
+{
+    "title": "Access control list for retrieval market",
+    "subtitle": "Manage access control by blacklisting/whitelisting client Peer IDs.",
+    "blacklist": {
+        "title": "Blacklist",
+        "subtitle": "CIDgravity will accept all deals by default and apply the following blacklist:",
+        "table": {
+            "empty": "There are no records to display",
+            "peerId": {
+                "title": "Peer ID",
+                "noContent": "No Peer ID",
+                "content_zero": "No Peer ID",
+                "content_one": "{{count}} Peer ID",
+                "content_two": "{{count}} Peer IDs",
+                "content_few": "{{count}} Peer IDs",
+                "content_many": "{{count}} Peer IDs",
+                "content_other": "{{count}} Peer IDs"
+            },
+            "client": {
+                "title": "Client"
+            },
+            "comment": {
+                "title": "Comment"
+            },
+            "action": {
+                "title": "Action"
+            }
+        }
+    },
+    "whitelist": {
+        "title": "Whitelist",
+        "subtitle": "CIDgravity will reject all deals by default and apply the following whitelist:",
+        "table": {
+            "empty": "There are no records to display",
+            "peerId": {
+                "title": "Peer ID",
+                "content_zero": "No Peer ID",
+                "content_one": "{{count}} Peer ID",
+                "content_two": "{{count}} Peer IDs",
+                "content_few": "{{count}} Peer IDs",
+                "content_many": "{{count}} Peer IDs",
+                "content_other": "{{count}} Peer IDs"
+            },
+            "client": {
+                "title": "Client"
+            },
+            "comment": {
+                "title": "Comment"
+            },
+            "action": {
+                "title": "Action"
+            }
+        }
+    }
+}

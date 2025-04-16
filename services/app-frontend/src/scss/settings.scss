@@ -1,0 +1,9 @@
+@import 'cidg-variables.scss';
+
+.settings-container {
+    @include media-breakpoint-up(md) {
+        .maintenance-section {
+            display: none;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+{
+    "header": "{{pricingModelName}} ruleset",
+    "body": {
+        "position": "Rule {{position}}",
+        "type": {
+            "label": "Deal type",
+            "verified": {
+                "true": "For verified deals",
+                "false": "For unverified deals",
+                "any": "For both verified and unverified deals"
+            }
+        },
+        "price": {
+            "label": "Price / TiB / 30D"
+        },
+        "size": {
+            "label": "Min/max deal size"
+        },
+        "duration": {
+            "label": "Min/max deal duration"
+        },
+        "fallback": {
+            "label": "",
+            "enabled": "<0>Fallback to default pricing model: </0> <1>Enabled</1>",
+            "disabled": "<0>Fallback to default pricing model: </0> <1>Disabled</1>",
+            "na": "<0>Fallback to default pricing model: </0> <1>Not applicable</1>"
+        },
+        "client": {
+            "title": "Associated clients",
+            "titleClientsWithDefault": "Clients with default pricing model",
+            "pricing": {
+                "alsoApplyToUnknownClients": "This default pricing model is also applied to all unknown clients",
+                "noClient": "No clients are associated with this pricing model"
+            }
+        }
+    },
+    "error": {
+        "hasNoRule": "There is no rule in this model"
+    },
+    "button": {
+        "close": "Close"
+    }
+}

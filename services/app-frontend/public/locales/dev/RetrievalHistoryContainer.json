@@ -1,0 +1,40 @@
+{
+    "title": "Retrieval history",
+    "subtitle": "Logs of all retrieval deal proposals received.",
+    "table": {
+        "empty": "Your history is currently empty.",
+        "noMatch": "Your search did not match any retrieval proposals.",
+        "from": {
+            "title": "From client",
+            "copy": {
+                "tooltip": "Copy full address"
+            }
+        },
+        "datetime": {
+            "title": "Received at ({{datetimeFormat}})"
+        },
+        "reason": {
+            "title": "Reason"
+        },
+        "inspect": {
+            "tooltip": "Inspect deal proposal"
+        },
+        "internalDecision": {
+            "accept": {
+                "tooltip": "Accepted"
+            },
+            "maintenance": {
+                "tooltip": "In maintenance"
+            },
+            "retrievalRateLimit": {
+                "tooltip": "Reject due to rate limit"
+            },
+            "acl": {
+                "tooltip": "Reject due to ACL"
+            }
+        }
+    },
+    "error": {
+        "generic": "Unable to load data. Try again in a few minutes or contact CIDgravity team!"
+    }
+}

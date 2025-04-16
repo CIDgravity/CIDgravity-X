@@ -1,0 +1,189 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Ticker API",
+      "version": "1.0.0",
+      "description": "This API provides real-time cryptocurrency ticker data aggregated from multiple exchanges. It allows clients to:\n\n- Retrieve the most recent ticker data (price and volume) for all supported exchanges.\n- Query specific trading pairs (e.g., FIL_USD) to get the latest prices across exchanges along with a weighted average price.\n- Check the operational status of the API service.\n- Retrieve the current version of the API.\n\nThe API is designed to be lightweight, fast, and suitable for building dashboards, trading bots, or analytics tools requiring up-to-date market data."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080"
+      }
+    ],
+    "paths": {
+      "/v1/get-latest-tickers": {
+        "get": {
+          "summary": "Get latest tickers",
+          "description": "Returns the most recent ticker data for all available exchanges. Each exchange in the response includes all trading pairs that were successfully fetched.\n\nOnly exchanges with a successful data fetch within the last 2 minutes are included in the response, ensuring the freshness and reliability of the data. Each exchange is represented once.",
+          "responses": {
+            "200": {
+              "description": "List of tickers",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ExchangeTicker"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/v1/get-latest-tickers/{pair}": {
+        "get": {
+          "summary": "Get latest tickers for specific pair",
+          "description": "Returns the most recent ticker data for a specific trading pair (e.g., FIL_USD) across all available exchanges.\n\nEach entry in the response represents a single exchange and includes only the data for the requested pair. Only exchanges with a successful data fetch for that pair within the last 2 minutes are included.\n\nThe response also includes a 'weightedPrice' field, which represents the volume-weighted average price of the pair across all included exchanges. This value reflects a more balanced market price by giving more weight to exchanges with higher trading volume.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "pair",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Cryptocurrency pair (e.g., FIL_USD)"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Tickers for the specified pair",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PairTickers"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/v1/get-version": {
+        "get": {
+          "summary": "Get version",
+          "description": "Retrieve the current version",
+          "responses": {
+            "200": {
+              "description": "Current version",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "version": {
+                        "type": "string",
+                        "example": "v1.0.0"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/v1/ping": {
+        "get": {
+          "summary": "Check health",
+          "description": "Check the health of the API",
+          "responses": {
+            "200": {
+              "description": "Health response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "All good"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ExchangeTicker": {
+          "type": "object",
+          "properties": {
+            "exchange": {
+              "type": "string",
+              "example": "Kraken"
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/TickerData"
+              }
+            },
+            "fetchedAt": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1744399419177
+            }
+          }
+        },
+        "TickerData": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "number",
+              "format": "float",
+              "example": 2.4512
+            },
+            "volume": {
+              "type": "number",
+              "format": "float",
+              "example": 14042.34
+            }
+          }
+        },
+        "PairTickers": {
+          "type": "object",
+          "properties": {
+            "pair": {
+              "type": "string",
+              "example": "FIL_USD"
+            },
+            "tickers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExchangeTickerDetail"
+              }
+            },
+            "weightedPrice": {
+              "type": "number",
+              "format": "float",
+              "example": 2.4521830535815163
+            }
+          }
+        },
+        "ExchangeTickerDetail": {
+          "type": "object",
+          "properties": {
+            "exchange": {
+              "type": "string",
+              "example": "Kraken"
+            },
+            "data": {
+              "$ref": "#/components/schemas/TickerData"
+            },
+            "fetchedAt": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1744399479093
+            }
+          }
+        }
+      }
+    }
+  }

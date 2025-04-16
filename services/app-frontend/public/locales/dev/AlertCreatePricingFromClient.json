@@ -1,0 +1,10 @@
+{
+    "header": "You are about to leave this page",
+    "body": {
+        "warningDataWillBeLost": "All unsaved information will be lost. Do you really want to continue?"
+    },
+    "button": {
+        "continue": "Yes",
+        "cancel": "Cancel"
+    }
+}

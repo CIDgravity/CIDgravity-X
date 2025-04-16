@@ -1,0 +1,12 @@
+{
+    "title": "Start epoch sealing buffer",
+    "tooltip": "Minimum start epoch buffer to give time for sealing of sector with deal, any deals below that time, will be rejected. <br/>Value expressed in HOURS.",
+    "button": {
+        "save": "Save"
+    },
+    "validation": {
+        "isInvalidValue": "Invalid value",
+        "isNotPositiveValue": "Must be a positive integer",
+        "isRequiredValue": "Mandatory field"
+    }
+}

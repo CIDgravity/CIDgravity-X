@@ -1,0 +1,13 @@
+{
+    "removeConfirmation": {
+        "header": "Remove policy group {{policyGroupName}}",
+        "body": {
+            "willRemoveThisPolicyGroup": "Do you really want to remove this policy group, this action cannot be undone!"
+        }
+    },
+    "button": {
+        "cancel": "Cancel",
+        "close": "Close",
+        "confirm": "Confirm"
+    }
+}

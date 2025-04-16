@@ -1,0 +1,61 @@
+{
+    "title": "Storage acceptance logic management",
+    "subtitle": "Acceptance logic can be attached to one or multiple clients.",
+    "requirements": "Applies only for ONLINE DEALS, and if you use a BOOST node with a version higher than 2.1.0",
+    "table": {
+        "name": {
+            "title": "Name"
+        },
+        "client": {
+            "title": "Clients",
+            "noContent": "N/A",
+            "defaultContentAndClients_zero": "Apply to unknown clients",
+            "defaultContentAndClients_one": "{{count}} client associated + unknown clients",
+            "defaultContentAndClients_two": "{{count}} clients associated + unknown clients",
+            "defaultContentAndClients_few": "{{count}} clients associated + unknown clients",
+            "defaultContentAndClients_many": "{{count}} clients associated + unknown clients",
+            "defaultContentAndClients_other": "{{count}} clients associated + unknown clients",
+            "content_zero": "No client associated",
+            "content_one": "{{count}} client associated",
+            "content_two": "{{count}} clients associated",
+            "content_few": "{{count}} clients associated",
+            "content_many": "{{count}} clients associated",
+            "content_other": "{{count}} clients associated"
+        },
+        "view": {
+            "tooltip": "View acceptance logic"
+        },
+        "edit": {
+            "tooltip": "Edit the acceptance logic"
+        },
+        "delete": {
+            "tooltip": "Delete this acceptance logic"
+        },
+        "setToDefault": {
+            "tooltip": "Set this acceptance logic as default"
+        },
+        "defaultBadge": "DEFAULT"
+    },
+    "notification": {
+        "success": {
+            "onUpdateDefaultAcceptanceLogic": "Default storage acceptance logic updated",
+            "onDeleteAcceptanceLogic": "Acceptance logic successfully deleted"
+        },
+        "error": {
+            "onUpdateDefaultAcceptanceLogic": "Unable to update default acceptance logic. Try later or reach out to CIDgravity team.",
+            "onDeleteAcceptanceLogic": "Unable to delete acceptance logic. Try later or reach out to CIDgravity team"
+        }
+    },
+    "empty": {
+        "title": "There are no storage acceptance logic under your account. A default storage acceptance logic must be created to use CIDgravity."
+    },
+    "error": {
+        "generic": "Unable to load storage acceptance logics. Try later or reach out to CIDgravity team."
+    },
+    "button": {
+        "new": "Create new acceptance logic",
+        "empty": {
+            "new": "Create default acceptance logic"
+        }
+    }
+}

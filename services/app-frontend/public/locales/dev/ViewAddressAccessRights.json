@@ -1,0 +1,14 @@
+{
+    "header": "Access rights on {{addressId}}",
+    "body": {
+        "table": {
+            "profile": "Profile picture",
+            "nickname": "Nickname",
+            "email": "Email address",
+            "action": "Actions"
+        }
+    },
+    "button": {
+        "close": "Close"
+    }
+}

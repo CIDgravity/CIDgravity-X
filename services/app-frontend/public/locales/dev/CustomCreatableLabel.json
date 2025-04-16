@@ -1,0 +1,10 @@
+{
+    "tooltip": {
+        "copy": "Copy"
+    },
+    "notification": {
+        "success": {
+            "onCopyToClipboard": "Copied to clipboard"
+        }
+    }
+}

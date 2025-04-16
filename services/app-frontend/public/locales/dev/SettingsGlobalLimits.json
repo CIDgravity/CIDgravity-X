@@ -1,0 +1,28 @@
+{
+    "client": {
+        "rateLimit": {
+            "title": "Global rate limits",
+            "storageDealPerHour": {
+                "label": "Number of storage deals per hour",
+                "info": "Max number of storage deals per hour across all clients"
+            },
+            "retrievalDealPerHour": {
+                "label": "Retrieval deals per hour",
+                "info": "Max number of retrieval deals per hour across all clients"
+            },
+            "cumulativeDealSize": {
+                "label": "Cumulative storage deal size (GiB/h)",
+                "info": "Max cumulative storage deal size per hour across all clients"
+            },
+            "button": {
+                "save": "Save"
+            }
+        }
+    },
+    "zeroMeanNoLimits": "0 means unlimited",
+    "validation": {
+        "isInvalidValue": "Invalid value",
+        "isNotPositiveValue": "Must be a positive integer",
+        "isRequiredValue": "Mandatory field"
+    }
+}

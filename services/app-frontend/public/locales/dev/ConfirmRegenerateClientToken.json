@@ -1,0 +1,10 @@
+{
+    "header": "Regenerate the token",
+    "body": {
+        "yourTokenWillBeInvalidated": " You are about to regenerate the token associated with this address, this action can't be undone! <br /> You can change your token if you think it is corrupted or used without your permission. <br /> <br />"
+    },
+    "button": {
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+    }
+}

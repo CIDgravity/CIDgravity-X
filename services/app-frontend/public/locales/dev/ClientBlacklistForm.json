@@ -1,0 +1,31 @@
+{
+    "title": "Add address to blacklist",
+    "field": {
+        "addressId": {
+            "label": "Provider address"
+        },
+        "comment": {
+            "label": "Comment"
+        }
+    },
+    "button": {
+        "create": "Create"
+    },
+    "validation": {
+        "address": {
+            "typeError": "Provider address must be a valid string",
+            "required": "Provider address is mandatory"
+        },
+        "comment": {
+            "typeError": "Comment must be a valid string"
+        }
+    },
+    "notification": {
+        "success": {
+            "onInsertAddressToBlacklist": "Address successfully added to blaclist."
+        },
+        "error": {
+            "generic": "An error occured while adding address to blacklist. Please try again in a few minutes or contact the CIDgravity team."
+        }
+    }
+}

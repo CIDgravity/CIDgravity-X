@@ -1,0 +1,11 @@
+{
+    "title": "CIDgravity is currently unavailable",
+    "explanation": "Our operations team is working on bringing it back online.<br />",
+    "action": "Try to reload this page or contact our support team<br /><br />{{errorMessage}}",
+    "button": {
+        "email": {
+            "label": "Report by email",
+            "subject": "[ALERT] CIDgravity is currently unavailable"
+        }
+    }
+}

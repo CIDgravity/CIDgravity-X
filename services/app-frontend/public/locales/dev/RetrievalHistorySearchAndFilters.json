@@ -1,0 +1,16 @@
+{
+    "inputSearch": {
+        "placeholder": "Search by address or proposal uid then PRESS ENTER"
+    },
+    "dateRangePicker": {
+        "placeholder": "From ({{dateFormat}}) - To ({{dateFormat}})"
+    },
+    "status": {
+        "placeholder": "Deal status",
+        "all": "All status",
+        "accept": "Accepted",
+        "maintenance": "Maintenance",
+        "retrievalRateLimit": "Rate limit exceeded",
+        "acl": "ACL / Blacklist"
+    }
+}

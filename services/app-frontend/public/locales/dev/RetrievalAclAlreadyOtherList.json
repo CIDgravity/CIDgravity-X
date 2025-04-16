@@ -1,0 +1,24 @@
+{
+    "whitelist": {
+        "header": "Confirm replacement from blacklist",
+        "body": "{{elementLabel}} is already blacklisted. Do you wish to move it to your whitelist?"
+    },
+    "blacklist": {
+        "header": "Confirm replacement from whitelist",
+        "body": "{{elementLabel}} is already whitelisted. Do you wish to move it to your blacklist?",
+        "button": {
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+        }
+    },
+    "button": {
+        "whitelist": {
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+        },
+        "blacklist": {
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "unableToRemove": {
+        "header": "Unable to remove pricing model {{pricingModelName}}",
+        "body": {
+            "needToUpdateClientsPricingModels": "Before removing, you need to change the pricing model of all clients currently attached to it. <br /><br /> List of clients using this model:<br />"
+        }
+    },
+    "removeConfirmation": {
+        "header": "Remove pricing model {{pricingModelName}}",
+        "body": {
+            "willRemoveThisPricingModel": "Do you really want to remove this pricing model, this action cannot be undone!"
+        }
+    },
+    "button": {
+        "cancel": "Cancel",
+        "close": "Close",
+        "confirm": "Confirm"
+    }
+}

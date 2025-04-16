@@ -1,0 +1,59 @@
+export const SERVER_API_URL = "";
+
+// For example : https://services.cidgravity.com/jwt
+export const REPORTING_SERVICE_URL = "";
+export const MINER_STATUS_CHECKER_SERVICE_URL = "";
+export const CLIENT_BACKEND_SERVICE_URL = "";
+
+export const AUTH0_DOMAIN = "";
+export const AUTH0_CLIENT_ID = "";
+export const AUTH0_AUDIENCE = "";
+
+// Cookie name for storing last seen address
+export const LAST_SEEN_ADDRESS_COOKIE_NAME = "lastSeenAddress"
+
+// Names that will be used to store data in user session storage
+// Default values can be kept
+export const TOKEN_REFRESHED_DISPATCH_EVENT = 'tokenRefreshed'
+export const SESSION_STORAGE_TENANT_KEY = 'tenantId'
+export const SESSION_STORAGE_ACCOUNT_TYPE_KEY = 'accountType'
+export const AUTH0_ERROR_RETRY = 'authenticationRetried'
+
+// Link to upgrade page
+export const UPGRADE_PAGE_LINK = "https://cidgravity.com"
+
+// Endpoint to connect to the websocket server
+// Must begin with "ws://"
+export const WEBSOCKET_ENDPOINT = ""
+
+// Retool application used for miner status checker dashboard (must be public link for production usage)
+// For any other environment, you can use a viewer link and change the _environment url parameter (Retool account required)
+// Non prod environment url example : https://cidgravity.retool.com/apps/3e131b9c-e98c-11ed-b98c-e7c7307454e1/CIDgravity%20-%20Miner%20status?_releaseVersion=latest&&_environment=development&&_embed=true
+export const RETOOL_MINER_STATUS_CHECKER_PUBLIC_LINK = "https://cidgravity.retool.com/embedded/public/d0f4d2a5-3693-493e-9f0c-2d6e18edd5b3"
+
+// Retool application used for CIDgravity storage deals analytics page / dashboard (must be public link for production usage)
+// For any other environment, you can use a viewer link and change the _environment url parameter (Retool account required)
+// Non prod environment url example : https://cidgravity.retool.com/apps/25b34c8c-97f9-11ed-9f90-cf7f2a3b6bad/CIDgravity%20-%20Storage%20reporting?_releaseVersion=latest&&_environment=development&&_embed=true
+export const RETOOL_STORAGE_DASHBOARD_PUBLIC_LINK = "https://cidgravity.retool.com/embedded/public/ca9a2a11-883d-4ba9-82f1-76399ca6d62b"
+
+// Retool application used for retrieval deals analytics page (must be public link for production usage)
+// For any other environment, you can use a viewer link and change the _environment url parameter (Retool account required)
+// Non prod environment url example : https://cidgravity.retool.com/apps/6f662f64-cf96-11ed-b792-fb29386bf742/CIDgravity%20-%20Retrieval%20reporting?_releaseVersion=latest&&_environment=development&&_embed=true
+export const RETOOL_RETRIEVAL_DASHBOARD_PUBLIC_LINK = 'https://cidgravity.retool.com/embedded/public/a520785f-3e58-4586-80c8-fea4ac99c0aa'
+
+// Retool application used for client dashboard page (must be public link for production usage)
+// For any other environment, you can use a viewer link and change the _environment url parameter (Retool account required)
+// Non prod environment url example : https://cidgravity.retool.com/apps/5ac05456-732c-11ee-98f2-a76e31fddffb/CIDgravity%20-%20Client%20reporting?_releaseVersion=latest&&_environment=development&&_embed=true
+export const RETOOL_CLIENT_DASHBOARD_PUBLIC_LINK = 'https://cidgravity.retool.com/embedded/public/f8ff382c-a6fa-42ab-913f-84b9f9ed509f'
+
+// If there is only one locale in the array, the LanguageSwitcher will be hidden
+// The order of the locales does not matter
+// But each locale must respect the format { countryCode: 'dev', nativeName: 'dev' }
+// WARNING : The first element will be set as the fallback language (must be en-US in production / staging !)
+export const availableLanguages = [
+    { countryCode: 'dev', nativeName: 'dev' },
+    { countryCode: 'en-US', nativeName: 'English' },
+    { countryCode: 'zh-Hans', nativeName: '简体中文' },
+    { countryCode: 'zh-Hant', nativeName: '繁体中文' },
+    { countryCode: 'fr', nativeName: 'Français' },
+]

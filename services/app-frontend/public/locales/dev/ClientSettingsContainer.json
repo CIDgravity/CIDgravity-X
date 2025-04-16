@@ -1,0 +1,37 @@
+{
+    "title": "Settings",
+    "other": {
+        "token": {
+            "title": "API Token",
+            "regenerate": "Disable and regenerate this token",
+            "subtitle": "Use this token to access CIDgravity APIs for reporting, miner discovery, and more. Find additional details in the <1>documentation</1>."
+        },
+        "friendlyName": {
+            "button": {
+                "save": "Save"
+            },
+            "title": "Nickname"
+        },
+        "alternateAddresses": {
+            "title": "Alternate addresses",
+            "placeholder": "Select alternate addresses to use"
+        }
+    },
+    "notification": {
+        "success": {
+            "onUpdateFriendlyName": "Nickname updated.",
+            "onRegenerateConnectorToken": "Token has been regenerated.",
+            "onAddAlternateAddress": "{{alternateAddress}} successfully added as alternate address",
+            "onRemoveAlternateAddress": "{{alternateAddress}} successfully remove from alternate addresses"
+        },
+        "error": {
+            "onUpdateFriendlyName": "An error occurred updating the miner nickname, Please try again in a few minutes or contact the CIDgravity team.",
+            "onRegenerateConnectorToken": "An error occurred generating a new token, Please try again in a few minutes or contact the CIDgravity team.",
+            "onAddAlternateAddress": "Something wrong while adding {{alternateAddress}} as alternate address",
+            "onRemoveAlternateAddress": "Something wrong while removing {{alternateAddress}} from alternate addresses"
+        }
+    },
+    "error": {
+        "generic": "An error occurred retrieving account details, Please try again in a few minutes or contact the CIDgravity team."
+    }
+}

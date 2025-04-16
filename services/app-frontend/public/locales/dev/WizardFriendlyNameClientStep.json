@@ -1,0 +1,8 @@
+{
+    "defaultFriendlyName": "{{userNickname}}'s awesome dataset",
+    "title": "Set a friendly name *",
+    "subtitle": "This information will allow you to quickly identify the client when making a selection",
+    "validation": {
+        "isFriendlyNameMandatory": "Friendly name is required"
+    }
+}

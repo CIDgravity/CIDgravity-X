@@ -1,0 +1,102 @@
+{
+    "title": "Diagnosis",
+    "subtitle": "Test your end-to-end miner connectivity in few steps",
+    "step": {
+        "readyToLaunch": "You can run the diagnosis using the button above",
+        "sendingProposal": "Running diagnosis",
+        "checkingResults": "Analysis of diagnosis results ({{step}} / 6)",
+        "errorCodes": {
+            "timeout": "Can't send the test proposal due to a timeout exception, try again in few minutes"
+        },
+        "results": {
+            "howToSolve": "How to solve this behavior",
+            "finishedSuccess": {
+                "title": "All diagnosis steps passed successfully",
+                "description": "Your miner connectivity has been checked without any error<br />You are ready to receive deals using CIDgravity !"
+            }
+        }
+    },
+    "errorCode": {
+        "ERR_TIMEOUT": {
+            "name": "Timeout during diagnosis procedure",
+            "resolveTips": "This error should not occur !<br />Please try later or contact CIDgravity team",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_CIDGRAVITY_SIDE": {
+            "name": "Checking CIDgravity diagnosis server",
+            "resolveTips": "This error should not occur !<br />Please try later or contact CIDgravity team",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_NO_PEER_ID_SET_ON_CHAIN": {
+            "name": "Peer ID available on chain {{peerId}}",
+            "resolveTips": "N/A",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_INVALID_MULTI_ADDRESS_IN_MINER_INFO": {
+            "name": "Valid multi address in miner info",
+            "resolveTips": "N/A",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_NO_MULTI_ADDRESS_SET_ON_CHAIN": {
+            "name": "Multi address available on chain : {{multiaddresses}}",
+            "resolveTips": "N/A",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_CONNECT_MINER_PEER_ID": {
+            "name": "Connect to your miner Peer ID",
+            "resolveTips": "N/A",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_DEAL_PROTOCOL_UNSUPPORTED": {
+            "name": "Deal proposal version : {{dealProtocolsSupported}}",
+            "resolveTips": "N/A",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_NO_MATCHING_DEAL_PROTOCOL_SUPPORTED": {
+            "name": "Deal proposal comptatible",
+            "resolveTips": "N/A",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_GET_ASK": {
+            "name": "Get ask",
+            "resolveTips": "Running get-ask command",
+            "resolveTipsCommand": "boost provider storage-ask {{minerID}}"
+        },
+        "ERR_GET_ASK_PRICES_NOT_SET_TO_ZERO": {
+            "name": "Checking get-ask prices\n Validating price: {{getAskPricePerGib}}\nValidating verified price: {{getAskVerifiedPricePerGib}}",
+            "resolveTips": "Set the prices via the boost UI/Settings menu",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_GET_ASK_SIZES_NOT_PROPERLY_SET": {
+            "name": "Checking get-ask sizes\nValidating min piece size: {{getAskMinPieceSize}}\nValidating max piece size: {{getAskMaxPieceSize}}\nValidating sector size: {{getAskSectorSize}}",
+            "resolveTips": "Set the sizes via the boost UI/Settings menu",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_SEND_PROPOSAL": {
+            "name": "Use boost client to send the deal proposal",
+            "resolveTips": "N/A",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_CIDGRAVITY_CONNECTOR_MISCONFIGURED": {
+            "name": "Checking CIDgravity connector configuration",
+            "resolveTips": "Check your miner logs to find the problem",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_CIDGRAVITY_INVALID_CONNECTOR_TYPE": {
+            "name": "Checking CIDgravity connector type",
+            "resolveTips": "Upgrade your connector version",
+            "resolveTipsCommand": "N/A"
+        },
+        "ERR_CIDGRAVITY_INVALID_CONNECTOR_VERSION": {
+            "name": "Checking CIDgravity connector version",
+            "resolveTips": "Upgrade your connector version",
+            "resolveTipsCommand": "N/A"
+        },
+        "DIAGNOSIS_SUCCESS": {
+            "name": "Finalization of the diagnosis"
+        }
+    },
+    "button": {
+        "sendTest": "Run diagnosis"
+    }
+}

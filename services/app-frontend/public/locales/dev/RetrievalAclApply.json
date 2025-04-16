@@ -1,0 +1,13 @@
+{
+    "header": "Apply ACL changes",
+    "body": "Do you wish to apply your whitelist/blacklist changes?",
+    "button": {
+        "close": "Close",
+        "apply_zero": "Apply",
+        "apply_one": "Apply {{count}} change",
+        "apply_two": "Apply {{count}} changes",
+        "apply_few": "Apply {{count}} changes",
+        "apply_many": "Apply {{count}} changes",
+        "apply_other": "Apply {{count}} changes"
+    }
+}

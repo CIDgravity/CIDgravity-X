@@ -1,0 +1,47 @@
+{
+    "title": "Deal playground",
+    "subtitle": "This page allows you to send dummy proposals to the pricing engine based on your CIDGravity configuration.",
+    "isLoadingProposal": "Loading deal proposal to simulate",
+    "testResult": {
+        "success": {
+            "title": "Success!",
+            "matchedPricing": "Matched {{pricingModel}} / Rule {{rule}}",
+            "matchedAcceptanceLogic": "Matched acceptance logic {{acceptanceLogicName}}"
+        },
+        "rejected": {
+            "title": "Proposal rejected",
+            "matchedPricing": "Rejected by {{pricingModel}} / Rule {{rule}}",
+            "storageAcceptanceLogicNotPassed": "Deal proposal values not matched the storage acceptance logic {{acceptanceLogicName}}",
+            "storageLogicUsedExplanation": "Below, you can find the logic evaluated by our deal filter (variables replaced by values)"
+        },
+        "loading": {
+            "title": "Wait for a result",
+            "description": "You deal proposal is being treated, wait this view to be updated with the result"
+        },
+        "waiting": {
+            "title": "Wait for a request",
+            "description": "Fill the form to test a deal proposal throught your pricing models"
+        },
+        "error": {
+            "title": "Bad request",
+            "reason": "Your deal proposal can't be analysed due to a error, if this behavior persist, please report it to the support team"
+        }
+    },
+    "error": {
+        "onLoadSpecificProposal": "Unable to load specific deal proposal to simulate. Try again in a few minutes or contact CIDgravity team!"
+    },
+    "validation": {
+        "isFromAddressNotSupported": "The from address you provide doesn't match a valid Filecoin address",
+        "isPriceMandatory": "The price must be filled (at least O FIL)",
+        "isFromAddressMandatory": "From address is required to launch a test request",
+        "isDurationOutsideLimits": "Check the duration, limits are min = 180 days and max 1278 days!",
+        "isProposalPieceSizeUnderLimit": "The deal size can't be under 256B!",
+        "isTestSuccessfullySent": "Test succesfully send",
+        "isTestFailed": "Test failed, please try again in few minutes"
+    },
+    "notification": {
+        "error": {
+            "isFromAddressNotSupported": "The from address you provide doesn't match a valid Filecoin address"
+        }
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "header": "Delete client {{clientName}}",
+    "body": {
+        "willCompletelyRemoveClient": "You are about to <strong>completely remove</strong> this client, this action can't be undone!<br /> If you confirm this action, all deal proposal from one of the client addresses, will be associated to your default model, and no exception will be applied to it!"
+    },
+    "button": {
+        "continue": "Continue",
+        "close": "Close"
+    }
+}

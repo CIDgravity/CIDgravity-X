@@ -1,0 +1,19 @@
+{
+    "header": "{{storageAcceptanceLogicName}} acceptance logic",
+    "body": {
+        "client": {
+            "title": "Associated clients",
+            "titleClientsWithDefault": "Clients with default accceptance logic",
+            "acceptanceLogic": {
+                "alsoApplyToUnknownClients": "This default acceptance logic is also applied to all unknown clients",
+                "noClient": "No clients are associated with this acceptance logic"
+            }
+        }
+    },
+    "error": {
+        "emptyLogic": "This is an empty acceptance logic. It's a passtrought logic, all deals will be accepted"
+    },
+    "button": {
+        "close": "Close"
+    }
+}

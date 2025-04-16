@@ -1,0 +1,131 @@
+{
+    "dealProposal": {
+        "title": "Deal proposal",
+        "subtitle": "Fill the form to create a dummy deal proposal and test your pricing models"
+    },
+    "storageAcceptanceLogic": {
+        "title": "Storage acceptance logic",
+        "subtitle": "Simulate values for sealing pipeline to test your storage acceptance logic"
+    },
+    "button": {
+        "isSendingTest": "Sending ...",
+        "addSealingPipelineValue": "Add new value",
+        "sendATest": "Send a test"
+    },
+    "fromAddress": {
+        "label": "From address *",
+        "formatCreateLabel": "Use this address"
+    },
+    "dealDuration": {
+        "label": "Deal duration *",
+        "daysValue": "Days",
+        "epochsValue": "Epochs"
+    },
+    "dealSize": {
+        "label": "Deal size *",
+        "tooltip": "If not a power of 2, we will round it automatically",
+        "sizeUnits": {
+            "B": "B",
+            "KIB": "KiB",
+            "MIB": "MiB",
+            "GIB": "GiB"
+        }
+    },
+    "verified": {
+        "label": "Verified *",
+        "trueValue": "True",
+        "falseValue": "True"
+    },
+    "transferType": {
+        "label": "Transfer type *",
+        "manualValue": "Manual",
+        "graphsyncValue": "Graphsync",
+        "httpValue": "Http",
+        "libp2pValue": "Libp2p"
+    },
+    "price": {
+        "tooltip": "Price is specified in attoFil / GiB / epoch",
+        "priceConversionUnit" : "Fil / TiB / 30D",
+        "priceConversionUnitAttoFilPerGibPerEpoch": "attoFil / GiB / epoch",
+        "label": "Price *",
+        "placeholder": "FIL / GiB / Epoch",
+        "units": {
+            "attofil_gib_epoch": "attoFil / GiB / Epoch",
+            "usd_tib_month": "USD / TiB / 30d"
+        }
+    },
+    "sealingpipeline": {
+        "select": {
+            "otherTitle": "Other",
+            "sectorStatesTitle": "Sealing Pipeline"
+        },
+        "value": {
+            "placeholder": "Value",
+            "tooltips": {
+                "valueMustBeNanoFil": "Value must be in nano Fil",
+                "valueMustBeAttoFil": "Value must be in attoFil",
+                "mustBeInUSDollars": "Price must be specified in US $",
+                "decimalNumberWillBeTruncated": "Must be whole number, decimal will be truncated"
+            }
+        },
+        "fields": {
+            "curioDealStatingStatesTitle": "Curio sealing pipeline - Staging states",
+            "curioDealStatingStatesTooltip": "Curio sealing pipeline - Staging states",
+            "curioPipelineStatesRunningTitle": "Curio sealing pipeline - Running states",
+            "curioPipelineStatesRunningTooltip": "Curio sealing pipeline - Running states",
+            "curioPipelineStatesPendingTitle": "Curio sealing pipeline - Pending states",
+            "curioPipelineStatesPendingTooltip": "Curio sealing pipeline - Pending states",
+            "curioPipelineStatesFailedTitle": "Curio sealing pipeline - Failed states",
+            "curioPipelineStatesFailedTooltip": "Curio sealing pipeline - Failed states",
+            "curioStagingStates": {
+                "AcceptedWaitingDownload": "AcceptedWaitingDownload",
+                "Downloading": "Downloading",
+                "Publishing": "Publishing",
+                "Sealing": "Sealing"
+            },
+            "curioRunning": {
+                "SDR": "SDR running",
+                "Trees": "Trees running",
+                "PrecommitMsg": "PrecommitMsg running",
+                "WaitSeed": "WaitSeed running",
+                "PoRep": "PoRep running",
+                "CommitMsg": "CommitMsg running",
+                "Encode": "Encode running",
+                "Prove": "Prove running",
+                "Submit": "Submit running",
+                "MoveStorage": "MoveStorage running"
+            },
+            "curioPending": {
+                "SDR": "SDR pending",
+                "Trees": "Trees pending",
+                "PrecommitMsg": "PrecommitMsg pending",
+                "WaitSeed": "WaitSeed pending",
+                "PoRep": "PoRep pending",
+                "CommitMsg": "CommitMsg pending",
+                "Encode": "Encode pending",
+                "Prove": "Prove pending",
+                "Submit": "Submit pending",
+                "MoveStorage": "MoveStorage pending"
+            },
+            "curioFailed": {
+                "SDR": "SDR failed",
+                "Trees": "Trees failed",
+                "PrecommitMsg": "PrecommitMsg failed",
+                "WaitSeed": "WaitSeed failed",
+                "PoRep": "PoRep failed",
+                "CommitMsg": "CommitMsg failed",
+                "Encode": "Encode failed",
+                "Prove": "Prove failed",
+                "Submit": "Submit failed",
+                "MoveStorage": "MoveStorage failed"
+            },
+            "additionalFieldsTitle": "Other fields",
+            "additionalFieldsTooltip": "Other fields",
+            "ReceivedOnDatetime": "Received on (datetime)"
+        }
+    },
+    "validation": {
+        "isPriceInvalidValue": "Invalid value (use dots not commas)",
+        "isPriceMandatoryField": "Deal price is mandatory"
+    }
+}

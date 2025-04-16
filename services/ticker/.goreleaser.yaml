@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: ticker
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod download
+
+# set environment variables
+env:
+  - CGO_ENABLED=0
+
+builds:
+  - main: ./cmd/ticker
+    id: "ticker"
+    binary: ticker
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: arm
+        goarm: 7
+      - goarm: mips64
+      - gomips: hardfloat
+      - goamd64: v4
+
+# override some archives same and extensions depending on OS
+archives:
+  - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: '{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}'
+    files:
+      - README.md
+
+# create changelog based on commits
+changelog:
+    sort: asc
+    filters:
+        exclude:
+            - '^docs:'
+            - '^test:'
+            - 'README'
+            - Merge pull request
+            - Merge branch
+
+nfpms:
+- maintainer: CIDgravity <contact@cidgravity.com>
+  description: Ticker is a fast and extensible Go-based API that fetches cryptocurrency ticker data from multiple exchanges and stores it in a MongoDB database.
+  homepage: https://github.com/CIDgravity/CIDgravity-Ticker
+  license: MIT
+  formats:
+  - deb
+  - rpm
+  - apk

@@ -1,0 +1,9 @@
+{
+    "title": "Welcome {{userFirstName}}!",
+    "error": {
+        "unableToLoadMinerSettings": "Something wrong happened while loading your dashboard, please refresh using the button below"
+    },
+    "button": {
+        "reloadDashboard": "Reload dashboard"
+    }
+}

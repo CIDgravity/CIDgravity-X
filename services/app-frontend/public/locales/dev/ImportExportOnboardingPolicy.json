@@ -1,0 +1,13 @@
+{
+    "header": "Import / export onboarding policy",
+    "body": {
+        "description": "Manully edit the onboarding policy and use the Import button to load it again",
+        "editor": {
+            "placeholder": "Paste your JSON onboarding policy here"
+        }
+    },
+    "button": {
+        "copyToClipboard": "Copy to clipboard",
+        "apply": "Import"
+    }
+}

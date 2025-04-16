@@ -1,0 +1,112 @@
+@use 'sass:map';
+@import 'cidg-variables.scss';
+@import '../../node_modules/bootstrap/scss/mixins';
+
+$sidebar-bg-color: $cidg-dark-blue !default;
+$sidebar-color: #fff !default;
+$sidebar-width: 230px !default;
+$sidebar-collapsed-width: 80px !default;
+$highlight-color: #d8d8d8 !default;
+$submenu-bg-color: #000b44 !default;
+$submenu-bg-color-collapsed: #000b44 !default;
+$icon-bg-color: #fff !default;
+$icon-size: 35px !default;
+$breakpoint-xs: 480px !default;
+$breakpoint-sm: map.get($grid-breakpoints, sm);
+$breakpoint-md: map.get($grid-breakpoints, md);
+$breakpoint-lg: map.get($grid-breakpoints, lg);
+$breakpoint-xl: map.get($grid-breakpoints, xl);
+
+@import '~react-pro-sidebar/dist/scss/styles.scss';
+
+.logo-cidgravity {
+    width: 110px;
+    height: 110px;
+    text-align: center;
+}
+
+.link-no-border {
+    border-bottom: none !important;
+}
+
+.pro-sidebar {
+    height: 100%;
+}
+
+@include media-breakpoint-up(md) {
+    .btn-toggle {
+        display: none;
+    }
+}
+@include media-breakpoint-down(md) {
+    .btn-toggle {
+        cursor: pointer;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 10;
+    }
+
+    .btn-toggle-inner {
+        display: flex;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        justify-content: center;
+        align-items: center;
+        background: $cidg-dark-blue;
+        color: $white;
+        text-align: center;
+        font-size: 20px;
+    }
+}
+
+.top-navbar {
+    position: fixed;
+    margin-left: 190px;
+    top: 0;
+
+    background-color: #f4f4f4;
+    width: 100%;
+    height: 50px;
+    color: #222b2a;
+    vertical-align: middle;
+    box-shadow: 0px 1px 10px #999;
+
+    white-space: nowrap;
+}
+
+.ticker {
+    margin-left: 20px;
+    line-height: 50px;
+}
+
+.user-picture {
+    border-radius: 50%;
+    height: 40px;
+    line-height: 50px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.icon-size {
+    font-size: 87px;
+}
+
+.connected-as {
+    white-space: nowrap;
+}
+
+.filecoin-logo {
+    height: 30px;
+}
+
+.pro-sidebar > .pro-sidebar-inner > .pro-sidebar-layout .pro-sidebar-footer {
+    border-top: none !important;
+}
+
+.sidebar-version {
+    text-align: center !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 10px;
+}

@@ -1,0 +1,32 @@
+{
+    "blacklist": {
+        "title": "Add new item",
+        "elementToSelect": {
+            "label": "Peer ID or client name*",
+            "placeholder": "Select...",
+            "formatCreateLabel": "Use this Peer ID"
+        },
+        "comment": {
+            "label": "Comment"
+        }
+    },
+    "whitelist": {
+        "title": "Add new item",
+        "elementToSelect": {
+            "label": "Peer ID or client name*",
+            "placeholder": "Select...",
+            "formatCreateLabel": "Use this Peer ID"
+        },
+        "comment": {
+            "label": "Comment"
+        }
+    },
+    "button": {
+        "blacklist": {
+            "addToAcl": "Add to blacklist"
+        },
+        "whitelist": {
+            "addToAcl": "Add to whitelist"
+        }
+    }
+}

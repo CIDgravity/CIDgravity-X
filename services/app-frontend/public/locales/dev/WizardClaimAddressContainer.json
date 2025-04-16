@@ -1,0 +1,9 @@
+{
+    "validation": {
+        "isAddressLimitReached": "Address claim limit reached, unlink an address from your account to claim a new one",
+        "isAddressAlreadyClaimed": "Address already claimed"
+    },
+    "error": {
+        "isUnableToSubmitForm": "An error occurred while submitting the form, please try again in a few seconds or contact the CIDgravity support team."
+    }
+}

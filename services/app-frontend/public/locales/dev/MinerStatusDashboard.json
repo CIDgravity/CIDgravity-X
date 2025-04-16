@@ -1,0 +1,170 @@
+{
+    "filter": {
+        "timeRange": {
+            "placeholder": "Select a time range",
+            "24hours": "Last 24 hours",
+            "72hours": "Last 72 hours",
+            "7days": "Last 7 days"
+        }
+    },
+    "button": {
+        "refresh": "Refresh",
+        "viewOnFilscan": "View miner on Filscan.io"
+    },
+    "retool": {
+        "storageAvailability": {
+            "title": "Storage availability",
+            "status": {
+                "title": "Status"
+            },
+            "storageRatio": {
+                "title": "Storage ratio"
+            }
+        },
+        "retrievalAvailability": {
+            "title": "Retrieval availability",
+            "filspark": "filspark.com",
+            "httpRatio": {
+                "title": "HTTP ratio"
+            }
+        },
+        "walletBalances": {
+            "title": "Wallets balance",
+            "escrow": "Escrow",
+            "collateral": "Collateral",
+            "pubMsg": "PubMsg"
+        },
+        "sealingPipeline": {
+            "title": "Sectors state"
+        },
+        "minerAvailability": {
+            "title": "Miner availability"
+        },
+        "minerStatusErrorCodes": {
+            "title": "Status check error codes"
+        },
+        "history": {
+            "sectorStates": {
+                "title": "Sector states history"
+            }
+        },
+        "minerStatus": {
+            "available": "Available",
+            "unavailable": "Unavailable",
+            "internal_error": "Internal error",
+            "unkown": "Unknown"
+        },
+        "fundsState": {
+            "balance": "Balance",
+            "locked": "Locked",
+            "available": "Available",
+            "tagged": "Tagged"
+        },
+        "errorCodes": {
+            "OK": "Success",
+            "ERR_NO_PEER_ID_SET_ON_CHAIN": "Peer ID not published on chain",
+            "ERR_NO_MULTI_ADDRESS_SET_ON_CHAIN": "Multiaddr not published on chain",
+            "ERR_INVALID_MULTI_ADDRESS_IN_MINER_INFO": "Wrong multiaddr format",
+            "ERR_CONNECT_MINER_PEER_ID": "Peer ID unreacheable",
+            "ERR_CIDGRAVITY_SIDE": "Service unavailable",
+            "ERR_DEAL_PROTOCOL_UNSUPPORTED": "Deal protocols unsupported",
+            "ERR_NO_MATCHING_DEAL_PROTOCOL_SUPPORTED": "Deal protocols incompatible",
+            "ERR_CIDGRAVITY_CONNECTOR_MISCONFIGURED": "CIDgravity connector misconfigured",
+            "ERR_TIMEOUT": "Service unavailable",
+            "ERR_GET_ASK": "Get ask error",
+            "ERR_GET_ASK_PRICES_NOT_SET_TO_ZERO": "Storage pricing misconfigured",
+            "ERR_GET_ASK_SIZES_NOT_PROPERLY_SET": "Storage piece size misconfigured",
+            "ERR_SEND_PROPOSAL": "Unable to send proposal",
+            "ERR_CIDGRAVITY_INVALID_CONNECTOR_TYPE": "Wrong CIDgravity connector",
+            "ERR_CIDGRAVITY_INVALID_CONNECTOR_VERSION": "Wrong CIDgravity connector version"
+        },
+        "sectorStates": {
+            "WaitDeals": "WaitDeals",
+            "Packing": "Packing",
+            "AddPiece": "AP",
+            "AddPieceFailed": "AddPieceFailed",
+            "GetTicket": "GetTicket",
+            "PreCommit1": "PC1",
+            "PreCommit2": "PC2",
+            "PreCommitting": "PreCommitting",
+            "PreCommitWait": "PreCommitWait",
+            "SubmitPreCommitBatch": "SubmitPreCommitBatch",
+            "PreCommitBatchWait": "PreCommitBatchWait",
+            "WaitSeed": "WaitSeed",
+            "Committing": "Committing",
+            "CommitFinalize": "CommitFinalize",
+            "CommitFinalizeFailed": "CommitFinalizeFailed",
+            "SubmitCommit": "SubmitCommit",
+            "CommitWait": "CommitWait",
+            "SubmitCommitAggregate": "SubmitCommitAggregate",
+            "CommitAggregateWait": "CommitAggregateWait",
+            "FinalizeSector": "FinalizeSector",
+            "Proving": "Proving",
+            "Available": "Available",
+            "FailedUnrecoverable": "FailedUnrecoverable",
+            "SealPreCommit1Failed": "SealPreCommit1Failed",
+            "SealPreCommit2Failed": "SealPreCommit2Failed",
+            "PreCommitFailed": "PreCommitFailed",
+            "ComputeProofFailed": "ComputeProofFailed",
+            "RemoteCommitFailed": "RemoteCommitFailed",
+            "CommitFailed": "CommitFailed",
+            "PackingFailed": "PackingFailed",
+            "FinalizeFailed": "FinalizeFailed",
+            "DealsExpired": "DealsExpired",
+            "RecoverDealIDs": "RecoverDealIDs",
+            "Faulty": "Faulty",
+            "FaultReported": "FaultReported",
+            "FaultedFinal": "FaultedFinal",
+            "Terminating": "Terminating",
+            "TerminateWait": "TerminateWait",
+            "TerminateFinality": "TerminateFinality",
+            "TerminateFailed": "TerminateFailed",
+            "Removing": "Removing",
+            "RemoveFailed": "RemoveFailed",
+            "Removed": "Removed",
+            "SnapDealsWaitDeals": "SnapDealsWaitDeals",
+            "SnapDealsAddPiece": "SnapDealsAddPiece",
+            "SnapDealsPacking": "SnapDealsPacking",
+            "UpdateReplica": "UpdateReplica",
+            "ProveReplicaUpdate": "ProveReplicaUpdate",
+            "SubmitReplicaUpdate": "SubmitReplicaUpdate",
+            "WaitMutable": "WaitMutable",
+            "ReplicaUpdateWait": "ReplicaUpdateWait",
+            "UpdateActivating": "UpdateActivating",
+            "ReleaseSectorKey": "ReleaseSectorKey",
+            "FinalizeReplicaUpdate": "FinalizeReplicaUpdate",
+            "SnapDealsAddPieceFailed": "SnapDealsAddPieceFailed",
+            "SnapDealsDealsExpired": "SnapDealsDealsExpired",
+            "SnapDealsRecoverDealIDs": "SnapDealsRecoverDealIDs",
+            "ReplicaUpdateFailed": "ReplicaUpdateFailed",
+            "ReleaseSectorKeyFailed": "ReleaseSectorKeyFailed",
+            "FinalizeReplicaUpdateFailed": "FinalizeReplicaUpdateFailed",
+            "AbortUpgrade": "AbortUpgrade",
+            "ReceiveSector": "ReceiveSector"
+        },
+        "sectorStatesStandardized": {
+            "WaitDeals": "WaitDeals",
+            "AP": "AP",
+            "WaitChain": "WaitChain",
+            "Error": "Error",
+            "PC1": "PC1",
+            "PC2": "PC2",
+            "C1/C2": "C1/C2",
+            "FIN": "FIN",
+            "RU": "RU",
+            "PR1/PR2": "PR1/PR2"
+        },
+        "columnsName": {
+            "sectorState": "Sector state",
+            "numberOfDeals": "Number of deals"
+        },
+        "axisUnits": {
+            "numberOfChecks": "Checks",
+            "numberOfDeals": "Number of deals",
+            "amounts": "Amount"
+        },
+        "noRowsFound": "No data",
+        "noDataAvailable": "No data",
+        "unknownValue": "N/A"
+    }
+}

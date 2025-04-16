@@ -1,0 +1,19 @@
+{
+    "general": {
+        "title": "General informations",
+        "subtitle": "Fill main informations on the acceptance logic",
+        "name": {
+            "label": "Acceptance logic name *"
+        }
+    },
+    "rule": {
+        "title": "Manage rules",
+        "subtitle": "Set advanced rules based on your sealing pipeline state or other available values",
+        "emptyLogicWarning": "No rules in this logic, it will be a passthrough,<br />all deals will be accepted"
+    },
+    "button": {
+        "update": "Update",
+        "create": "Create",
+        "manualEditJsonLogic": "JSON import"
+    }
+}

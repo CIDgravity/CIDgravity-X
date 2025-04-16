@@ -1,0 +1,251 @@
+{
+    "title": {
+        "newDefault": "Create your default acceptance logic",
+        "new": "Create a new acceptance logic",
+        "edit": "Edit an acceptance logic"
+    },
+    "queryBuilder": {
+        "valueLabel": "value",
+        "valuePlaceholder": "value",
+        "fieldLabel": "Variable",
+        "operatorLabel": "Operator",
+        "funcLabel": "Advanced operations",
+        "fieldPlaceholder": "Select variable",
+        "funcPlaceholder": "Select advanced operation",
+        "operatorPlaceholder": "Select operator",
+        "addGroupLabel": "Create group",
+        "addRuleLabel": "Create rule",
+        "addSubRuleLabel": "Create sub rule",
+        "notLabel": "Not",
+        "fieldSourcesPopupTitle": "Select source",
+        "valueSourcesPopupTitle": "Select value source",
+        "advancedOperationSecondArgLabel": "Select number, variable or advanced operation",
+        "operators": {
+            "between": {
+                "label": "Between",
+                "from": "from",
+                "to": "to"
+            }
+        },
+        "types": {
+            "boolean": {
+                "is": "is"
+            }
+        },
+        "functions": {
+            "sum": {
+                "label": "Sum"
+            },
+            "minus": {
+                "label": "Substraction"
+            },
+            "multiply": {
+                "label": "Multiply"
+            },
+            "divide": {
+                "label": "Divide"
+            }
+        },
+        "fields": {
+            "curioDealStatingStates": {
+                "title": "Curio sealing pipeline - Staging states",
+                "tooltip": "Curio sealing pipeline - Staging states",
+                "values": {
+                    "AcceptedWaitingDownload": "AcceptedWaitingDownload",
+                    "Downloading": "Downloading",
+                    "Publishing": "Publishing",
+                    "Sealing": "Sealing"
+                }
+            },
+            "curioPipelineStatesRunning": {
+                "title": "Curio sealing pipeline - running sector states",
+                "tooltip": "Curio sealing pipeline - running sector states",
+                "values": {
+                    "Any": "Any running",
+                    "SDR": "SDR running",
+                    "Trees": "Trees running",
+                    "PrecommitMsg": "PrecommitMsg running",
+                    "WaitSeed": "WaitSeed running",
+                    "PoRep": "PoRep running",
+                    "CommitMsg": "CommitMsg running",
+                    "Encode": "Encode running",
+                    "Prove": "Prove running",
+                    "Submit": "Submit running",
+                    "MoveStorage": "MoveStorage running"
+                }
+            },
+            "curioPipelineStatesPending": {
+                "title": "Curio sealing pipeline - pending sector states",
+                "tooltip": "Curio sealing pipeline - pending sector states",
+                "values": {
+                    "Any": "Any pending",
+                    "SDR": "SDR pending",
+                    "Trees": "Trees pending",
+                    "PrecommitMsg": "PrecommitMsg pending",
+                    "WaitSeed": "WaitSeed pending",
+                    "PoRep": "PoRep pending",
+                    "CommitMsg": "CommitMsg pending",
+                    "Encode": "Encode pending",
+                    "Prove": "Prove pending",
+                    "Submit": "Submit pending",
+                    "MoveStorage": "MoveStorage pending"
+                }
+            },
+            "curioPipelineStatesFailed": {
+                "title": "Curio sealing pipeline - failed sector states",
+                "tooltip": "Curio sealing pipeline - failed sector states",
+                "values": {
+                    "Any": "Any failed",
+                    "SDR": "SDR failed",
+                    "Trees": "Trees failed",
+                    "PrecommitMsg": "PrecommitMsg failed",
+                    "WaitSeed": "WaitSeed failed",
+                    "PoRep": "PoRep failed",
+                    "CommitMsg": "CommitMsg failed",
+                    "Encode": "Encode failed",
+                    "Prove": "Prove failed",
+                    "Submit": "Submit failed",
+                    "MoveStorage": "MoveStorage failed"
+                }
+                
+            },
+            "sectorStates": {
+                "title": "Sealing pipeline - sector states",
+                "tooltip": "Sealing pipeline - sector states",
+                "values": {
+                    "WaitDeals": "WaitDeals",
+                    "Packing": "Packing",
+                    "AddPiece": "AP",
+                    "GetTicket": "GetTicket",
+                    "PreCommit1": "PC1",
+                    "PreCommit2": "PC2",
+                    "PreCommitting": "PreCommitting",
+                    "PreCommitWait": "PreCommitWait",
+                    "SubmitPreCommitBatch": "SubmitPreCommitBatch",
+                    "PreCommitBatchWait": "PreCommitBatchWait",
+                    "WaitSeed": "WaitSeed",
+                    "Committing": "Committing",
+                    "CommitFinalize": "CommitFinalize",
+                    "SubmitCommit": "SubmitCommit",
+                    "CommitWait": "CommitWait",
+                    "SubmitCommitAggregate": "SubmitCommitAggregate",
+                    "CommitAggregateWait": "CommitAggregateWait",
+                    "FinalizeSector": "FinalizeSector",
+                    "Proving": "Proving",
+                    "Available": "Available",
+                    "FailedUnrecoverable": "FailedUnrecoverable",
+                    "DealsExpired": "DealsExpired",
+                    "RecoverDealIDs": "RecoverDealIDs",
+                    "Faulty": "Faulty",
+                    "FaultReported": "FaultReported",
+                    "FaultedFinal": "FaultedFinal",
+                    "Terminating": "Terminating",
+                    "TerminateWait": "TerminateWait",
+                    "TerminateFinality": "TerminateFinality",
+                    "Removing": "Removing",
+                    "Removed": "Removed",
+                    "SnapDealsWaitDeals": "SnapDealsWaitDeals",
+                    "SnapDealsAddPiece": "SnapDealsAddPiece",
+                    "SnapDealsPacking": "SnapDealsPacking",
+                    "UpdateReplica": "UpdateReplica",
+                    "ProveReplicaUpdate": "ProveReplicaUpdate",
+                    "SubmitReplicaUpdate": "SubmitReplicaUpdate",
+                    "WaitMutable": "WaitMutable",
+                    "ReplicaUpdateWait": "ReplicaUpdateWait",
+                    "UpdateActivating": "UpdateActivating",
+                    "ReleaseSectorKey": "ReleaseSectorKey",
+                    "FinalizeReplicaUpdate": "FinalizeReplicaUpdate",
+                    "SnapDealsDealsExpired": "SnapDealsDealsExpired",
+                    "SnapDealsRecoverDealIDs": "SnapDealsRecoverDealIDs",
+                    "ReceiveSector": "ReceiveSector",
+                    "AbortUpgrade": "AbortUpgrade"
+                }
+            },
+            "sectorStatesErrors": {
+                "title": "Sealing pipeline errors",
+                "tooltip": "Sealing pipeline errors",
+                "values": {
+                    "Any": "Any",
+                    "AddPieceFailed": "AddPieceFailed",
+                    "CommitFinalizeFailed": "CommitFinalizeFailed",
+                    "SealPreCommit1Failed": "SealPreCommit1Failed",
+                    "SealPreCommit2Failed": "SealPreCommit2Failed",
+                    "PreCommitFailed": "PreCommitFailed",
+                    "ComputeProofFailed": "ComputeProofFailed",
+                    "RemoteCommitFailed": "RemoteCommitFailed",
+                    "CommitFailed": "CommitFailed",
+                    "PackingFailed": "PackingFailed",
+                    "FinalizeFailed": "FinalizeFailed",
+                    "TerminateFailed": "TerminateFailed",
+                    "RemoveFailed": "RemoveFailed",
+                    "SnapDealsAddPieceFailed": "SnapDealsAddPieceFailed",
+                    "ReplicaUpdateFailed": "ReplicaUpdateFailed",
+                    "ReleaseSectorKeyFailed": "ReleaseSectorKeyFailed",
+                    "FinalizeReplicaUpdateFailed": "FinalizeReplicaUpdateFailed"
+                }
+            },
+            "additionalFields": {
+                "title": "Other fields",
+                "tooltip": "Additional fields",
+                "dayOfWeek": {
+                    "monday": "Monday",
+                    "tuesday": "Tuesday",
+                    "wednesday": "Wednesday",
+                    "thursday": "Thursday",
+                    "friday": "Friday",
+                    "saturday": "Saturday",
+                    "sunday": "Sunday"
+                },
+                "values": {
+                    "ReceivedOnTimeOfDayUTC": "Received on (time of the day UTC)",
+                    "ReceivedOnDayOfWeek": "Received on (day of the week)"
+                }
+            }
+        }
+    },
+    "error": {
+        "isAcceptanceLogicNotExistingOrNotAllowed": "The storage acceptance logic you ask doesn't exist or you are not allowed to perform this operation"
+    },
+    "button": {
+        "backToAcceptanceLogicList": "Go back to storage acceptance logic list"
+    },
+    "validation": {
+        "name": {
+            "required": "Acceptance logic name is mandatory",
+            "matches": "Can only contain letters, numbers and underscore",
+            "alreadyUsed": "Acceptance logic name already used, it must be unique for all your logics"
+        },
+        "builder": {
+            "invalid": "Invalid acceptance logic, check all rules for more details",
+            "positiveNumberOnly": "You can use positive number only",
+            "integerOnly": "Only integer can be used"
+        },
+        "onCreateAcceptanceLogic": "Unable to create the acceptance logic. Try later or reach out to CIDgravity team",
+        "onUpdateAcceptanceLogic": "Unable to update the acceptance logic. Try later or reach out to CIDgravity team"
+    },
+    "notification": {
+        "success": {
+            "onCreateDefaultAcceptanceLogic": "Default acceptance logic successfully created",
+            "onCreateAcceptanceLogic": "Acceptance logic successfully created",
+            "onUpdateAcceptanceLogic": "Acceptance logic successfully updated"
+        },
+        "error": {
+            "onImportInvalidJsonLogic": "Invalid JSON logic format detected, check. Check the JSON you want to import and try again",
+            "onImportInvalidVariablesNames": "Can't import your storage acceptance logic. At least one variable have a wrong name format",
+            "generic": "Unable to create/update the acceptance logic. Try later or reach out to CIDgravity team",
+            "builder": {
+                "EMPTY_GROUP": "A group must contains at least one rule",
+                "rhs": {
+                    "REQUIRED_FUNCTION_ARG": "The values are required for advanced operations of rule {{rulePosition}}",
+                    "INCOMPLETE_RHS": "The right side of rule {{rulePosition}} is incomplete",
+                    "customError": "The right side of rule {{rulePosition}} is invalid: {{errorMessage}}"
+                },
+                "lhs": {
+                    "REQUIRED_FUNCTION_ARG": "The values are required for advanced operations of rule {{rulePosition}}",
+                    "INCOMPLETE_LHS": "The left side of rule {{rulePosition}} is incomplete",
+                    "customError": "The left side of rule {{rulePosition}} is invalid: {{errorMessage}}"
+                }
+            }
+        }
+    }
+}

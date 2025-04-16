@@ -1,0 +1,8 @@
+{
+    "title": "Forbidden access",
+    "permissionDenied": "You don't have permission to access this miner",
+    "button": {
+        "back": "Back",
+        "claim": "Claim an address"
+    }
+}

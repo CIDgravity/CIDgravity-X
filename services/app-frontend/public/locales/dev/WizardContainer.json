@@ -1,0 +1,13 @@
+{
+    "title": "Claim {{address}}",
+    "step": {
+        "start": "Start",
+        "signMessage": "Ownership Verification",
+        "providerInformation": "Provider information",
+        "friendlyName": "Nickname",
+        "importClientsAndPricing": "Import clients and pricing",
+        "complete": "Complete",
+        "settings": "Global settings",
+        "clientInformation": "Client information"
+    }
+}

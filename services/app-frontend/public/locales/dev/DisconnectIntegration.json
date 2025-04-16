@@ -1,0 +1,10 @@
+{
+    "header": "Disconnect {{integrationName}} from CIDgravity",
+    "body": {
+        "willDisconnectIntegration": "You are about to disconnect this integration with CIDgravity. The associated client and pricing will not be deleted, you will need to do it manually before connecting again! <br /> <br /> Do you want to continue?"
+    },
+    "button": {
+        "continue": "Continue",
+        "cancel": "Cancel"
+    }
+}

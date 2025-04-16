@@ -1,0 +1,49 @@
+{
+    "title": "Storage history",
+    "subtitle": "Logs of all storage deal proposals received.",
+    "table": {
+        "empty": "Your history is currently empty.",
+        "noMatch": "Your search did not match any storage proposals.",
+        "dealStatus": {
+            "title": "Status"
+        },
+        "fromAddress": {
+            "title": "From address",
+            "unkownAddress": "N / A",
+            "tooltip": {
+                "copy": "Copy full address"
+            }
+        },
+        "clientName": {
+            "title": "Client name",
+            "unknown": "N/A",
+            "tooltip": {
+                "createAsClient": "Create as client",
+                "clientCreatedAfterDealProcessed": "Client created after deal processed",
+                "importedFromMultiple": "{{clientName}} (source: {{importedFrom}} on {{importedOn}})",
+                "importedFromSingle": "Proposed name from {{importedFrom}}"
+            }
+        },
+        "datetime": {
+            "title": "Received at"
+        },
+        "reason": {
+            "title": "Reason"
+        },
+        "inspect": {
+            "tooltip": "Inspect deal proposal"
+        },
+        "inspectAcceptanceLogic": {
+            "tooltip": "Inspect acceptance logic results"
+        },
+        "simulate": {
+            "tooltip": "Simulate in playground"
+        },
+        "internalMessage": {
+            "empty": "N/A"
+        }
+    },
+    "error": {
+        "generic": "Unable to load data. Try again in a few minutes or contact CIDgravity team!"
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "title": "Configure your global settings",
+    "subtitle": "These settings will allow you to protect your miner when receiving deals",
+    "numberOfStorageDealsPerHourField": {
+        "label": "Number of storage deals per hour *",
+        "tooltip": "Max number of storage deals per hour accross all clients"
+    },
+    "cumulativeDealSizeForStorageField": {
+        "label": "Cumulative deal size for storage (GiB) *",
+        "tooltip": "Max cumulative deal size per hour for storage deals accross all clients"
+    },
+    "retrievalDealsPerHourField": {
+        "label": "Retrieval deals per hour *",
+        "tooltip": "Max number of retrieval deals per hour accross all clients"
+    },
+    "customMessageField": {
+        "label": "Custom message",
+        "tooltip": "This message will be send back to client when a deal is rejected"
+    },
+    "acceptDealsFromUnkownClientsField": {
+        "label": "Accept storage deals from unknown clients",
+        "tooltip": "When deactivated, all storage deals from unknown clients are rejected"
+    },
+    "validation": {
+        "isStorageDealsPerHourValidNumber": "You must enter a number",
+        "isStorageDealsPerHourPositiveNumber": "The number must be positive",
+        "isStorageDealsPerHourInteger": "You cannot enter a floating point",
+        "isStorageDealsPerHourMandatory": "Please enter the number of storage deals per hour",
+        "isDealSizeValidNumber": "You must enter a number",
+        "isDealSizePositiveNumber": "The number must be positive",
+        "isDealSizeInteger": "You cannot enter a floating point",
+        "isDealSizeMandatory": "Please enter the cumulative size of deals for storage",
+        "isRetrievalDealsPerHourValidNumber": "You must enter a number",
+        "isRetrievalDealsPerHourPositiveNumber": "The number must be positive",
+        "isRetrievalDealsPerHourInteger": "You cannot enter a floating point",
+        "isRetrievalDealsPerHourMandatory": "Please enter the number of retrieval deals per hour"
+    }
+}
