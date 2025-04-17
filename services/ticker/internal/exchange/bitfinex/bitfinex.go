@@ -45,7 +45,7 @@ func New() *Bitfinex {
 	return &Bitfinex{
 		config: exchange.ExchangeConfig{
 			Name:     "Bitfinex",
-			Endpoint: "https://api.bitfinex.com/v1/pubticker/",
+			Endpoint: "https://api.bitfinex.com/v1/pubticker",
 			Timeout:  "15s",
 		},
 	}

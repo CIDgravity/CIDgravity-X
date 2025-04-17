@@ -10,7 +10,7 @@ var ExchangePairs = map[string]map[string]string{
 		"FIL_USD": "FILUSD",
 	},
 	"Bitfinex": {
-		"FIL_USD": "tFILUSD",
+		"FIL_USD": "filusd",
 	},
 	"Crypto.com": {
 		"FIL_USD": "FIL_USD",
