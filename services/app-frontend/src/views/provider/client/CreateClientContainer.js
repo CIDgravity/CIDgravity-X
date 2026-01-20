@@ -26,7 +26,7 @@ import {
     toReadableSize,
 } from 'shared/utils/file_size'
 
-import { computePriceEquivalence } from 'shared/utils/fil'
+import { computeRulePrice } from 'shared/utils/supported-currencies'
 import { peerIdFromString } from '@libp2p/peer-id'
 import Select from 'react-select'
 import { toast } from 'react-toastify'
@@ -40,7 +40,6 @@ import {
     shortenAddress,
 } from 'shared/utils/filecoinUtil'
 
-import { convertToFIL } from 'shared/utils/fil'
 import { GetCurrentAddress } from 'shared/services/addresses_claim'
 
 const createOptionFilecoinAddress = (addrObj, addrNotOnChainTooltip) => ({
@@ -1130,17 +1129,11 @@ class CreateClientContainer extends PureComponent {
                                                                         {t('pricingModel.details.priceLabel')}
                                                                     </strong>
                                                                     <br />
-                                                                    {selectedRulesModelDetails.currency === 'attofil_gib_epoch' ? (
-                                                                        <>
-                                                                            {computePriceEquivalence(rule.price, "FIL")}{' '}
-                                                                            {t('pricingModel.details.priceUnit.FIL')}
-                                                                        </>
-                                                                    ) : selectedRulesModelDetails.currency === 'usd_tib_month' ? (
-                                                                        <>
-                                                                            {rule.price}{' '}
-                                                                            {t('pricingModel.details.priceUnit.USD')}
-                                                                        </>
-                                                                    ) : null }
+                                                                    {computeRulePrice(
+                                                                        rule,
+                                                                        selectedRulesModelDetails.currency,
+                                                                        { format: true }
+                                                                    )}
                                                                 </Col>
                                                             </Row>
 

@@ -14,6 +14,8 @@ import {
     toReadableDurationFormat,
 } from '../utils/file_size'
 
+import { formatRulePrice } from 'shared/utils/supported-currencies'
+
 export const ViewPricingModel = ({
     isModalOpened,
     handleModal,
@@ -78,17 +80,13 @@ export const ViewPricingModel = ({
                                             </strong>
                                             <br />
 
-                                            {pricingModel.currency === 'attofil_gib_epoch' ? (
-                                                <>
-                                                    {rule.price_for_30days_fil} FIL
-                                                </>
-
-                                            ) : pricingModel.currency === 'usd_tib_month' ? (
-                                                <>
-                                                    {rule.price_for_30days_usd} USD
-                                                </>
-
-                                            ) : null }
+                                            {
+                                                formatRulePrice(
+                                                    rule, 
+                                                    pricingModel.currency, 
+                                                    { format: true }
+                                                )
+                                            }
                                         </Col>
                                     </Row>
 

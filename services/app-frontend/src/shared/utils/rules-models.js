@@ -1,5 +1,6 @@
 import { toReadableSize, toReadableDurationFormatNew } from '../../shared/utils/file_size'
 import { attoFilIsGreaterThan, attoFilIsLowerThan } from '../../shared/utils/fil'
+import { validateRulePrice } from '../../shared/utils/supported-currencies'
 
 // Function which check all the rules in a model are correctly filled
 // To return a valid result, all inputs must be filled
@@ -25,21 +26,7 @@ export const checkIfRulesAreFilled = (rulesList) => {
 // It's used to handle file size (min / max) with a string as unity and for duration (epochs / days)
 export const checkIfRulesAreValid = (pricingModelCurrency, rulesList) => {
     rulesList.forEach((rule, index) => {
-
-        // max 3 decimals for the price (used to handle comma in case the pricing currency is USD)
-        // commas as forbidden is pricing model currency isn't USD
-        if (pricingModelCurrency === 'usd_tib_month') {
-            if (rule.price.includes(".") || rule.price.includes(",")) {
-                const [, decimalPart] = rule.price.replace(",", ".").split(".");
-                if (decimalPart.length > 3) {
-                    throw new Error(`Rule ${index}: Price has too many decimal (found: ${decimalPart.length}, max: 3)`)
-                }
-            }
-        } else {
-            if (rule.price.includes(".") || rule.price.includes(",")) {
-                throw new Error(`Rule ${index}: Price with decimal is not allowed`)
-            }
-        }
+        validateRulePrice(rule.price, pricingModelCurrency, index);
 
         if (attoFilIsLowerThan(rule.price, '0')) {
             throw new Error('Rule ' + index + ': Price must be > 0 FIL')

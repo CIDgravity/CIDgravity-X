@@ -92,13 +92,13 @@ func Setup(config config.Config, dB *mongo.Database) *http.Server {
 	router.Use(logs.CustomGinLogger())
 
 	// Setup all API route
-	apiV1 := router.Group("/v1")
+	apiV1 := router.Group("/v1/ticker")
 	{
 		apiV1.GET("/get-version", appController.GetVersion)
 		apiV1.GET("/ping", appController.Ping)
 
-		apiV1.GET("/get-latest-tickers", exchangeController.GetLatestTickers)
-		apiV1.GET("/get-latest-tickers/:pairToFetch", exchangeController.GetLatestTickersForPair)
+		apiV1.POST("/get-latest", exchangeController.GetLatestTickers)
+		apiV1.POST("/get-latest-by-pair", exchangeController.GetLatestTickersForPair)
 	}
 
 	return server

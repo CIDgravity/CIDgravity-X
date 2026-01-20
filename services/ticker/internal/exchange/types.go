@@ -1,5 +1,9 @@
 package exchange
 
+type FetchRequestBody struct {
+	Pair string `json:"pair" form:"pair"`
+}
+
 type TickersWithWeighted struct {
 	Pair          string                                                   `json:"pair"`
 	Tickers       []ExchangeResponseDatabase[ExchangeFetchResponseForPair] `json:"tickers"`

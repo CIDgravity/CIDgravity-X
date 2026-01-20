@@ -17,7 +17,7 @@ import {
 import { GetCurrentAddress } from 'shared/services/addresses_claim'
 import { CustomPagination } from 'shared/components/CustomPagination'
 import { toast } from 'react-toastify'
-import { computePriceEquivalence } from 'shared/utils/fil'
+import { getCurrencyLabelTranslation, computeRulePrice } from 'shared/utils/supported-currencies'
 
 import ReactTooltip from 'react-tooltip'
 
@@ -121,17 +121,9 @@ class PricingModelContainer extends PureComponent {
     }
 
     handleOpenedViewPricingModel = (pricingModel) => {
-        var rulesWithComputedPrice = []
-
-        for (const rule of pricingModel.rules) {
-            if (pricingModel.currency === 'attofil_gib_epoch') {
-                rule['price_for_30days_fil'] = computePriceEquivalence(rule.price, "FIL")
-            } else if (pricingModel.currency === 'usd_tib_month') {
-                rule['price_for_30days_usd'] = rule.price
-            }
-
-            rulesWithComputedPrice.push(rule);
-        }
+        const rulesWithComputedPrice = pricingModel.rules.map((rule) =>
+            computeRulePrice({ ...rule }, pricingModel.currency)
+        );
 
         // Update the state and open the modal to view pricing model details
         this.setState({ clickedPricingModel: { ...pricingModel, rules: rulesWithComputedPrice } })
@@ -309,7 +301,7 @@ class PricingModelContainer extends PureComponent {
                                                         }
                                                     >
                                                         <div className="flex-fill d-flex align-items-center">
-                                                            {t(`table.currency.units.${pricingModel.currency}`)}
+                                                            {getCurrencyLabelTranslation(pricingModel.currency)}
                                                         </div>
                                                     </Col>
 

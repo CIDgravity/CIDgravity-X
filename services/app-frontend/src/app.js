@@ -43,6 +43,7 @@ import {
 import { Homepage } from 'views/global/home'
 import { OnboardingContainer } from 'views/global/onboarding'
 import { WizardContainer } from 'views/global/wizard'
+import { ClaimFromGatewayContainer } from 'views/global/claim-from-gateway'
 
 // Other components (located in views/)
 import { Unavailable } from 'views/Unavailable'
@@ -126,6 +127,11 @@ const App = () => {
                                 />
 
                                 {/* Following route are protected with Auth0 token but not under miner context */}
+                                <ProtectedRoute
+                                    exact
+                                    path="/claim/:signedMessage"
+                                    component={ClaimFromGatewayContainer}
+                                />
                                 <ProtectedRoute
                                     exact
                                     path="/profile"

@@ -9,7 +9,9 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { Trans, withTranslation } from 'react-i18next'
 import { withRouter } from 'react-router'
 import { toast } from 'react-toastify'
-import { Alert, Button, Col, Container, FormGroup, Label, Row } from 'reactstrap'
+import { Button, Col, Container, FormGroup, Label, Row } from 'reactstrap'
+
+import { PriceConversionAlert, getCurrencyOptions, getCurrencyLabelTranslation } from 'shared/utils/supported-currencies'
 
 import Select from 'react-select'
 import Switch from 'react-switch'
@@ -94,12 +96,9 @@ class CreatePricingModelForm extends PureComponent {
                                         name="pricingModelCurrency"
                                         defaultValue={{
                                             value: selectedPricingModelCurrency, 
-                                            label:  t(`general.currency.options.${selectedPricingModelCurrency}`)
+                                            label: getCurrencyLabelTranslation(selectedPricingModelCurrency)
                                         }}
-                                        options={[
-                                            { value: "attofil_gib_epoch", label: t('general.currency.options.attofil_gib_epoch') },
-                                            { value: "usd_tib_month", label: t('general.currency.options.usd_tib_month') }
-                                        ]}
+                                        options={getCurrencyOptions()}
                                         onChange={handlePricingModelCurrencyChange}
                                     />
                                 </FormGroup>
@@ -664,16 +663,8 @@ class CreatePricingModelForm extends PureComponent {
                                                                                     type="text"
                                                                                     className="form-control"
                                                                                     name="price"
-                                                                                    placeholder={
-                                                                                        selectedPricingModelCurrency === 'attofil_gib_epoch' ? (
-                                                                                            t('rule.price.placeholder.attoFilGiBEpoch')
-                                                                                        ) : (
-                                                                                            t('rule.price.placeholder.USDCentsTibMonth')
-                                                                                        )
-                                                                                    }
-                                                                                    value={
-                                                                                        rule.price
-                                                                                    }
+                                                                                    placeholder={getCurrencyLabelTranslation(selectedPricingModelCurrency)}
+                                                                                    value={rule.price}
                                                                                     onChange={(
                                                                                         e
                                                                                     ) =>
@@ -684,21 +675,10 @@ class CreatePricingModelForm extends PureComponent {
                                                                                     }
                                                                                 />
 
-                                                                                {rule.price != null && rule.price > 0 && (
-                                                                                    <>
-                                                                                        {selectedPricingModelCurrency === 'attofil_gib_epoch' ? (
-                                                                                            <Alert color="info" className="mt-2 d-flex align-items-center">
-                                                                                                ≈ {rule.price_for_30days_fil} {t('rule.price.priceConversionUnit')}{' '}
-                                                                                                (${rule.price_for_30days_usd})
-                                                                                            </Alert>
-                                                                                        ) : selectedPricingModelCurrency === 'usd_tib_month' ? (
-                                                                                            <Alert color="info" className="mt-2 d-flex align-items-center">
-                                                                                                ≈ {rule.price_fil_per_gib_per_epoch}{' '} 
-                                                                                                {t('rule.price.priceConversionUnitAttoFilPerGibPerEpoch')}
-                                                                                            </Alert>
-                                                                                        ) : null }
-                                                                                    </>
-                                                                                )}
+                                                                                <PriceConversionAlert
+                                                                                    priceData={rule}
+                                                                                    currency={selectedPricingModelCurrency}
+                                                                                />
                                                                             </Col>
                                                                         </Row>
                                                                     </div>

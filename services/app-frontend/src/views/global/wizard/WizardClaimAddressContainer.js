@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 export function WizardClaimAddressContainer({
     address,
     signedMessage,
+    generatedChallenge,
     actorType,
     steps,
     currentForm,
@@ -50,6 +51,7 @@ export function WizardClaimAddressContainer({
             signature: {
                 address: address,
                 signedMessage: signedMessage,
+                challenge: generatedChallenge,
                 friendlyName: formValues.friendly_name.name,
             },
             import: {
@@ -105,7 +107,7 @@ export function WizardClaimAddressContainer({
                 toast.error(errorMessage)
             })
         },
-        [t, address, actorType, signedMessage, currentForm, setCurrentForm, setToken, setShortAddressId]
+        [t, address, actorType, signedMessage, generatedChallenge, currentForm, setCurrentForm, setToken, setShortAddressId]
     )
 
     return <WizardFormContainer steps={steps} onSubmit={handleSubmit} />

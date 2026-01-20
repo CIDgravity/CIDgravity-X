@@ -13,8 +13,8 @@ import { useTranslation } from 'react-i18next'
 export function WizardSignMessageStep({
     address,
     setAddress,
-    hexMessage,
-    setHexMessage,
+    generatedChallenge,
+    setGeneratedChallenge,
     setSignedMessage,
     currentForm,
     setCurrentForm,
@@ -32,14 +32,14 @@ export function WizardSignMessageStep({
             .then((res) => {
                 if (res.status === 200) {
                     setWorkerKey(res.data.workerKey)
-                    setHexMessage(res.data.hexMsg)
+                    setGeneratedChallenge(res.data.challenge)
                     setError(null)
                     setLoading(false)
                 }
             })
             .catch((err) => {
                 setWorkerKey(null)
-                setHexMessage(null)
+                setGeneratedChallenge(null)
                 setError(err)
                 setLoading(false)
             })
@@ -58,6 +58,7 @@ export function WizardSignMessageStep({
                 try {
                     const res = await CheckChallenge({
                         address: address,
+                        challenge: generatedChallenge,
                         signedMessage: values.message,
                     })
         
@@ -106,7 +107,7 @@ export function WizardSignMessageStep({
                                                     'runThisCommandStep.codeHighlight.content',
                                                     {
                                                         workerKey: workerKey,
-                                                        hexMessage: hexMessage,
+                                                        generatedChallenge: generatedChallenge,
                                                     }
                                                 )}
                                             />

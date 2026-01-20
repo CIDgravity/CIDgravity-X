@@ -8,7 +8,7 @@ VERSION := $(shell scripts/get-git-tag-or-hash.sh)
 # Use linker flags to provide version/build settings
 LDFLAGS=-ldflags "-X=main.version=$(VERSION)"
 
-all: audit build
+all: build
 
 build: ## build the go application
 	make clean

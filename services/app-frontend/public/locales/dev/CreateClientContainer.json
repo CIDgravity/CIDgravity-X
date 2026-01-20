@@ -22,7 +22,8 @@
             "priceLabel": "Price / TiB / 30D",
             "priceUnit": {
                 "FIL": "FIL",
-                "USD": "USD"
+                "USD": "USD",
+                "USDFC": "USDFC"
             },
             "dealSize": "Deal size",
             "dealDuration": "Deal duration",

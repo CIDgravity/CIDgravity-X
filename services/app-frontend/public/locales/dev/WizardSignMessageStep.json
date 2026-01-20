@@ -4,7 +4,7 @@
     "runThisCommandStep": {
         "label": "1. Run this command to sign a specific message",
         "codeHighlight": {
-            "content": "lotus wallet sign {{workerKey}} {{hexMessage}}"
+            "content": "lotus wallet sign {{workerKey}} {{generatedChallenge}}"
         }
     },
     "putSignedMessageStep": {

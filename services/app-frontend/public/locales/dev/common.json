@@ -1,1 +1,18 @@
-{}
+{
+    "fil_tib_month": {
+        "label": "Fil/TiB/30d",
+        "currency": "FIL"
+    },
+    "attofil_gib_epoch": {
+        "label": "attoFIL/GiB/Epoch",
+        "currency": "attoFIL"
+    },
+    "usd_tib_month": {
+        "label": "USD/TiB/30d",
+        "currency": "USD"
+    },
+    "usdfc_tib_month": {
+        "label": "USDFC/TiB/30d",
+        "currency": "USDFC"
+    }
+}

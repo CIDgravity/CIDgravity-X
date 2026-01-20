@@ -13,7 +13,7 @@ import {
     UpdatePricingModelWithRules,
 } from 'shared/services/pricing-model'
 
-import { GetLatestMessariTicker } from 'shared/services/integration'
+import { GetLatestTicker } from 'shared/services/integration'
 import { Loader } from 'shared/components'
 import {
     fromBytesToReadableFormat,
@@ -28,7 +28,7 @@ import {
 } from 'shared/utils/rules-models'
 import { generateRandomString } from 'shared/utils/string'
 
-import { computePriceEquivalence, convertToFilecoinRate } from 'shared/utils/fil'
+import { computePriceForInput, getDefaultCurrency, computeAllRulePrices } from 'shared/utils/supported-currencies'
 
 import CreatePricingModelForm from './CreatePricingModelForm'
 
@@ -42,7 +42,7 @@ class CreatePricingModelContainer extends PureComponent {
             isLoading: true,
             isError: false,
             selectedFallOnDefaultValue: true,
-            selectedPricingModelCurrency: 'usd_tib_month', 
+            selectedPricingModelCurrency: getDefaultCurrency(), 
             selectedPricePlaceholder: '',
             ruleList: [
                 {
@@ -62,17 +62,12 @@ class CreatePricingModelContainer extends PureComponent {
                     archived: false,
                 },
             ],
-            messariTicker: {
-                data: {
-                    market_data: {
-                        price_usd: null,
-                        price_btc: null,
-                        price_eth: null
-                    }
-                },
-                status: {
-                    timestamp: null
-                }
+            ticker: {
+                pair: null,
+                isFromFallback: false,
+                tickersCount: -1,
+                weightedPrice: -1,
+                retrievedAt: null
             },
             pricingModel: {
                 uniqueId: '',
@@ -89,7 +84,7 @@ class CreatePricingModelContainer extends PureComponent {
     }
 
     async componentDidMount() {
-        await this.loadMessariTickerData()
+        await this.loadTickerData()
 
         if (this.props.match.params.pricingModelId === 'new') {
             try {
@@ -110,28 +105,30 @@ class CreatePricingModelContainer extends PureComponent {
                 )
 
                 if (response.data) {
-                    const { messariTicker } = this.state;
+                    const { ticker } = this.state;
                     
                     this.setState({
                         pricingModel: {
                             ...response.data,
                         },
-                        ruleList: response.data.rules.map((rule) => ({
-                            ...rule,
-                            price: rule.price,
-                            price_for_30days_fil: response.data.currency === 'attofil_gib_epoch' ? computePriceEquivalence(rule.price, "FIL") : -1,
-                            price_for_30days_usd: response.data.currency === 'attofil_gib_epoch' ? computePriceEquivalence(rule.price, "USD", messariTicker.data.market_data.price_usd) : -1,
-                            price_fil_per_gib_per_epoch: response.data.currency === 'usd_tib_month' ? convertToFilecoinRate(rule.price, messariTicker.data.market_data.price_usd) : -1,
-                            minDuration: toReadableDurationFormat(rule.minDuration)[0],
-                            minDurationUnit: toReadableDurationFormat(rule.minDuration)[1],
-                            maxDuration: toReadableDurationFormat(rule.maxDuration)[0],
-                            maxDurationUnit: toReadableDurationFormat(rule.maxDuration)[1],
-                            minSize: fromBytesToReadableFormat(rule.minSize)[0],
-                            maxSize: fromBytesToReadableFormat(rule.maxSize)[0],
-                            minSizeUnit: fromBytesToReadableFormat(rule.minSize)[1],
-                            maxSizeUnit: fromBytesToReadableFormat(rule.maxSize)[1],
-                        })),
+                        ruleList: response.data.rules.map((rule) => {
+                            const ruleWithPrices = computeAllRulePrices(rule, response.data.currency, ticker.weightedPrice);
+                            return {
+                                ...ruleWithPrices,
 
+                                // Format durations
+                                minDuration: toReadableDurationFormat(rule.minDuration)[0],
+                                minDurationUnit: toReadableDurationFormat(rule.minDuration)[1],
+                                maxDuration: toReadableDurationFormat(rule.maxDuration)[0],
+                                maxDurationUnit: toReadableDurationFormat(rule.maxDuration)[1],
+
+                                // Format sizes
+                                minSize: fromBytesToReadableFormat(rule.minSize)[0],
+                                maxSize: fromBytesToReadableFormat(rule.maxSize)[0],
+                                minSizeUnit: fromBytesToReadableFormat(rule.minSize)[1],
+                                maxSizeUnit: fromBytesToReadableFormat(rule.maxSize)[1],
+                            };
+                        }),
                         selectedPricingModelCurrency: response.data.currency,
                         selectedFallOnDefaultValue: response.data.fallOnDefault,
                         isLoading: false,
@@ -147,10 +144,10 @@ class CreatePricingModelContainer extends PureComponent {
         }
     }
 
-    loadMessariTickerData = async () => {
+    loadTickerData = async () => {
         try {
-            const response = await GetLatestMessariTicker()
-            this.setState({ messariTicker: response.data })
+            const response = await GetLatestTicker()
+            this.setState({ ticker: response.data })
         } catch (error) {
             this.setState({ error: true })
         }
@@ -286,7 +283,7 @@ class CreatePricingModelContainer extends PureComponent {
     }
 
     handleRuleInputChange = (e, index) => {
-        const { messariTicker, selectedPricingModelCurrency } = this.state;
+        const { ticker, selectedPricingModelCurrency } = this.state;
         const { name, value } = e.target
         const list = [...this.state.ruleList]
 
@@ -294,13 +291,11 @@ class CreatePricingModelContainer extends PureComponent {
 
         // if trying to update the price, update the conversion in TiB / 30j value
         if (name === "price") {
-            if (selectedPricingModelCurrency === 'attofil_gib_epoch') {
-                list[index]["price_for_30days_fil"] = computePriceEquivalence(value, "FIL")
-                list[index]["price_for_30days_usd"] = computePriceEquivalence(value, "USD", messariTicker.data.market_data.price_usd)
-
-            } else if (selectedPricingModelCurrency === 'usd_tib_month') {
-                list[index]["price_fil_per_gib_per_epoch"] = convertToFilecoinRate(value, messariTicker.data.market_data.price_usd)
-            }
+            const computed = computePriceForInput(value, selectedPricingModelCurrency, ticker);
+            list[index] = {
+                ...list[index],
+                ...computed
+            };
         }
 
         this.setState({ ruleList: list })

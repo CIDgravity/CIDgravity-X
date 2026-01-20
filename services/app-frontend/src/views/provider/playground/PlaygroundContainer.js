@@ -27,8 +27,9 @@ import { GetAllClientsForCurrentUser } from 'shared/services/client'
 import { clientArrayToSelectObjectWithAddresses } from 'shared/utils/array-utils'
 import { getFilecoinAddressIfValidAndSupported } from 'shared/utils/filecoinUtil'
 
-import { GetLatestMessariTicker } from 'shared/services/integration'
-import { computePriceEquivalence, convertToFilecoinRate } from 'shared/utils/fil'
+import { GetLatestTicker } from 'shared/services/integration'
+import { computePriceEquivalence } from 'shared/utils/fil'
+import { getDefaultCurrency, computeAllRulePrices } from 'shared/utils/supported-currencies'
 
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -51,7 +52,7 @@ class PlaygroundContainer extends PureComponent {
             selectedDealTransferType: 'manual',
             selectedDealType: 'storage',
             selectedPrice: 0,
-            selectedPriceCurrency: 'usd_tib_month',
+            selectedPriceCurrency: getDefaultCurrency(),
             selectedPriceFor30DaysFil: 0,
             selectedPriceFor30DaysUsd: 0,
             selectedPriceFilGibEpoch: 0,
@@ -80,17 +81,12 @@ class PlaygroundContainer extends PureComponent {
                 },
             },
 
-            messariTicker: {
-                data: {
-                    market_data: {
-                        price_usd: null,
-                        price_btc: null,
-                        price_eth: null
-                    }
-                },
-                status: {
-                    timestamp: null
-                }
+            ticker: {
+                pair: null,
+                isFromFallback: false,
+                tickersCount: -1,
+                weightedPrice: -1,
+                retrievedAt: null
             },
 
             clientsAddresses: [],
@@ -111,10 +107,10 @@ class PlaygroundContainer extends PureComponent {
             console.error(error)
         }
 
-        // load messari ticker data
+        // load ticker data
         try {
-            const response = await GetLatestMessariTicker()
-            this.setState({ messariTicker: response.data })
+            const response = await GetLatestTicker()
+            this.setState({ ticker: response.data })
         } catch (error) {
             this.setState({ error: true })
         }
@@ -132,7 +128,7 @@ class PlaygroundContainer extends PureComponent {
     }
 
     loadDealProposalById = async (id, knownClientAddresses) => {
-        const { messariTicker } = this.state;
+        const { ticker } = this.state;
         this.setState({ isLoading: true })
 
         try {
@@ -174,7 +170,7 @@ class PlaygroundContainer extends PureComponent {
                     selectedPrice: Math.floor(jsonProposal?.Proposal?.StoragePricePerEpoch / convertBytesToGiB(response.data.dealSize)),
                     selectedPriceCurrency: 'attofil_gib_epoch',
                     selectedPriceFor30DaysFil: computePriceEquivalence(jsonProposal?.Proposal?.StoragePricePerEpoch, "FIL"),
-                    selectedPriceFor30DaysUsd: computePriceEquivalence(jsonProposal?.Proposal?.StoragePricePerEpoch, "USD", messariTicker.data.market_data.price_usd),
+                    selectedPriceFor30DaysUsd: computePriceEquivalence(jsonProposal?.Proposal?.StoragePricePerEpoch, "USD", ticker.weightedPrice),
                     selectedPriceFilGibEpoch: -1,
 
                     selectedDealDuration: endEpoch - startEpoch,
@@ -220,7 +216,7 @@ class PlaygroundContainer extends PureComponent {
 
     sendTest = async (values) => {
         const { t } = this.props
-        const { selectedAddress, selectedPrice, currentAddress, sealingPipelineValuesToSimulate, simulateFromHistory, messariTicker } = this.state
+        const { selectedAddress, selectedPrice, currentAddress, sealingPipelineValuesToSimulate, simulateFromHistory, ticker } = this.state
 
         // Check the address format
         // If selected form client, format will be valid, but check also for manual address
@@ -266,21 +262,19 @@ class PlaygroundContainer extends PureComponent {
             }
 
             // Check the values (dealSize can't be < 256 and duration limits are 180 days and 1278 days)
-            if (
-                formValues.dealDuration < 518400 ||
-                formValues.dealDuration > 3680640
-            ) {
+            if (formValues.dealDuration < 518400 || formValues.dealDuration > 3680640) {
                 return {
                     status: false,
                     message: t('validation.isDurationOutsideLimits'),
                 }
             }
 
-            const convertedValues = convertToDealProposal(
+            const convertedValues = await convertToDealProposal(
                 formValues,
-                messariTicker.data.market_data.price_usd,
+                ticker.weightedPrice,
                 currentAddress.settings.startEpochSealingBuffer,
-                !simulateFromHistory
+                !simulateFromHistory,
+                currentAddress?.statusCheck?.agent
             )
 
             if (convertedValues.Proposal.PieceSize < 256) {
@@ -347,18 +341,17 @@ class PlaygroundContainer extends PureComponent {
 
     handlePriceCurrencyChange = (e) => {
         const { value } = e.target
-        const { selectedPrice, messariTicker } = this.state;
+        const { selectedPrice, ticker } = this.state;
+        const computedPrices = computeAllRulePrices(selectedPrice, value, ticker.weightedPrice);
 
-        this.setState({ 
+        this.setState({
             selectedPriceCurrency: value,
-            selectedPriceFor30DaysFil: value === 'attofil_gib_epoch' ? computePriceEquivalence(selectedPrice, "FIL") : -1,
-            selectedPriceFor30DaysUsd: value === 'attofil_gib_epoch' ? computePriceEquivalence(selectedPrice, "USD", messariTicker.data.market_data.price_usd) : -1,
-            selectedPriceFilGibEpoch: value === 'usd_tib_month' ? convertToFilecoinRate(selectedPrice, messariTicker.data.market_data.price_usd) : -1,
-        })
+            ...computedPrices
+        });
     }
 
     handleInputValueChange = (input, e) => {
-        const { messariTicker, selectedPriceCurrency } = this.state
+        const { ticker, selectedPriceCurrency } = this.state
         const { value } = e.target
 
         if (input === 'duration') {
@@ -373,12 +366,13 @@ class PlaygroundContainer extends PureComponent {
         } else if (input === 'dealType') {
             this.setState({ selectedDealType: value })
         } else if (input === 'price') {
-            this.setState({ 
+            const computedRule = computeAllRulePrices({ price: value }, selectedPriceCurrency, ticker.weightedPrice);
+            this.setState({
                 selectedPrice: value,
-                selectedPriceFor30DaysFil: selectedPriceCurrency === 'attofil_gib_epoch' ? computePriceEquivalence(value, "FIL") : -1,
-                selectedPriceFor30DaysUsd: selectedPriceCurrency === 'attofil_gib_epoch' ? computePriceEquivalence(value, "USD", messariTicker.data.market_data.price_usd) : -1,
-                selectedPriceFilGibEpoch: selectedPriceCurrency === 'usd_tib_month' ? convertToFilecoinRate(value, messariTicker.data.market_data.price_usd) : -1,
-            })
+                selectedPriceFor30DaysFil: computedRule.price_for_30days_fil ?? -1,
+                selectedPriceFor30DaysUsd: computedRule.price_for_30days_usd ?? -1,
+                selectedPriceFilGibEpoch: computedRule.price_fil_per_gib_per_epoch ?? -1,
+            });
         }
     }
 

@@ -5,3 +5,4 @@ const apiURL = `${SERVER_API_URL}`
 
 export const CheckProviderShortAddressOnChainValidity = async (shortAddressToCheck) => 
     await axios.get(`${apiURL}/util/check-provider-short-address-validity/${shortAddressToCheck}`)
+

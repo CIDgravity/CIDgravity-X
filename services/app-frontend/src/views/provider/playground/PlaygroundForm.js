@@ -4,9 +4,11 @@ import { isMobile } from 'react-device-detect'
 import { withTranslation } from 'react-i18next'
 import { withRouter } from 'react-router'
 import { toast } from 'react-toastify'
-import { Alert, Button, Col, FormGroup, Label, Row, Input } from 'reactstrap'
+import { Button, Col, FormGroup, Label, Row, Input } from 'reactstrap'
 
 import { GetPlaygroundAccepanceLogicFields } from 'shared/services/playground'
+import { PriceConversionAlert, getCurrencyLabelTranslation, SupportedCurrencies } from 'shared/utils/supported-currencies'
+
 import CustomSizeInput from 'shared/forms/CustomSizeInput'
 
 import DatePicker from 'react-datepicker'
@@ -232,7 +234,7 @@ class PlaygroundForm extends PureComponent {
                     </Row>
 
                     <Row className="mt-4" style={{ marginLeft: 5 + 'px' }}>
-                        <Col xs={isMobile ? '12' : '6'} md={isMobile ? '12' : '6'}>
+                        <Col xs={isMobile ? '12' : '7'} md={isMobile ? '12' : '7'}>
                             <Label for="deal-price" className="form-label">
                                 {t('price.label')}
                             </Label>
@@ -247,10 +249,8 @@ class PlaygroundForm extends PureComponent {
                                     name="dealPrice"
                                     value={selectedPrice}
                                     disabled={isSubmitting}
-                                    placeholder={t('price.placeholder')}
-                                    onChange={(e) =>
-                                        onInputValueChange('price', e)
-                                    }
+                                    placeholder={getCurrencyLabelTranslation(selectedPriceCurrency)}
+                                    onChange={(e) => onInputValueChange('price', e)}
                                 />
 
                                 <div className="input-group-prepend">
@@ -260,12 +260,11 @@ class PlaygroundForm extends PureComponent {
                                         onChange={(e) => onPriceCurrencyChange(e)}
                                         className="form-select"
                                     >
-                                        <option value="attofil_gib_epoch">
-                                            {t('price.units.attofil_gib_epoch')}
-                                        </option>
-                                        <option value="usd_tib_month">
-                                            {t('price.units.usd_tib_month')}
-                                        </option>
+                                        {Object.entries(SupportedCurrencies).map(([currencyKey, cfg]) => (
+                                            <option key={currencyKey} value={currencyKey}>
+                                                {getCurrencyLabelTranslation(currencyKey)}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -274,21 +273,15 @@ class PlaygroundForm extends PureComponent {
 
                     <Row style={{ marginLeft: 5 + 'px' }}>
                         <Col xs="12" md="12">
-                            {selectedPrice != null && selectedPrice > 0 && (
-                                <>
-                                    {selectedPriceCurrency === 'attofil_gib_epoch' ? (
-                                        <Alert color="info" className="mt-2 d-flex align-items-center">
-                                            ≈ {selectedPriceFor30DaysFil} {t('price.priceConversionUnit')}{' '}
-                                            (${selectedPriceFor30DaysUsd})
-                                        </Alert>
-                                    ) : selectedPriceCurrency === 'usd_tib_month' ? (
-                                        <Alert color="info" className="mt-2 d-flex align-items-center">
-                                            {selectedPriceFilGibEpoch}{' '} 
-                                            {t('price.priceConversionUnitAttoFilPerGibPerEpoch')}
-                                        </Alert>
-                                    ) : null }
-                                </>
-                            )}
+                            <PriceConversionAlert
+                                priceData={{
+                                    price: selectedPrice,
+                                    price_for_30days_fil: selectedPriceFor30DaysFil,
+                                    price_for_30days_usd: selectedPriceFor30DaysUsd,
+                                    price_fil_per_gib_per_epoch: selectedPriceFilGibEpoch
+                                }}
+                                currency={selectedPriceCurrency}
+                            />
                         </Col>
                     </Row>
                 </section>

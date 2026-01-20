@@ -143,8 +143,8 @@ class TopNavBar extends PureComponent {
         websocket.onmessage = (e) => {
             const websocketMessage = JSON.parse(e.data)
 
-            if (websocketMessage.type === 'messariTicker') {
-                this.messariTicker(websocketMessage.messari)
+            if (websocketMessage.type === 'ticker') {
+                this.ticker(websocketMessage.ticker)
             }
 
             if (websocketMessage.type === 'baseFee') {
@@ -158,7 +158,7 @@ class TopNavBar extends PureComponent {
             }
 
             if (websocketMessage.type === 'all') {
-                this.messariTicker(websocketMessage.messari)
+                this.ticker(websocketMessage.ticker)
                 this.baseFee(websocketMessage.baseFee)
                 // TODO remove that if and make sure the backend sends an empty map instead
                 if (websocketMessage.areUnderMaintenance !== undefined)
@@ -188,15 +188,15 @@ class TopNavBar extends PureComponent {
         }
     }
 
-    messariTicker = (tickerData) => {
+    ticker = (tickerData) => {
         const { websocketOpened } = this.state
 
         if (this.filPriceComponentRef !== null && this.filPriceComponentRef.current !== null) {
             if (tickerData) {
                 if (websocketOpened) {
-                    this.filPriceComponentRef.current.innerHTML = '<NavbarText className="text-center">$ ' + Number(tickerData.data.market_data.price_usd.toFixed(2)) + '</NavbarText>'
+                    this.filPriceComponentRef.current.innerHTML = '<NavbarText className="text-center">$ ' + Number(tickerData.weightedPrice.toFixed(2)) + '</NavbarText>'
                 } else {
-                    this.filPriceComponentRef.current.innerHTML = '$ ' + Number(tickerData.data.market_data.price_usd.toFixed(2))
+                    this.filPriceComponentRef.current.innerHTML = '$ ' + Number(tickerData.weightedPrice.toFixed(2))
                 }
             } else {
                 this.filPriceComponentRef.current.innerHTML =  '{t("ticker.retrievingPrice")}{"  "}<i className="fas fa-stroopwafel fa-spin" />'

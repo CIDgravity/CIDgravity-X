@@ -44,15 +44,10 @@
         "libp2pValue": "Libp2p"
     },
     "price": {
-        "tooltip": "Price is specified in attoFil / GiB / epoch",
-        "priceConversionUnit" : "Fil / TiB / 30D",
-        "priceConversionUnitAttoFilPerGibPerEpoch": "attoFil / GiB / epoch",
-        "label": "Price *",
-        "placeholder": "FIL / GiB / Epoch",
-        "units": {
-            "attofil_gib_epoch": "attoFil / GiB / Epoch",
-            "usd_tib_month": "USD / TiB / 30d"
-        }
+        "tooltip": "Price is specified in attoFil/GiB/epoch",
+        "priceConversionUnit" : "Fil/TiB/30D",
+        "priceConversionUnitAttoFilPerGibPerEpoch": "attoFil/GiB/epoch",
+        "label": "Price *"
     },
     "sealingpipeline": {
         "select": {

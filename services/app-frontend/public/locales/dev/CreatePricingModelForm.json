@@ -7,11 +7,7 @@
         },
         "currency": {
             "label": "Currency",
-            "placeholder": "Pricing model currency",
-            "options": {
-                "attofil_gib_epoch": "AttoFIL / GiB / Epoch",
-                "usd_tib_month": "USD / TiB / Month"
-            }
+            "placeholder": "Pricing model currency"
         },
         "fallback": {
             "label": "Fallback to default pricing model",
@@ -85,13 +81,9 @@
         },
         "price": {
             "label": "Price *",
-            "info": "Must be specified in attoFil / GiB / epoch",
-            "priceConversionUnit": "Fil / TiB / 30D",
-            "placeholder": {
-                "attoFilGiBEpoch": "attoFIL/GiB/Epoch",
-                "USDCentsTibMonth": "USD/TiB/Month"
-            },
-            "priceConversionUnitAttoFilPerGibPerEpoch": "attoFil / GiB / Epoch"
+            "info": "Must be specified in attoFil/GiB/epoch",
+            "priceConversionUnit": "Fil/TiB/30D",
+            "priceConversionUnitAttoFilPerGibPerEpoch": "attoFil/GiB/Epoch"
         }
     },
     "button": {

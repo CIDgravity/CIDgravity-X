@@ -1,9 +1,14 @@
 package controller
 
 import (
+	"bytes"
+	"encoding/json"
+	"io"
 	"net/http"
 	"runtime/debug"
 
+	"github.com/CIDgravity/Ticker/config"
+	"github.com/CIDgravity/Ticker/internal/exchange"
 	logs "github.com/CIDgravity/Ticker/pkg/logger"
 	"github.com/CIDgravity/Ticker/service"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -46,15 +51,40 @@ func (ctrl exchangeController) GetLatestTickers(c *gin.Context) {
 }
 
 func (ctrl exchangeController) GetLatestTickersForPair(c *gin.Context) {
-	pairToFetch := c.Param("pairToFetch")
-
-	// Check param isn't empty
-	if pairToFetch == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing pairToFetch param"})
+	if c.Request.Body == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
 		return
 	}
 
-	results, err := ctrl.exchangeService.GetLatestTickersForPair(pairToFetch)
+	var pairToFetch exchange.FetchRequestBody
+	bodyBytes, err := io.ReadAll(c.Request.Body)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		return
+	}
+
+	c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+	if err := json.Unmarshal(bodyBytes, &pairToFetch); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		return
+	}
+
+	if pairToFetch.Pair == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "pair is mandatory"})
+		return
+	}
+
+	// Find the pair in config for a sample exchange
+	// If not found it means pair not supported, so can't be fetched (or data will be empty)
+	_, err = config.GetPairForPlatform("Kraken", pairToFetch.Pair)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "pair not supported. Only FIL_USD is supported at this time"})
+		return
+	}
+
+	// Fetch data
+	results, err := ctrl.exchangeService.GetLatestTickersForPair(pairToFetch.Pair)
 
 	if err != nil {
 		logs.Error(logs.LogParams{

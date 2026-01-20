@@ -7,8 +7,9 @@ import { withTranslation, Trans } from 'react-i18next'
 
 import { GetProviderDetailsForClient } from 'shared/services/cidg-services/client-backend/provider_details'
 import { fromBytesToReadableFormat, toReadableDurationFormat } from 'shared/utils/file_size'
-import { GetLatestMessariTicker } from 'shared/services/integration'
-import { computePriceEquivalence, convertToFIL, convertToFilecoinRate } from 'shared/utils/fil'
+import { GetLatestTicker } from 'shared/services/integration'
+import { convertToFIL } from 'shared/utils/fil'
+import { formatRulePrice, computeAllRulePrices } from 'shared/utils/supported-currencies'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlack } from '@fortawesome/free-brands-svg-icons'
@@ -35,12 +36,12 @@ class ProviderDetailsContainer extends PureComponent {
     }
 
     async componentDidMount() {
-        const fetchLatestMessariTicker = GetLatestMessariTicker()
+        const fetchLatestTicker = GetLatestTicker()
         const fetchProviderDetails = GetProviderDetailsForClient(this.props.match.params.providerAddress)
 
-        Promise.allSettled([ fetchLatestMessariTicker, fetchProviderDetails ]).then((responses) => {
-            const [messariTickerResult, providerDetailsResult] = responses;
-            const hasError = messariTickerResult.status === "rejected" || providerDetailsResult.status === "rejected";
+        Promise.allSettled([ fetchLatestTicker, fetchProviderDetails ]).then((responses) => {
+            const [tickerResult, providerDetailsResult] = responses;
+            const hasError = tickerResult.status === "rejected" || providerDetailsResult.status === "rejected";
 
             if (hasError) {
                 this.setState({
@@ -52,13 +53,13 @@ class ProviderDetailsContainer extends PureComponent {
                 this.setState({
                     isLoading: false,
                     providerAddressDetails: providerDetailsResult.value.data.result,
-                    pricingRulesApplied: providerDetailsResult.value.data.result.pricingRulesApplied?.map((rule) => ({
-                        ...rule,
-                        price: rule.price,
-                        price_for_30days_fil: rule.currency === 'attofil_gib_epoch' ? computePriceEquivalence(rule.price, "FIL") : -1,
-                        price_for_30days_usd: rule.currency === 'attofil_gib_epoch' ? computePriceEquivalence(rule.price, "USD", messariTickerResult.value.data.data.market_data.price_usd) : -1,
-                        price_fil_per_gib_per_epoch: rule.currency === 'usd_tib_month' ? convertToFilecoinRate(rule.price, messariTickerResult.value.data.data.market_data.price_usd) : -1,
-                    })),
+                    pricingRulesApplied: providerDetailsResult.value.data.result.pricingRulesApplied?.map((rule) => {
+                        return computeAllRulePrices(
+                            { ...rule },
+                            rule.currency,
+                            tickerResult.value.data.weightedPrice
+                        );
+                    }),
                 })
             }
         })
@@ -354,42 +355,13 @@ class ProviderDetailsContainer extends PureComponent {
                                                 </Col>
                                             
                                                 <Col xs='3' md='3'>
-                                                    {rule.currency === 'attofil_gib_epoch' ? (
-                                                        <>
-                                                            <div className="flex-fill d-flex align-items-center">
-                                                                <p>
-                                                                    {convertToFIL(rule.price)}{' '}
-                                                                    {t('pricing.columns.dealPrice.unit.filGibEpoch')}
-                                                                </p>
-                                                            </div>
-
-                                                            {rule.price != null && rule.price > 0 && (
-                                                                <Alert color="info" className="mt-2">
-                                                                    ≈ {rule.price_for_30days_fil}{' '} 
-                                                                    {t('pricing.columns.dealPrice.equivalenceUnit.filTibMonth')}
-                                                                    {' '}(${rule.price_for_30days_usd})
-                                                                </Alert>
-                                                            )}
-                                                        </>
-
-                                                    ) : rule.currency === 'usd_tib_month' ? (
-                                                        <>
-                                                            <div className="flex-fill d-flex align-items-center">
-                                                                <p>
-                                                                    {(rule.price)}{' '}
-                                                                    {t('pricing.columns.dealPrice.unit.usdTib30d')}
-                                                                </p>
-                                                            </div>
-
-                                                            {rule.price != null && rule.price > 0 && (
-                                                                <Alert color="info" className="mt-2">
-                                                                    ≈ {rule.price_fil_per_gib_per_epoch}{' '} 
-                                                                    {t('pricing.columns.dealPrice.equivalenceUnit.attofilGiBEpoch')}
-                                                                </Alert>
-                                                            )}
-                                                        </>
-
-                                                    ) : null }
+                                                    {
+                                                        formatRulePrice(
+                                                            rule, 
+                                                            rule.currency, 
+                                                            { format: true, convertFn: convertToFIL, equivalence: true }
+                                                        )
+                                                    }
                                                 </Col>
                                             </Row>
                                         </div>

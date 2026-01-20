@@ -1,100 +1,31 @@
 import { getCurrentFilecoinEpoch } from '../../shared/utils/filecoinUtil'
-import { convertBytesToGiB } from '../../shared/utils/file_size'
-import { convertToFilecoinRate } from '../../shared/utils/fil'
+import { computeRulePriceAndLabelForProposal } from '../../shared/utils/supported-currencies'
 
 import {
     StorageAcceptanceLogicCurioPipelineStatesFields,
     StorageAcceptanceLogicCurioDealStagingStatesFields,
     StorageAcceptanceLogicSealingPipelineSectorStatesFields,
+    StorageAcceptanceLogicSealingPipelineSectorStatesErrorsFields,
     StorageAcceptanceLogicAdditionalFields
 } from '../../shared/utils/storage-acceptance-logic-query-fields'
 
 const dayjs = require('dayjs')
 
-export const convertToDealProposal = (
+export const convertToDealProposal = async (
     values,
     tickerPriceUsd,
     startEpochSealingBufferSettings,
-    shouldConvertFromNanoFil
+    shouldConvertFromNanoFil,
+    minerAgent
 ) => {
     // First convert a json array to a string array
-    const storageAcceptanceLogicAdditionalFields =
-        StorageAcceptanceLogicAdditionalFields().map(
-            (element) => element['label']
-        )
-
-    const storageAcceptanceLogicCurioSectorStates =
-        StorageAcceptanceLogicCurioPipelineStatesFields().map(
-            (element) => element
-        )
-
-    const storageAcceptanceLogicCurioDealStagingStates =
-        StorageAcceptanceLogicCurioDealStagingStatesFields().map(
-            (element) => element
-        )
-
-    const sealingPipelineCurioDealStagingStates = values.sealingPipelineValuesToSimulate
-    .filter(
-        (item) =>
-            !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
-            storageAcceptanceLogicCurioDealStagingStates.includes(item.state) && item.category === 'curioDealStagingStates'
-    )
-    .reduce(
-        (obj, item) =>
-            Object.assign(obj, { [item.state]: parseInt(item.value) }),
-        {}
-    )
-
-    const sealingPipelineCurioRunningSectorStates = values.sealingPipelineValuesToSimulate
-    .filter(
-        (item) =>
-            !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
-            storageAcceptanceLogicCurioSectorStates.includes(item.state) && item.category === 'curioRunning'
-    )
-    .reduce(
-        (obj, item) =>
-            Object.assign(obj, { [item.state]: parseInt(item.value) }),
-        {}
-    )
-
-    const sealingPipelineCurioPendingSectorStates = values.sealingPipelineValuesToSimulate
-    .filter(
-        (item) =>
-            !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
-            storageAcceptanceLogicCurioSectorStates.includes(item.state) && item.category === 'curioPending'
-    )
-    .reduce(
-        (obj, item) =>
-            Object.assign(obj, { [item.state]: parseInt(item.value) }),
-        {}
-    )
-
-    const sealingPipelineCurioFailedSectorStates = values.sealingPipelineValuesToSimulate
-    .filter(
-        (item) =>
-            !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
-            storageAcceptanceLogicCurioSectorStates.includes(item.state) && item.category === 'curioFailed'
-    )
-    .reduce(
-        (obj, item) =>
-            Object.assign(obj, { [item.state]: parseInt(item.value) }),
-        {}
-    )
-
     const additionalFieldsProposalData = values.sealingPipelineValuesToSimulate
-        .filter(
-            (item) =>
-                !StorageAcceptanceLogicSealingPipelineSectorStatesFields().includes(
-                    item.state
-                )
-        )
-        .reduce((obj, item) => {
-            return item.state === 'ReceivedOnDatetime'
-                ? Object.assign(obj, {
-                      [item.state]: dayjs(item.value * 1000).unix(),
-                  })
-                : Object.assign(obj, { [item.state]: parseInt(item.value) })
-        }, {})
+    .filter((item) => !StorageAcceptanceLogicSealingPipelineSectorStatesFields().includes(item.state))
+    .reduce((obj, item) => {
+        return item.state === 'ReceivedOnDatetime'
+            ? Object.assign(obj, { [item.state]: dayjs(item.value * 1000).unix() })
+            : Object.assign(obj, { [item.state]: parseInt(item.value) })
+    }, {})
 
     // We will send directly a CIDgravity standardized proposal to deal filter
     const pieceCID = { '/': 'cidgravity_playground' }
@@ -102,16 +33,15 @@ export const convertToDealProposal = (
     const clientSignature = { Type: 2, Data: 'cidgravity_playground' }
     const currentFilecoinEpoch = getCurrentFilecoinEpoch()
 
-    // Convert the price depending on selectedCurrency
-    // attofil_gib_epoch: price is already in attoFil but we need to multiplicate by size in GiB (in real deal proposal the price is for size / epoch)
-    // usd_tib_month: use the specific function to convert to attoFil / GiB / Epoch and apply same conversion than other unit
-    let dealPrice = values.dealPrice
-
-    if (values.dealPriceCurrency === 'usd_tib_month') {
-        dealPrice = convertToFilecoinRate(values.dealPrice, tickerPriceUsd)
-    }
-
-    const priceAsAttoFil = Math.ceil(dealPrice * convertBytesToGiB(values.dealSize))
+    // Depending on the selected currency, get the label that will be send
+    // and the deal price
+    const { priceAsAttoFil, label } = await computeRulePriceAndLabelForProposal(
+        values.dealPrice,
+        values.dealPriceCurrency,
+        values.dealSize,
+        tickerPriceUsd,
+        "cidgravity_playground"
+    );
 
     // For the start epoch, we need to add few epochs to avoid rejecting due to start epoch sealing bufer checks
     // For now 2880 epochs should be enough (2880 epochs = 24 hours)
@@ -124,7 +54,7 @@ export const convertToDealProposal = (
         VerifiedDeal: values.dealVerified,
         Client: values.fromAddress,
         Provider: 'cidgravity_playground',
-        Label: 'cidgravity_playground',
+        Label: label,
         StartEpoch:
             currentFilecoinEpoch +
             startEpochSealingBufferSettings +
@@ -139,20 +69,81 @@ export const convertToDealProposal = (
         ClientCollateral: '0',
     }
 
-    return {
+    // create the proposal that will be sent
+    let normalizedProposal = {
         Proposal: proposal,
         ClientSignature: clientSignature,
         ProposalCID: proposalCID,
         FastRetrieval: false,
         DealType: 'storage',
         FormatVersion: '2.2.0',
-        Agent: 'playground-curio',
+        Agent: minerAgent === "boost" ? "playground-boost" : "playground-curio",
         Transfer: {
             Size: values.dealSize,
             Type: values.dealTransferType
         },
         Additional: additionalFieldsProposalData,
-        CurioSealingPipelineState: {
+    }
+
+    // define the right sealing pipeline format based on miner agent
+    if (minerAgent === "boost") {
+        const storageAcceptanceLogicSectorStatesError = StorageAcceptanceLogicSealingPipelineSectorStatesErrorsFields().map((element) => element)
+        const storageAcceptanceLogicSectorStates = StorageAcceptanceLogicSealingPipelineSectorStatesFields().map((element) => element)
+        const storageAcceptanceLogicAdditionalFields =StorageAcceptanceLogicAdditionalFields().map((element) => element['label'])
+        
+        // Parse the sealing pipeline values (storage acceptance logic)
+        // We need to parse one side the sealing pipeline sector state and other side the "Other" variables
+        const sealingPipelineSectorStates = values.sealingPipelineValuesToSimulate
+            .filter((item) => !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
+            storageAcceptanceLogicSectorStates.includes(item.state)
+        )
+        .reduce((obj, item) => Object.assign(obj, { [item.state]: parseInt(item.value) }), {})
+
+        const sealingPipelineSectorStatesError = values.sealingPipelineValuesToSimulate
+            .filter((item) => !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
+                storageAcceptanceLogicSectorStatesError.includes(item.state)
+            )
+            .reduce((obj, item) => Object.assign(obj, { [item.state]: parseInt(item.value) }), {})
+
+        // set the value in the normalized proposal
+        normalizedProposal.SealingPipelineState = {
+            SealingPipelineState: {
+                SectorStates: sealingPipelineSectorStates,
+                SectorStatesErrors: sealingPipelineSectorStatesError,
+            },
+        }
+
+    }  else if (minerAgent === "curio") {
+        const storageAcceptanceLogicAdditionalFields = StorageAcceptanceLogicAdditionalFields().map((element) => element['label'])
+        const storageAcceptanceLogicCurioSectorStates = StorageAcceptanceLogicCurioPipelineStatesFields().map((element) => element)
+        const storageAcceptanceLogicCurioDealStagingStates = StorageAcceptanceLogicCurioDealStagingStatesFields().map((element) => element)
+
+        const sealingPipelineCurioDealStagingStates = values.sealingPipelineValuesToSimulate
+            .filter((item) => !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
+                storageAcceptanceLogicCurioDealStagingStates.includes(item.state) && item.category === 'curioDealStagingStates'
+        )
+        .reduce((obj, item) => Object.assign(obj, { [item.state]: parseInt(item.value) }), {})
+
+        const sealingPipelineCurioRunningSectorStates = values.sealingPipelineValuesToSimulate
+            .filter((item) => !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
+                storageAcceptanceLogicCurioSectorStates.includes(item.state) && item.category === 'curioRunning'
+        )
+        .reduce((obj, item) => Object.assign(obj, { [item.state]: parseInt(item.value) }), {})
+
+        const sealingPipelineCurioPendingSectorStates = values.sealingPipelineValuesToSimulate
+            .filter((item) => !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
+                storageAcceptanceLogicCurioSectorStates.includes(item.state) && item.category === 'curioPending'
+        )
+        .reduce((obj, item) =>Object.assign(obj, { [item.state]: parseInt(item.value) }), {})
+
+        const sealingPipelineCurioFailedSectorStates = values.sealingPipelineValuesToSimulate
+            .filter((item) => !storageAcceptanceLogicAdditionalFields.includes(item.state) &&
+                storageAcceptanceLogicCurioSectorStates.includes(item.state) && item.category === 'curioFailed'
+        )
+        .reduce((obj, item) => Object.assign(obj, { [item.state]: parseInt(item.value) }), {})
+
+        // set the value in the normalized proposal
+        normalizedProposal.CurioSealingPipelineState = {
             DealStagingStates: sealingPipelineCurioDealStagingStates,
             Pipeline: {
                 IsSnap: false,
@@ -165,6 +156,8 @@ export const convertToDealProposal = (
             }
         }
     }
+
+    return normalizedProposal
 }
 
 export const ParseStandardizedProposalToAcceptanceLogicValues = (deal, standardizedProposal) => {

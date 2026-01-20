@@ -24,7 +24,7 @@ export function WizardContainer() {
     const [address, setAddress] = useState(undefined)
     const [shortAddressId, setShortAddressId] = useState(undefined)
     const [actorType, setActorType] = useState(undefined)
-    const [hexMessage, setHexMessage] = useState(undefined)
+    const [generatedChallenge, setGeneratedChallenge] = useState(undefined)
     const [signedMessage, setSignedMessage] = useState(undefined)
     const [claimedInfo, setClaimedInfo] = useState(undefined)
     const [currentForm, setCurrentForm] = useState(0)
@@ -55,7 +55,7 @@ export function WizardContainer() {
             CompleteMinerAlreadyExists({
                 signature: {
                     address: address,
-                    hexMsg: hexMessage,
+                    challenge: generatedChallenge,
                     signedMessage: signedMessage,
                     friendlyName: claimedInfo.friendlyName,
                 },
@@ -135,8 +135,8 @@ export function WizardContainer() {
                             <WizardSignMessageStep
                                 address={address}
                                 setAddress={setAddress}
-                                hexMessage={hexMessage}
-                                setHexMessage={setHexMessage}
+                                generatedChallenge={generatedChallenge}
+                                setGeneratedChallenge={setGeneratedChallenge}
                                 setSignedMessage={setSignedMessage}
                                 signedMessage={signedMessage}
                                 currentForm={currentForm}
@@ -150,6 +150,7 @@ export function WizardContainer() {
                         <WizardClaimAddressContainer
                             address={address}
                             signedMessage={signedMessage}
+                            generatedChallenge={generatedChallenge}
                             actorType={actorType}
                             steps={steps}
                             currentForm={currentForm}

@@ -17,6 +17,7 @@ go.work.sum
 
 # config files
 ./config.toml
+config.toml
 
 # env file
 .env
