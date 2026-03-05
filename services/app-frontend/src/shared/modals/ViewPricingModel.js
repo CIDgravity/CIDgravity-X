@@ -1,14 +1,12 @@
 import { useTranslation, Trans } from 'react-i18next'
-import {
-    Alert,
-    Button,
-    Col,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-} from 'reactstrap'
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import Row from 'react-bootstrap/Row'
 import {
     fromBytesToReadableFormat,
     toReadableDurationFormat,
@@ -24,12 +22,12 @@ export const ViewPricingModel = ({
     const { t } = useTranslation('ViewPricingModel') // second param ignored i18n
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>
+            <ModalHeader closeButton>
                 {t('header', { pricingModelName: pricingModel.name })}
             </ModalHeader>
 
@@ -171,7 +169,7 @@ export const ViewPricingModel = ({
                         {pricingModel?.clients?.length !== 0 ? (
                             <ul>
                                 {pricingModel?.clients?.map((client) => (
-                                    <li>{client.name}</li>
+                                    <li key={client.name}>{client.name}</li>
                                 ))}
                             </ul>
                         ) : (
@@ -189,13 +187,13 @@ export const ViewPricingModel = ({
                                     <ul>
                                         {pricingModel?.clientsWithDefault?.map(
                                             (client) => (
-                                                <li>{client.name}</li>
+                                                <li key={client.name}>{client.name}</li>
                                             )
                                         )}
                                     </ul>
                                 )}
 
-                                <Alert color="warning">
+                                <Alert variant="warning">
                                     {t(
                                         'body.client.pricing.alsoApplyToUnknownClients'
                                     )}

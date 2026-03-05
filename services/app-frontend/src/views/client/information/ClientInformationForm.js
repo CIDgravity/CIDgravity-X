@@ -5,8 +5,12 @@ import Select from 'react-select'
 
 import { withTranslation } from 'react-i18next'
 import { Field, Form, withFormik } from 'formik'
-import { withRouter } from 'react-router'
-import { Button, Col, FormGroup, Label, Row } from 'reactstrap'
+import { withRouter } from 'shared/utils/withRouter'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 import {  CountrySelector } from 'shared/components/CountrySelector'
 
@@ -31,9 +35,9 @@ class ClientInformationForm extends PureComponent {
                         <section className="card-form">
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="entity-name" className="form-label">
+                                    <FormLabel htmlFor="entity-name" className="form-label">
                                         {t('entityName.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('entityName.placeholder')}
                                         id="entity-name"
@@ -53,9 +57,9 @@ class ClientInformationForm extends PureComponent {
                             <Row className="my-3">
                                 <Col xs="6" md="6">
                                     <FormGroup>
-                                        <Label for="entity-type" className="form-label">
+                                        <FormLabel htmlFor="entity-type" className="form-label">
                                             {t('entityType.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <Select 
                                             name="entityType"
@@ -75,9 +79,9 @@ class ClientInformationForm extends PureComponent {
 
                                 <Col xs="6" md="6">
                                     <FormGroup>
-                                        <Label for="entity-country" className="form-label">
+                                        <FormLabel htmlFor="entity-country" className="form-label">
                                             {t('entityCountry.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <CountrySelector 
                                             defaultValueCountryCode={values.entityCountry}
@@ -97,9 +101,9 @@ class ClientInformationForm extends PureComponent {
 
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="entity-website" className="form-label">
+                                    <FormLabel htmlFor="entity-website" className="form-label">
                                         {t('entityWebsite.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('entityWebsite.placeholder')}
                                         id="entity-website"
@@ -123,9 +127,9 @@ class ClientInformationForm extends PureComponent {
                         <section className="card-form">
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="contact-fullname" className="form-label">
+                                    <FormLabel htmlFor="contact-fullname" className="form-label">
                                         {t('contactFullName.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('contactFullName.placeholder')}
                                         id="contact-fullname"
@@ -144,9 +148,9 @@ class ClientInformationForm extends PureComponent {
 
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="contact-email" className="form-label">
+                                    <FormLabel htmlFor="contact-email" className="form-label">
                                         {t('contactEmail.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('contactEmail.placeholder')}
                                         id="contact-email"
@@ -165,9 +169,9 @@ class ClientInformationForm extends PureComponent {
 
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="contact-slack" className="form-label">
+                                    <FormLabel htmlFor="contact-slack" className="form-label">
                                         {t('contactSlack.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('contactSlack.placeholder')}
                                         id="contact-slack"
@@ -192,9 +196,9 @@ class ClientInformationForm extends PureComponent {
                     <Col xs="12" md="12">
                         <section className="card-form">
                             <FormGroup>
-                                <Label for="datacap-request-link" className="form-label">
+                                <FormLabel htmlFor="datacap-request-link" className="form-label">
                                     {t('datacapRequestLink.label')}
-                                </Label>
+                                </FormLabel>
                                 <Field
                                     placeholder={t('datacapRequestLink.placeholder')}
                                     id="datacap-request-link"

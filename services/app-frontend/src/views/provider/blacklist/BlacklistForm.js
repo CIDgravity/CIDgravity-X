@@ -6,8 +6,12 @@ import { toast } from 'react-toastify'
 
 import { Field, Form, withFormik } from 'formik'
 import { withTranslation } from 'react-i18next'
-import { withRouter } from 'react-router'
-import { Button, Col, FormGroup, Label, Row } from 'reactstrap'
+import { withRouter } from 'shared/utils/withRouter'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 class BlacklistForm extends PureComponent {
     render() {
@@ -19,9 +23,9 @@ class BlacklistForm extends PureComponent {
                     <Row className="my-3">
                         <Col xs="12" md="12">
                             <FormGroup>
-                                <Label for="address" className="form-label">
+                                <FormLabel htmlFor="address" className="form-label">
                                     {t('addressToBlacklist.label')}
-                                </Label>
+                                </FormLabel>
                                 <Field
                                     id="address"
                                     className="form-control"
@@ -41,9 +45,9 @@ class BlacklistForm extends PureComponent {
 
                     <Row>
                         <Col xs="12" md="12">
-                            <Label for="input-comment" className="form-label">
+                            <FormLabel htmlFor="input-comment" className="form-label">
                                 {t('comment.label')}
-                            </Label>
+                            </FormLabel>
 
                             <Field
                                 id="input-comment"

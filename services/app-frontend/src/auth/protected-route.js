@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { Route } from 'react-router-dom'
+import React, { useEffect, useMemo } from 'react'
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 import { Loading } from '../shared/components/index'
 
@@ -8,7 +7,7 @@ import { HasAccessToAddress } from '../shared/services/addresses_claim'
 import { SESSION_STORAGE_TENANT_KEY } from '../config/constants'
 import { GetTenantValuesFromSessionStorage } from '../shared/utils/auth'
 
-const ProtectedRoute = ({ component, ...args }) => {
+const ProtectedRoute = ({ component }) => {
     useEffect(() => {
         const [addressId, actorType] = GetTenantValuesFromSessionStorage();
 
@@ -24,16 +23,16 @@ const ProtectedRoute = ({ component, ...args }) => {
                     sessionStorage.removeItem(SESSION_STORAGE_TENANT_KEY)
                 })
         }
-    })
+    }, [])
 
-    return (
-        <Route
-            component={withAuthenticationRequired(component, {
-                onRedirecting: () => <Loading />
-            })}
-            {...args}
-        />
+    const AuthenticatedComponent = useMemo(
+        () => withAuthenticationRequired(component, {
+            onRedirecting: () => <Loading />
+        }),
+        [component]
     )
+
+    return <AuthenticatedComponent />
 }
 
 export default ProtectedRoute

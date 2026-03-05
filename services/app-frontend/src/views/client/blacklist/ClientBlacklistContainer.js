@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Input, Col, Row } from 'reactstrap'
+import FormControl from 'react-bootstrap/FormControl'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import { Trans, withTranslation } from 'react-i18next'
 import { isBrowser } from 'react-device-detect'
 import { Loader } from 'shared/components'
@@ -23,7 +25,7 @@ import { CheckProviderShortAddressOnChainValidity } from 'shared/services/fileco
 
 import moment from 'moment'
 import debounce from 'lodash/debounce'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import ClientBlacklistForm from './ClientBlacklistForm'
 import PremiumRestrictedSection from 'shared/components/PremiumRestrictedSection'
 
@@ -205,7 +207,7 @@ class ClientBlacklistContainer extends PureComponent {
                             <div className="card-no-border mt-4 mb-4">
                                 <Row>
                                     <Col xs={12} md={12} style={{ marginTop: 50 + 'px', paddingLeft: 50 + 'px', paddingRight: 50 + 'px' }}>
-                                        <Input
+                                        <FormControl
                                             id="search"
                                             placeholder={t('searchForm.searchInput.placeholder')}
                                             onChange={(e) => this.handleSearchAddressInBlacklist(e.target.value)}
@@ -268,11 +270,11 @@ class ClientBlacklistContainer extends PureComponent {
                                                                         >
                                                                             <i
                                                                                 className="fas fa-trash-alt"
-                                                                                data-for="delete"
-                                                                                data-tip={t('table.delete.tooltip')}
+                                                                                data-tooltip-id="delete"
+                                                                                data-tooltip-content={t('table.delete.tooltip')}
                                                                             />
                 
-                                                                            <ReactTooltip place="bottom" id="delete"/>
+                                                                            <Tooltip place="bottom" id="delete"/>
                                                                         </span>
                                                                     </div>
                                                                 </Col>

@@ -9,7 +9,7 @@ import {
     StorageAcceptanceLogicAdditionalFields
 } from '../../shared/utils/storage-acceptance-logic-query-fields'
 
-const dayjs = require('dayjs')
+import dayjs from 'dayjs'
 
 export const convertToDealProposal = async (
     values,

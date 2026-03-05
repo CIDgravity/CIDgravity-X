@@ -1,5 +1,9 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { useTranslation } from 'react-i18next'
 
 export const ConfirmUnlinkAddress = ({
@@ -13,12 +17,12 @@ export const ConfirmUnlinkAddress = ({
 
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>
+            <ModalHeader closeButton>
                 {t('header', { addressId: selectedAddress.addressId })}
             </ModalHeader>
 
@@ -26,7 +30,7 @@ export const ConfirmUnlinkAddress = ({
                 {t('body.willUnlinkFromYourAccount')}
                 <br /> <br />
                 <strong>
-                    <i class="fas fa-exclamation-triangle" />
+                    <i className="fas fa-exclamation-triangle" />
                     {'  '}
                     {t('body.beCareful')}
                 </strong>{' '}
@@ -36,12 +40,12 @@ export const ConfirmUnlinkAddress = ({
             <ModalFooter>
                 <Button
                     onClick={() => handleDeleteAddress(selectedAddress, selectedActorType)}
-                    color="danger"
+                    variant="danger"
                 >
                     {t('button.confirm')}
                 </Button>
 
-                <Button onClick={handleModal} color="secondary">
+                <Button onClick={handleModal} variant="secondary">
                     {t('button.cancel')}
                 </Button>
             </ModalFooter>

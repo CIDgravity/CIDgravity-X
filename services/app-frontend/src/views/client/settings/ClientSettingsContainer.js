@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react'
 
-import { Container, Row, Col, Label, Button } from 'reactstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react'
 import { isMobile } from 'react-device-detect'
 import { Loader } from 'shared/components'
@@ -12,10 +16,8 @@ import {
 
 import { toast } from 'react-toastify'
 import { ConfirmRegenerateClientToken } from 'shared/modals'
-import 'react-tabs/style/react-tabs.css'
-
 import Select from 'react-select'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import { withTranslation, Trans } from 'react-i18next'
 
 import { TOKEN_REFRESHED_DISPATCH_EVENT } from 'config/constants'
@@ -227,18 +229,18 @@ class ClientSettingsContainer extends PureComponent {
                                             <h5>{t('other.token.title')}</h5>
 
                                             <h6 style={{ marginTop: '30px',}}>
-                                                <Label className="form-label">
+                                                <FormLabel className="form-label">
                                                     {t('other.token.title')}
-                                                </Label>
+                                                </FormLabel>
 
                                                 <span onClick={this.handleConfirmRegenerateTokenModal}>
                                                     <i
                                                         className="ms-4 fa fa-refresh fa-sm copy-btn"
-                                                        data-for="regenerate"
-                                                        data-tip={t('other.token.regenerate')}
+                                                        data-tooltip-id="regenerate"
+                                                        data-tooltip-content={t('other.token.regenerate')}
                                                     />
 
-                                                    <ReactTooltip place="bottom" id="regenerate"/>
+                                                    <Tooltip place="bottom" id="regenerate"/>
                                                 </span>
                                             </h6>
 

@@ -1,9 +1,11 @@
 import { Form, Formik } from 'formik'
-import { Button, Row, Col } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { useTranslation } from 'react-i18next'
 
 import React, { createElement, useCallback } from 'react'
-import produce from 'immer'
+import { produce } from 'immer'
 
 export function WizardGenericStep({
     steps,
@@ -89,7 +91,7 @@ export function WizardGenericStep({
                                 <div className="text-end ms-2">
                                     {currentStep !== 0 && (
                                         <Button
-                                            color="secondary"
+                                            variant="secondary"
                                             type="button"
                                             onClick={() => {
                                                 setStatus(undefined)

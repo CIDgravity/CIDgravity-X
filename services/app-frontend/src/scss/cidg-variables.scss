@@ -1,19 +1,19 @@
-// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
-@import '../../node_modules/bootstrap/scss/functions';
+// Load Bootstrap to access its variables
+@use '../../node_modules/bootstrap/scss/bootstrap' as bs;
 
-// 2. Include any default variable overrides here
-$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-
-// 3. Include remainder of required Bootstrap stylesheets
-@import '../../node_modules/bootstrap/scss/variables';
+// Custom CIDgravity variables
 $cidg-dark-blue: #000b44;
-$font-size-base: 0.875rem;
 
-// Export scss variables to JS
-:export {
-    successColor: $success;
-    warningColor: $warning;
-    blue: $cidg-dark-blue;
-}
+// Re-export Bootstrap variables and custom variables for easy access
+$font-family-base: bs.$font-family-base;
+$font-size-base: bs.$font-size-base;
+$danger: bs.$danger;
+$blue: bs.$blue;
+$light: bs.$light;
+$body-color: bs.$body-color;
+$white: bs.$white;
+$success: bs.$success;
+$warning: bs.$warning;
+$grid-breakpoints: bs.$grid-breakpoints;
+
+// JS-accessible color constants are in src/config/scss-variables.js

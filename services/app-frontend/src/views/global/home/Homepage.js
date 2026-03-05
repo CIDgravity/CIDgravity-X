@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useAuth0 } from '@auth0/auth0-react'
 
 import { GetAddressActorType } from 'shared/services/addresses_claim'
@@ -13,7 +13,7 @@ import { Loader } from 'shared/components'
 import Cookies from 'js-cookie'
 
 const Homepage = () => {
-    const history = useHistory()
+    const navigate = useNavigate()
     const { getAccessTokenSilently } = useAuth0()
 
     useEffect(() => {
@@ -28,9 +28,9 @@ const Homepage = () => {
         if (lastSeenAddress !== undefined && lastSeenAddress != null && isShortAddressFromFilecoinAddressString(lastSeenAddress)) {
             GetAddressActorType(lastSeenAddress).then(function (actorType) {
                 if (actorType.data.actor_type === 'storageminer') {
-                    history.replace({ pathname: `/provider/${lastSeenAddress}` })
+                    navigate(`/provider/${lastSeenAddress}`, { replace: true })
                 } else if (actorType.data.actor_type === 'account') {
-                    history.replace({ pathname: `/client/${lastSeenAddress}` })
+                    navigate(`/client/${lastSeenAddress}`, { replace: true })
                 }
             })
 
@@ -42,15 +42,15 @@ const Homepage = () => {
                     const [ actorType, addressId ] = firstAddressFromJwt
 
                     if (actorType === 'storageminer') {
-                        history.replace({ pathname: `/provider/${addressId}` })
+                        navigate(`/provider/${addressId}`, { replace: true })
                     } else if (actorType === 'account') {
-                        history.replace({ pathname: `/client/${addressId}` })
+                        navigate(`/client/${addressId}`, { replace: true })
                     } else {
-                        history.replace({ pathname: `/onboarding` })
+                        navigate(`/onboarding`, { replace: true })
                     }
 
                 } else {
-                    history.replace({ pathname: `/onboarding` })
+                    navigate(`/onboarding`, { replace: true })
                 }
             })
         }

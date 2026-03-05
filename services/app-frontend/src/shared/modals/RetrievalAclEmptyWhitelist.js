@@ -1,10 +1,13 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useTranslation } from 'react-i18next'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalHeader from 'react-bootstrap/ModalHeader'
 
 export default function RetrievalAclEmptyWhitelist({
-    isOpen,
+    show,
     setIsOpen,
     onConfirm,
     isLoading,
@@ -13,12 +16,12 @@ export default function RetrievalAclEmptyWhitelist({
     const { t } = useTranslation('RetrievalAclEmptyWhitelist') // second param ignored i18n
     return (
         <Modal
-            isOpen={isOpen}
-            fade={false}
-            toggle={() => setIsOpen(false)}
+            show={show}
+            animation={false}
+            onHide={() => setIsOpen(false)}
             size="lg"
         >
-            <ModalHeader toggle={() => setIsOpen(false)}>
+            <ModalHeader closeButton>
                 {t('header')}
             </ModalHeader>
 

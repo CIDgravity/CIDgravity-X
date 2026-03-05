@@ -1,5 +1,9 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Trans, useTranslation } from 'react-i18next'
 
 export const ConfirmRegenerateClientToken = ({
@@ -10,19 +14,19 @@ export const ConfirmRegenerateClientToken = ({
     const { t } = useTranslation('ConfirmRegenerateClientToken') // second param ignored i18n
 
     return (
-        <Modal isOpen={isModalOpened} fade={false} toggle={handleModal} size="lg">
-            <ModalHeader toggle={handleModal}>{t('header')}</ModalHeader>
+        <Modal show={isModalOpened} animation={false} onHide={handleModal} size="lg">
+            <ModalHeader closeButton>{t('header')}</ModalHeader>
 
             <ModalBody>
                 <Trans t={t} i18nKey="body.yourTokenWillBeInvalidated" />
             </ModalBody>
 
             <ModalFooter>
-                <Button onClick={handleSubmitRegenerate} color="danger">
+                <Button onClick={handleSubmitRegenerate} variant="danger">
                     {t('button.confirm')}
                 </Button>
 
-                <Button onClick={handleModal} color="secondary">
+                <Button onClick={handleModal} variant="secondary">
                     {t('button.cancel')}
                 </Button>
             </ModalFooter>

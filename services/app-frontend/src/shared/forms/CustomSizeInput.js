@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import { withTranslation } from 'react-i18next'
-import { Col, Row, Input } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import FormControl from 'react-bootstrap/FormControl'
 
 class CustomSizeInput extends PureComponent {
     onValueChange = (event) => {
@@ -18,9 +20,9 @@ class CustomSizeInput extends PureComponent {
 
         return (
             <Row>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                     <Col md="7">
-                        <Input
+                        <FormControl
                             type="number"
                             className="form-control"
                             name="value"
@@ -31,7 +33,7 @@ class CustomSizeInput extends PureComponent {
                     </Col>
 
                     <Col md="5">
-                        <div class="input-group-prepend">
+                        <div className="input-group-prepend">
                             <select
                                 onChange={(e) => this.onUnitChange(e)}
                                 className="form-select"

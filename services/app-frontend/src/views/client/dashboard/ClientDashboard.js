@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react'
-import { Row, Col, Button } from 'reactstrap'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react'
 
 import { isMobile } from 'react-device-detect'
@@ -85,7 +87,7 @@ class ClientDashboard extends PureComponent {
                             disabled={!isFullyLoaded}
                             onClick={onRefresh}
                             style={{ marginRight: 20 + 'px' }}
-                            color="primary"
+                            variant="primary"
                             size="1x"
                         >
                             <FontAwesomeIcon icon={faRefresh} size="2xs" />

@@ -1,5 +1,9 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { useTranslation, Trans } from 'react-i18next'
 
 export const ConfirmDeleteClient = ({
@@ -11,8 +15,8 @@ export const ConfirmDeleteClient = ({
     const { t } = useTranslation('ConfirmDeleteClient') // second param ignored i18n
 
     return (
-        <Modal isOpen={isModalOpen} fade={false} toggle={handleClose} size="lg">
-            <ModalHeader toggle={handleClose}>
+        <Modal show={isModalOpen} animation={false} onHide={handleClose} size="lg">
+            <ModalHeader closeButton>
                 {t('header', { clientName: client.name })}
             </ModalHeader>
 
@@ -21,11 +25,11 @@ export const ConfirmDeleteClient = ({
             </ModalBody>
 
             <ModalFooter>
-                <Button onClick={handleDeleteClient} color="danger">
+                <Button onClick={handleDeleteClient} variant="danger">
                     {t('button.continue')}
                 </Button>
 
-                <Button onClick={handleClose} color="secondary">
+                <Button onClick={handleClose} variant="secondary">
                     {t('button.close')}
                 </Button>
             </ModalFooter>

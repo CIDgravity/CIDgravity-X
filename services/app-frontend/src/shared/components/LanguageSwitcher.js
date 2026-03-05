@@ -1,10 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import {
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-} from 'reactstrap'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownToggle from 'react-bootstrap/DropdownToggle'
+import DropdownMenu from 'react-bootstrap/DropdownMenu'
+import DropdownItem from 'react-bootstrap/DropdownItem'
 
 import { availableLanguages } from '../../config/constants'
 
@@ -14,9 +12,9 @@ const LanguageSwitcher = () => {
     return (
         <div>
             {availableLanguages.length > 1 && (
-                <UncontrolledDropdown nav>
-                    <DropdownToggle nav caret>
-                        <span>
+                <Dropdown>
+                    <DropdownToggle>
+                        <span className="me-1">
                             {
                                 availableLanguages[
                                     availableLanguages.findIndex(
@@ -26,8 +24,9 @@ const LanguageSwitcher = () => {
                                 ]?.nativeName
                             }
                         </span>
+                        <i className="fas fa-caret-down" />
                     </DropdownToggle>
-                    <DropdownMenu end>
+                    <DropdownMenu align="end">
                         {availableLanguages.map((lng) => (
                             <DropdownItem
                                 className="dropdown-item"
@@ -51,7 +50,7 @@ const LanguageSwitcher = () => {
                             </DropdownItem>
                         ))}
                     </DropdownMenu>
-                </UncontrolledDropdown>
+                </Dropdown>
             )}
         </div>
     )

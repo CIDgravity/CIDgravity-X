@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { Row, Col } from 'reactstrap'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { FastField, useField } from 'formik'
 import { object, string } from 'yup'
 import { useAuth0 } from '@auth0/auth0-react'

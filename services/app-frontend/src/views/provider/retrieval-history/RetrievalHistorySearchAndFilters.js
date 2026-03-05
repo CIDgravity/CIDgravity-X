@@ -1,6 +1,9 @@
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Input, InputGroup, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Row from 'react-bootstrap/Row'
 import { CustomAsyncSelect } from 'shared/forms'
 
 import DatePicker from 'react-datepicker'
@@ -22,7 +25,7 @@ export function RetrievalHistorySearchAndFilters({
             <Row className="mt-4">
                 <Col xs={12} md={12} lg={12} className="mb-2">
                     <InputGroup>
-                        <Input
+                        <FormControl
                             id="search"
                             placeholder={t('inputSearch.placeholder')}
                             onChange={(e) => onSearchClientName(e.target.value)}
@@ -34,7 +37,7 @@ export function RetrievalHistorySearchAndFilters({
             </Row>
 
             <Row style={{ marginBottom: '50px' }}>
-                <Col xs={12} md={4} lg={4} className="mt-2 mt-md-0">
+                <Col xs={12} md={6} lg={6} className="mt-2 mt-md-0">
                     <DatePicker
                         disabledKeyboardNavigation
                         dateFormat={dateFormat}
@@ -52,7 +55,7 @@ export function RetrievalHistorySearchAndFilters({
                     />
                 </Col>
 
-                <Col xs={12} md={4} lg={4}>
+                <Col xs={12} md={6} lg={6}>
                     <CustomAsyncSelect
                         onChange={onSearchStatus}
                         id="status"

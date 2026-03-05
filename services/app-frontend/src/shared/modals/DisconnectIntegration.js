@@ -1,5 +1,9 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Trans, useTranslation } from 'react-i18next'
 
 export const DisconnectIntegration = ({
@@ -12,12 +16,12 @@ export const DisconnectIntegration = ({
 
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>
+            <ModalHeader closeButton>
                 {t('header', { integrationName: integrationName })}
             </ModalHeader>
 
@@ -26,11 +30,11 @@ export const DisconnectIntegration = ({
             </ModalBody>
 
             <ModalFooter>
-                <Button onClick={handleDisconnect} color="danger" size="1x">
+                <Button onClick={handleDisconnect} variant="danger" size="1x">
                     {t('button.continue')}
                 </Button>
 
-                <Button onClick={handleModal} color="secondary" size="1x">
+                <Button onClick={handleModal} variant="secondary" size="1x">
                     {t('button.cancel')}
                 </Button>
             </ModalFooter>

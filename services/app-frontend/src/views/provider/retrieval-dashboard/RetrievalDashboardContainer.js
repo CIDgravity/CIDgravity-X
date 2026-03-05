@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react'
-import { Container, Row, Col, Button } from 'reactstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -178,7 +181,7 @@ class RetrievalDashboardContainer extends PureComponent {
                             disabled={!isFullyLoaded}
                             onClick={this.onRefresh}
                             style={{ marginRight: 20 + 'px' }}
-                            color="primary"
+                            variant="primary"
                             size="1x"
                         >
                             <FontAwesomeIcon icon={faRefresh} size="2xs" />

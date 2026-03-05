@@ -1,4 +1,2 @@
-@import '~antd/dist/antd.css';
-@import 'cidg-variables.scss';
-@import '../../node_modules/bootstrap/scss/bootstrap';
-@import 'custom.scss';
+@use 'cidg-variables.scss';
+@use 'custom.scss';

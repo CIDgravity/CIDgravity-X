@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Row, Col } from 'reactstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { Steps } from 'antd'
 import { useTranslation } from 'react-i18next'
 
@@ -17,8 +19,6 @@ import { WizardProviderInformationStep } from './steps/WizardProviderInformation
 import { WizardEndPage } from './WizardEndPage'
 import { loadAddressesFromJwt } from 'shared/utils/addresses'
 import { useAuth0 } from '@auth0/auth0-react'
-
-const { Step } = Steps
 
 export function WizardContainer() {
     const [address, setAddress] = useState(undefined)
@@ -109,10 +109,10 @@ export function WizardContainer() {
                     {currentForm === 0 ? (
                         <>
                             <div className="mb-4">
-                                <Steps progressDot current={0}>
-                                    <Step title={t('step.start')} key="1" />
-                                    <Step title={t('step.signMessage')} key="2" />
-                                </Steps>
+                                <Steps current={0} items={[
+                                    { title: t('step.start') },
+                                    { title: t('step.signMessage') },
+                                ]} />
                             </div>
 
                             <WizardClaimAddressStep
@@ -126,10 +126,10 @@ export function WizardContainer() {
                     ) : currentForm === 1 ? (
                         <>
                             <div className="mb-4">
-                                <Steps progressDot current={1}>
-                                    <Step title={t('step.start')} key="1" />
-                                    <Step title={t('step.signMessage')} key="2" />
-                                </Steps>
+                                <Steps current={1} items={[
+                                    { title: t('step.start') },
+                                    { title: t('step.signMessage') },
+                                ]} />
                             </div>
 
                             <WizardSignMessageStep
@@ -162,28 +162,28 @@ export function WizardContainer() {
                         <>
                             <div className="mb-4">
                                 {steps.length === 2 ? (
-                                    <Steps progressDot current={3}>
-                                        <Step title={t('step.providerInformation')} key="1" />
-                                        <Step title={t('step.friendlyName')} key="2" />
-                                        <Step title={t('step.settings')} key="3" />
-                                        <Step title={t('step.complete')} key="4" />
-                                    </Steps>
+                                    <Steps current={3} items={[
+                                        { title: t('step.providerInformation') },
+                                        { title: t('step.friendlyName') },
+                                        { title: t('step.settings') },
+                                        { title: t('step.complete') },
+                                    ]} />
 
                                 ) : steps.length === 3 ? (
-                                    <Steps progressDot current={3}>
-                                        <Step title={t('step.providerInformation')} key="1" />
-                                        <Step title={t('step.friendlyName')} key="2" />
-                                        <Step title={t('step.settings')} key="3" />
-                                        <Step title={t('step.importClientsAndPricing')} key="4" />
-                                        <Step title={t('step.complete')} key="5" />
-                                    </Steps>
+                                    <Steps current={3} items={[
+                                        { title: t('step.providerInformation') },
+                                        { title: t('step.friendlyName') },
+                                        { title: t('step.settings') },
+                                        { title: t('step.importClientsAndPricing') },
+                                        { title: t('step.complete') },
+                                    ]} />
 
                                 ) : (
-                                    <Steps progressDot current={2}>
-                                        <Step title={t('step.start')} key="1" />
-                                        <Step title={t('step.signMessage')} key="2" />
-                                        <Step title={t('step.complete')} key="3" />
-                                    </Steps>
+                                    <Steps current={2} items={[
+                                        { title: t('step.start') },
+                                        { title: t('step.signMessage') },
+                                        { title: t('step.complete') },
+                                    ]} />
                                 )}
                             </div>
 

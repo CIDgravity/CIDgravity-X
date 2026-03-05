@@ -1,5 +1,9 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Trans, useTranslation } from 'react-i18next'
 
 export const ConfirmDeleteAcceptanceLogic = ({
@@ -12,14 +16,14 @@ export const ConfirmDeleteAcceptanceLogic = ({
 
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
             {!acceptanceLogic.clients || acceptanceLogic.clients.length > 0 ? (
                 <>
-                    <ModalHeader toggle={handleModal}>
+                    <ModalHeader closeButton>
                         {t('unableToRemove.header', {
                             acceptanceLogicName: acceptanceLogic.name,
                         })}
@@ -33,20 +37,20 @@ export const ConfirmDeleteAcceptanceLogic = ({
 
                         <ul className="mt-4">
                             {acceptanceLogic.clients.map((client) => (
-                                <li>{client.name}</li>
+                                <li key={client.name}>{client.name}</li>
                             ))}
                         </ul>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button onClick={handleModal} color="secondary">
+                        <Button onClick={handleModal} variant="secondary">
                             {t('button.close')}
                         </Button>
                     </ModalFooter>
                 </>
             ) : (
                 <>
-                    <ModalHeader toggle={handleModal}>
+                    <ModalHeader closeButton>
                         {t('removeConfirmation.header', {
                             acceptanceLogicName: acceptanceLogic.name,
                         })}
@@ -61,12 +65,12 @@ export const ConfirmDeleteAcceptanceLogic = ({
                     <ModalFooter>
                         <Button
                             onClick={handleDeleteAcceptanceLogic}
-                            color="danger"
+                            variant="danger"
                         >
                             {t('button.confirm')}
                         </Button>
 
-                        <Button onClick={handleModal} color="secondary">
+                        <Button onClick={handleModal} variant="secondary">
                             {t('button.cancel')}
                         </Button>
                     </ModalFooter>

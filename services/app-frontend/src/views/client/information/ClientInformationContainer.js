@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react'
 
-import { Alert, Container, Row, Col } from 'reactstrap'
+import Alert from 'react-bootstrap/Alert'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { withAuth0 } from '@auth0/auth0-react'
 import { Loader } from 'shared/components'
 
@@ -81,9 +84,9 @@ class ClientInformationContainer extends PureComponent {
                         <h1>{t('title')}</h1>
                         <p>{t('subtitle')}</p>
 
-                        <Alert color="warning" className="mt-4">
+                        <Alert variant="warning" className="mt-4">
                             <strong>
-                                <i class="fas fa-exclamation-triangle" />{' '}
+                                <i className="fas fa-exclamation-triangle" />{' '}
                                 {t('beCareful')}
                             </strong>{' '}
 

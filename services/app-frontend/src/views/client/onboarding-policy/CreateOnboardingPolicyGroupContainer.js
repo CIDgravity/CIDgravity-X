@@ -2,8 +2,11 @@ import { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
 import { Trans, withTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Link } from 'react-router'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import { Loader } from 'shared/components'
 
 import { GetCurrentAddressIsPremium } from 'shared/services/cidg-services/client-backend/address'
@@ -308,7 +311,7 @@ class CreateOnboardingPolicyGroupContainer extends PureComponent {
                         subtitle={<Trans t={t} i18nKey="premium.subtitle" />}
                         upgradeButtonText={<Trans t={t} i18nKey="premium.button" />}
                         backButtonText={<Trans t={t} i18nKey="premium.backButton" />}
-                        backButtonUrl="../onboarding-policy"
+                        backButtonUrl=".."
                     />
 
                 ) : !isLoading && !isError && !isPremiumRequired ? (
@@ -337,10 +340,11 @@ class CreateOnboardingPolicyGroupContainer extends PureComponent {
                                 <br />
                                 <br />
                                 <Button
-                                    tag={Link}
-                                    to="../onboarding-policy"
+                                    as={Link}
+                                    to=".."
+                                    relative="path"
                                     type="submit"
-                                    color="danger"
+                                    variant="danger"
                                     size="1x"
                                     className="me-4"
                                 >

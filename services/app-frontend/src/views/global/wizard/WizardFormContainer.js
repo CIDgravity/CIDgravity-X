@@ -13,8 +13,6 @@ function getInitialValues(steps) {
 }
 
 const WizardFormContainerContext = createContext(null)
-const { Step } = Steps
-
 export function WizardFormContainer({ steps, onSubmit }) {
     const { t } = useTranslation('WizardFormContainer') // second param ignored i18n
 
@@ -43,14 +41,11 @@ export function WizardFormContainer({ steps, onSubmit }) {
                     setValues,
                 }}
             >
-                <Steps current={currentStep + 2}>
-                    <Step title={t('claimAddressStepTitle')} key="1" />
-                    <Step title={t('signMessageStepTitle')} key="2" />
-
-                    {steps.map((step, index) => (
-                        <Step title={step.label} key={index + 2} />
-                    ))}
-                </Steps>
+                <Steps current={currentStep + 2} items={[
+                    { title: t('claimAddressStepTitle') },
+                    { title: t('signMessageStepTitle') },
+                    ...steps.map((step) => ({ title: step.label })),
+                ]} />
 
                 <WizardGenericStep
                     steps={stepIds}

@@ -1,8 +1,10 @@
 import React from 'react'
-import { Col, Row, Button } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { UPGRADE_PAGE_LINK } from 'config/constants'
 
@@ -32,7 +34,7 @@ const PremiumRestrictedSection = ({
                             )}
 
                             {backButtonText && backButtonUrl && (
-                                <Button tag={Link} to={backButtonUrl} size="1x" className="ms-4 btn custom-cidg-button mt-2">
+                                <Button as={Link} to={backButtonUrl} relative="path" size="1x" className="ms-4 btn custom-cidg-button mt-2">
                                     <span className="p-2 as--light">
                                         {backButtonText}
                                     </span>

@@ -1,6 +1,6 @@
 @use 'sass:map';
+@use 'cidg-variables.scss' as vars;
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Trade+Winds&display=swap');
-@import 'cidg-variables.scss';
 
 .query-builder {
     margin: 0px 0px 20px 0px !important;

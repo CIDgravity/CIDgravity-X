@@ -1,5 +1,5 @@
-const { newFromString, Protocol } = require('@glif/filecoin-address')
-const moment = require('moment')
+import { newFromString, Protocol } from '@glif/filecoin-address'
+import moment from 'moment'
 
 export const getFilecoinAddressIfValidAndSupported = (addressAsString) => {
     try {

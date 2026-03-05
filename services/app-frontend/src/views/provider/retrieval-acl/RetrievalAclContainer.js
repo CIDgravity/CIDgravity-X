@@ -1,8 +1,9 @@
 import { peerIdFromString } from '@libp2p/peer-id'
 import { useEffect, useState } from 'react'
-import { Prompt } from 'react-router'
+import { useBeforeUnload } from 'react-router'
 import { toast } from 'react-toastify'
-import { Col, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import { Loader } from 'shared/components'
 import { GetCurrentAddress } from 'shared/services/addresses_claim'
 import { GetAllRetrievalClientsForCurrentUser } from 'shared/services/client'
@@ -95,6 +96,15 @@ export function RetrievalAclContainer() {
     ] = useState('')
 
     const { t } = useTranslation('RetrievalAclContainer') // second param ignored i18n
+
+    // Warn on browser navigation (close tab, refresh) when there are unsaved changes
+    useBeforeUnload(
+        (e) => {
+            if (!isAclUnmodified(addedWhitelist, removedWhitelist, addedBlacklist, removedBlacklist, modifiedCurrentBehavior, currentBehavior)) {
+                e.preventDefault()
+            }
+        }
+    )
 
     useEffect(() => {
         const unwantedClientIds = getClientIdsFromAclList(modifiedBlacklist)
@@ -610,7 +620,7 @@ export function RetrievalAclContainer() {
                         </button>
                     </div>
                     <RetrievalAclEmptyWhitelist
-                        isOpen={isEmptyWhitelistModalOpen}
+                        show={isEmptyWhitelistModalOpen}
                         setIsOpen={setIsEmptyWhitelistModalOpen}
                         isLoading={isApplyLoading}
                         onConfirm={async () => {
@@ -635,7 +645,7 @@ export function RetrievalAclContainer() {
                         )}
                     />
                     <RetrievalAclApply
-                        isOpen={isApplyModalOpen}
+                        show={isApplyModalOpen}
                         setIsOpen={setIsApplyModalOpen}
                         isLoading={isApplyLoading}
                         onConfirm={async () => {
@@ -672,19 +682,7 @@ export function RetrievalAclContainer() {
                     <p>{t('subtitle')}</p>
                 </Col>
             </Row>
-            <Prompt
-                when={
-                    !isAclUnmodified(
-                        addedWhitelist,
-                        removedWhitelist,
-                        addedBlacklist,
-                        removedBlacklist,
-                        modifiedCurrentBehavior,
-                        currentBehavior
-                    )
-                }
-                message={t('prompt.onLeavingWithUnsavedChanges')}
-            />
+            {/* Warn on browser navigation (close tab, refresh) when there are unsaved changes */}
             {isError
                 ? componentOnError()
                 : isLoading

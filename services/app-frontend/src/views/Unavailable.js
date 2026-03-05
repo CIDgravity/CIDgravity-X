@@ -1,4 +1,5 @@
-import { Row, Col } from 'reactstrap'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { useTranslation, Trans } from 'react-i18next'
 export const Unavailable = ({ errorMessage }) => {
     const { t } = useTranslation('Unavailable') // second param ignored i18n

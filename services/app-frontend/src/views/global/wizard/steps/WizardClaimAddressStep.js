@@ -1,6 +1,8 @@
 import React from 'react'
 import { ErrorMessage, FastField, Form, Formik } from 'formik'
-import { Button, Row, Col } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { object, string } from 'yup'
 import {
     CheckAddressAlreadyClaimed,

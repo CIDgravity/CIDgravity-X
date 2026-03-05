@@ -2,8 +2,11 @@ import { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
 import { withTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Link } from 'react-router'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 
 import {
     checkAlreadyUsedName,
@@ -504,10 +507,11 @@ class CreatePricingModelContainer extends PureComponent {
                                 <br />
                                 <br />
                                 <Button
-                                    tag={Link}
-                                    to="../pricing-model"
+                                    as={Link}
+                                    to=".."
+                                    relative="path"
                                     type="submit"
-                                    color="danger"
+                                    variant="danger"
                                     size="1x"
                                     className="me-4"
                                 >

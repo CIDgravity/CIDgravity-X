@@ -11,7 +11,7 @@ const CustomBadgeOffer = ({ aclOffers, displayAllOffers = false, isLarge = false
             {displayAllOffers ? (
                 <>
                     {GetAclOffersToDisplay(aclOffers).map((aclOffer, index) => (
-                        <div className="flex-fill d-flex align-items-center">
+                        <div key={aclOffer} className="flex-fill d-flex align-items-center">
                             {CheckOfferIsPremium(aclOffer) ? (
                                 <div className={GetOfferClassName(aclOffer, isLarge, index)}>
                                     {i18nObject && i18nObject[aclOffer] !== undefined ? i18nObject[aclOffer] : aclOffer}

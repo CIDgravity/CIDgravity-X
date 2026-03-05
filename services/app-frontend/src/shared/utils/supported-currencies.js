@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert } from "reactstrap";
+import Alert from 'react-bootstrap/Alert';
 
 import { convertBytesToGiB } from '../../shared/utils/file_size'
 import { computePriceEquivalence, convertToFilecoinRate } from 'shared/utils/fil'
@@ -341,7 +341,7 @@ export const PriceConversionAlert = ({ priceData, currency, mainPriceField = "pr
     }
 
     return (
-        <Alert color="info" className={`mt-2 d-flex align-items-center ${className}`}>
+        <Alert variant="info" className={`mt-2 d-flex align-items-center ${className}`}>
             {content}
         </Alert>
     );

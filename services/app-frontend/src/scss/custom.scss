@@ -1,18 +1,18 @@
-@import 'cidg-variables.scss';
-@import 'premium.scss';
-@import 'error.scss';
-@import 'tabs.scss';
-@import 'top-navbar.scss';
-@import 'navbar.scss';
-@import 'settings.scss';
-@import 'query-builder.scss';
+@use 'cidg-variables.scss' as vars;
+@use 'premium.scss';
+@use 'error.scss';
+@use 'tabs.scss';
+@use 'top-navbar.scss';
+@use 'navbar.scss';
+@use 'settings.scss';
+@use 'query-builder.scss';
 
 body {
-    font-family: $font-family-base;
+    font-family: vars.$font-family-base;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-y: none;
-    font-size: $font-size-base;
+    font-size: vars.$font-size-base;
 }
 
 .diag-results {
@@ -150,7 +150,7 @@ body {
 
 .error-feedback {
     @extend .mt-1;
-    color: $danger;
+    color: vars.$danger;
 }
 
 .remove-rule-btn {
@@ -220,7 +220,7 @@ input[type='number'] {
 
 a {
     text-decoration: none;
-    color: $blue;
+    color: vars.$blue;
 }
 
 .icon-router-link {
@@ -414,7 +414,7 @@ code {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:visited {
-    background-color: $cidg-dark-blue !important;
+    background-color: vars.$cidg-dark-blue !important;
     border: none !important;
     color: white !important;
 }
@@ -436,7 +436,7 @@ code {
 }
 
 .custom-cidg-button {
-    background-color: $cidg-dark-blue;
+    background-color: vars.$cidg-dark-blue;
     border: none;
     color: white;
 }
@@ -447,7 +447,7 @@ code {
 }
 
 .ant-steps-icon-dot {
-    background-color: $cidg-dark-blue !important;
+    background-color: vars.$cidg-dark-blue !important;
 }
 
 .text-bold-italic {
@@ -457,7 +457,7 @@ code {
 
 .actorType {
     &.storageminer{
-        color: $cidg-dark-blue;
+        color: vars.$cidg-dark-blue;
     }
 
     &.account{
@@ -466,7 +466,7 @@ code {
 }
 .badge {
     &.storageminer {
-        background-color: $cidg-dark-blue;
+        background-color: vars.$cidg-dark-blue;
         color: white;
         padding: 4px 8px;
         text-align: center;
@@ -525,4 +525,9 @@ code {
 }
 .maxWidthTooltip {
     width: 20%;
+}
+
+.react-datepicker-wrapper {
+    display: block;
+    width: 100%;
 }

@@ -3,11 +3,11 @@ import enLocale from 'i18n-iso-countries/langs/en.json'
 import frLocale from 'i18n-iso-countries/langs/fr.json'
 import zhLocale from 'i18n-iso-countries/langs/zh.json'
 
+import countriesLib from 'i18n-iso-countries'
 import { useTranslation } from 'react-i18next'
 
 export const CountrySelector = ({ fieldName, fieldId, defaultValueCountryCode, onChange }) => {
     const { i18n } = useTranslation()
-    const countriesLib = require("i18n-iso-countries");
 
     // Register locale based on the current selected language
     if (i18n.language === 'fr') {
@@ -39,8 +39,6 @@ export const CountrySelector = ({ fieldName, fieldId, defaultValueCountryCode, o
 }
 
 export const GetCountryNameFromCode = (i18n, code) => {
-    const countriesLib = require("i18n-iso-countries");
-
     if (i18n.language === 'fr') {
         countriesLib.registerLocale(frLocale)
     } else if (i18n.language === 'zh') {

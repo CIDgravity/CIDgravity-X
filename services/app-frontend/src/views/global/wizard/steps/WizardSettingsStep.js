@@ -1,10 +1,13 @@
 import { FastField, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { Col, FormGroup, Label, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 import { boolean, number, object, string } from 'yup'
 
 import Switch from 'react-switch'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 export const WizardSettingsStep = (stepTitle) => ({
     id: 'settings',
@@ -68,23 +71,23 @@ export function Form() {
             <Row className="p-2 mb-4 pt-4">
                 <Col md="6" xs="6">
                     <FormGroup>
-                        <Label
-                            for="storage-global-hourly-deal-limit"
+                        <FormLabel
+                            htmlFor="storage-global-hourly-deal-limit"
                             className="form-label"
                         >
                             {t('numberOfStorageDealsPerHourField.label')}
-                        </Label>
+                        </FormLabel>
 
                         <i
                             style={{ marginTop: '4px' }}
-                            data-for="storageGlobalDealsLimitPerHour"
-                            data-tip={t(
+                            data-tooltip-id="storageGlobalDealsLimitPerHour"
+                            data-tooltip-content={t(
                                 'numberOfStorageDealsPerHourField.tooltip'
                             )}
                             className="ms-4 fas fa-info-circle fa-sm"
                         />
 
-                        <ReactTooltip
+                        <Tooltip
                             place="bottom"
                             id="storageGlobalDealsLimitPerHour"
                         />
@@ -108,23 +111,23 @@ export function Form() {
 
                 <Col md="6" xs="6">
                     <FormGroup>
-                        <Label
-                            for="storage-global-hourly-deal-size-limit"
+                        <FormLabel
+                            htmlFor="storage-global-hourly-deal-size-limit"
                             className="form-label"
                         >
                             {t('cumulativeDealSizeForStorageField.label')}
-                        </Label>
+                        </FormLabel>
 
                         <i
                             style={{ marginTop: '4px' }}
-                            data-for="storageGlobalDealsLimitSizePerHour"
-                            data-tip={t(
+                            data-tooltip-id="storageGlobalDealsLimitSizePerHour"
+                            data-tooltip-content={t(
                                 'cumulativeDealSizeForStorageField.tooltip'
                             )}
                             className="ms-4 fas fa-info-circle fa-sm"
                         />
 
-                        <ReactTooltip
+                        <Tooltip
                             place="bottom"
                             id="storageGlobalDealsLimitSizePerHour"
                         />
@@ -150,21 +153,21 @@ export function Form() {
             <Row className="p-2">
                 <Col md="6" xs="6">
                     <FormGroup>
-                        <Label
-                            for="retrieval-global-hourly-deal-limit"
+                        <FormLabel
+                            htmlFor="retrieval-global-hourly-deal-limit"
                             className="form-label"
                         >
                             {t('retrievalDealsPerHourField.label')}
-                        </Label>
+                        </FormLabel>
 
                         <i
                             style={{ marginTop: '4px' }}
-                            data-for="retrievalGlobalDealsLimitPerHour"
-                            data-tip={t('retrievalDealsPerHourField.tooltip')}
+                            data-tooltip-id="retrievalGlobalDealsLimitPerHour"
+                            data-tooltip-content={t('retrievalDealsPerHourField.tooltip')}
                             className="ms-4 fas fa-info-circle fa-sm"
                         />
 
-                        <ReactTooltip
+                        <Tooltip
                             place="bottom"
                             id="retrievalGlobalDealsLimitPerHour"
                         />
@@ -189,18 +192,18 @@ export function Form() {
 
                 <Col md="6" xs="6">
                     <FormGroup>
-                        <Label for="custom-message" className="form-label">
+                        <FormLabel htmlFor="custom-message" className="form-label">
                             {t('customMessageField.label')}
-                        </Label>
+                        </FormLabel>
 
                         <i
                             style={{ marginTop: '4px' }}
-                            data-for="customMessageTooltip"
-                            data-tip={t('customMessageField.tooltip')}
+                            data-tooltip-id="customMessageTooltip"
+                            data-tooltip-content={t('customMessageField.tooltip')}
                             className="ms-4 fas fa-info-circle fa-sm"
                         />
 
-                        <ReactTooltip
+                        <Tooltip
                             place="bottom"
                             id="customMessageTooltip"
                         />
@@ -245,13 +248,13 @@ export function Form() {
                             {t('acceptDealsFromUnkownClientsField.label')}
                             <i
                                 style={{ marginTop: '4px' }}
-                                data-for="size"
-                                data-tip={t(
+                                data-tooltip-id="size"
+                                data-tooltip-content={t(
                                     'acceptDealsFromUnkownClientsField.tooltip'
                                 )}
                                 className="ms-4 fas fa-info-circle"
                             />
-                            <ReactTooltip place="bottom" id="size" />
+                            <Tooltip place="bottom" id="size" />
                         </div>
                     </div>
                 </Col>

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react'
 import {
     Menu,
     MenuItem,
-    ProSidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
+    Sidebar,
     SubMenu,
 } from 'react-pro-sidebar'
 
@@ -29,9 +26,9 @@ import {
 } from 'react-icons/fa'
 
 import { isBrowser } from 'react-device-detect'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 import { SESSION_STORAGE_TENANT_KEY } from '../../config/constants'
 import { GetVersionInfos } from '../services/app'
@@ -110,11 +107,11 @@ const SideNavBar = () => {
         return (
             <div
                 className="sidebar-version m-2"
-                data-for="version"
-                data-tip={getDetailedVersions()}
+                data-tooltip-id="version"
+                data-tooltip-html={getDetailedVersions()}
             >
                 <small>{process.env.REACT_APP_VERSION}</small>
-                <ReactTooltip id="version" place="top" html={true} />
+                <Tooltip id="version" place="top" />
             </div>
         )
     }
@@ -132,12 +129,15 @@ const SideNavBar = () => {
                 </div>
             ) : null}
 
-            <ProSidebar
+            <Sidebar
                 breakPoint="md"
                 toggled={isToggled}
-                onToggle={handleToggleNavbar}
+                onBackdropClick={handleCloseNavbar}
+                backgroundColor="#000b44"
+                width="230px"
+                collapsedWidth="80px"
             >
-                <SidebarHeader className="mb-4">
+                <div className="sidebar-header mb-4">
                     <div
                         className="d-flex justify-content-center"
                         onClick={handleCloseNavbar}
@@ -152,47 +152,41 @@ const SideNavBar = () => {
                             </Link>
                         </div>
                     </div>
-                </SidebarHeader>
+                </div>
 
                 {isClientMode && !isHidden && (
                     <>
-                        <SidebarContent>
-                            <Menu iconShape="circle">
+                        <div className="sidebar-content">
+                            <Menu>
                                 <span onClick={handleCloseNavbar}>
-                                    <MenuItem icon={<FaChartBar color="#222b2a" />}>
+                                    <MenuItem icon={<FaChartBar color="#222b2a" />} component={<Link to={`/client/${selectedAddress}`} />}>
                                         {t('menu.client.dashboard')}
-                                        <Link to={`/client/${selectedAddress}`} />
                                     </MenuItem>
 
-                                    <MenuItem icon={<FaInfo color="#222b2a" />}>
+                                    <MenuItem icon={<FaInfo color="#222b2a" />} component={<Link to={`/client/${selectedAddress}/information`} />}>
                                         {t('menu.client.informations')}
-                                        <Link to={`/client/${selectedAddress}/information`} />
                                     </MenuItem>
 
-                                    <MenuItem icon={<FaRuler color="#222b2a" />}>
+                                    <MenuItem icon={<FaRuler color="#222b2a" />} component={<Link to={`/client/${selectedAddress}/onboarding-policy`} />}>
                                         {t('menu.client.policyGroup')}
-                                        <Link to={`/client/${selectedAddress}/onboarding-policy`} />
                                     </MenuItem>
 
-                                    <MenuItem icon={<FaBan color="#222b2a" />}>
+                                    <MenuItem icon={<FaBan color="#222b2a" />} component={<Link to={`/client/${selectedAddress}/blacklist`} />}>
                                         {t('menu.client.blacklist')}
-                                        <Link to={`/client/${selectedAddress}/blacklist`}/>
                                     </MenuItem>
 
-                                    <MenuItem icon={<FaHistory color="#222b2a" />}>
+                                    <MenuItem icon={<FaHistory color="#222b2a" />} component={<Link to={`/client/${selectedAddress}/storage-history`} />}>
                                         {t('menu.client.storageDealsHistory')}
-                                        <Link to={`/client/${selectedAddress}/storage-history`}/>
                                     </MenuItem>
                                 </span>
                             </Menu>
-                        </SidebarContent>
+                        </div>
 
-                        <SidebarFooter>
-                            <Menu iconShape="circle">
+                        <div className="sidebar-footer">
+                            <Menu>
                                 <span onClick={handleCloseNavbar}>
-                                    <MenuItem id="menuClientSettings" icon={<FaCog color="#222b2a" />}>
+                                    <MenuItem id="menuClientSettings" icon={<FaCog color="#222b2a" />} component={<Link to={`/client/${selectedAddress}/settings`} />}>
                                         {t('menu.client.settings')}
-                                        <Link to={`/client/${selectedAddress}/settings`} />
                                     </MenuItem>
                                 </span>
 
@@ -200,30 +194,28 @@ const SideNavBar = () => {
                                     <MenuItem
                                         id="menuHelp"
                                         icon={<FaLifeRing color="#222b2a" />}
+                                        component={<Link to={`/help`} />}
                                     >
                                         {t('menu.client.helpCenter')}
-                                        <Link to={`/help`} />
                                     </MenuItem>
                                 </span>
                             </Menu>
 
                             {getVersionComponent()}
-                        </SidebarFooter>
+                        </div>
                     </>
                 )}
 
                 {isProviderMode && !isHidden && (
                     <>
-                        <SidebarContent>
-                            <Menu iconShape="circle">
+                        <div className="sidebar-content">
+                            <Menu>
                                 <span onClick={handleCloseNavbar}>
                                     <MenuItem
                                         icon={<FaChartBar color="#222b2a" />}
+                                        component={<Link to={`/provider/${selectedAddress}`} />}
                                     >
                                         {t('menu.provider.dashboard')}
-                                        <Link
-                                            to={`/provider/${selectedAddress}`}
-                                        />
                                     </MenuItem>
                                 </span>
 
@@ -231,16 +223,14 @@ const SideNavBar = () => {
                                     <MenuItem
                                         id="menuClient"
                                         icon={<FaUser color="#222b2a" />}
+                                        component={<Link to={`/provider/${selectedAddress}/client`} />}
                                     >
                                         {t('menu.provider.client')}
-                                        <Link
-                                            to={`/provider/${selectedAddress}/client`}
-                                        />
                                     </MenuItem>
                                 </span>
 
                                 <SubMenu
-                                    title={t('menu.provider.storage.title')}
+                                    label={t('menu.provider.storage.title')}
                                     icon={<FaArrowDown color="#222B2A" />}
                                     defaultOpen
                                 >
@@ -248,11 +238,9 @@ const SideNavBar = () => {
                                         <MenuItem
                                             id="menuStorageDashboard"
                                             icon={<FaChartBar color="#fff" />}
+                                            component={<Link to={`/provider/${selectedAddress}/storage-dashboard`} />}
                                         >
                                             {t('menu.provider.storage.dashboard')}
-                                            <Link
-                                                to={`/provider/${selectedAddress}/storage-dashboard`}
-                                            />
                                         </MenuItem>
                                     </span>
 
@@ -263,11 +251,9 @@ const SideNavBar = () => {
                                                 icon={
                                                     <FaDollarSign color="#fff" />
                                                 }
+                                                component={<Link to={`/provider/${selectedAddress}/pricing-model`} />}
                                             >
                                                 {t('menu.provider.storage.pricing')}
-                                                <Link
-                                                    to={`/provider/${selectedAddress}/pricing-model`}
-                                                />
                                             </MenuItem>
                                         </span>
                                     )}
@@ -277,13 +263,11 @@ const SideNavBar = () => {
                                             <MenuItem
                                                 id="menuStorageAcceptanceLogic"
                                                 icon={<FaFilter color="#fff" />}
+                                                component={<Link to={`/provider/${selectedAddress}/storage-acceptance-logic`} />}
                                             >
                                                 {t(
                                                     'menu.provider.storage.acceptanceLogic'
                                                 )}
-                                                <Link
-                                                    to={`/provider/${selectedAddress}/storage-acceptance-logic`}
-                                                />
                                             </MenuItem>
                                         </span>
                                     )}
@@ -292,11 +276,9 @@ const SideNavBar = () => {
                                         <MenuItem
                                             id="menuHistory"
                                             icon={<FaHistory color="#fff" />}
+                                            component={<Link to={`/provider/${selectedAddress}/storage-history`} />}
                                         >
                                             {t('menu.provider.storage.history')}
-                                            <Link
-                                                to={`/provider/${selectedAddress}/storage-history`}
-                                            />
                                         </MenuItem>
                                     </span>
 
@@ -305,11 +287,9 @@ const SideNavBar = () => {
                                             <MenuItem
                                                 id="menuPlayground"
                                                 icon={<FaFlask color="#fff" />}
+                                                component={<Link to={`/provider/${selectedAddress}/playground`} />}
                                             >
                                                 {t('menu.provider.storage.playground')}
-                                                <Link
-                                                    to={`/provider/${selectedAddress}/playground`}
-                                                />
                                             </MenuItem>
                                         </span>
                                     )}
@@ -318,18 +298,16 @@ const SideNavBar = () => {
                                         <MenuItem
                                             id="menuBlacklist"
                                             icon={<FaBan color="#fff" />}
+                                            component={<Link to={`/provider/${selectedAddress}/blacklist`} />}
                                         >
                                             {t('menu.provider.storage.blacklist')}
-                                            <Link
-                                                to={`/provider/${selectedAddress}/blacklist`}
-                                            />
                                         </MenuItem>
                                     </span>
                                 </SubMenu>
 
                                 <span className="mt-4">
                                     <SubMenu
-                                        title={t('menu.provider.retrieval.title')}
+                                        label={t('menu.provider.retrieval.title')}
                                         icon={<FaArrowUp color="#222b2a" />}
                                     >
                                         <span onClick={handleCloseNavbar}>
@@ -338,11 +316,9 @@ const SideNavBar = () => {
                                                 icon={
                                                     <FaChartBar color="#fff" />
                                                 }
+                                                component={<Link to={`/provider/${selectedAddress}/retrieval-dashboard`} />}
                                             >
                                                 {t('menu.provider.retrieval.dashboard')}
-                                                <Link
-                                                    to={`/provider/${selectedAddress}/retrieval-dashboard`}
-                                                />
                                             </MenuItem>
                                         </span>
 
@@ -352,11 +328,9 @@ const SideNavBar = () => {
                                                 icon={
                                                     <FaHistory color="#fff" />
                                                 }
+                                                component={<Link to={`/provider/${selectedAddress}/retrieval-history`} />}
                                             >
                                                 {t('menu.provider.retrieval.history')}
-                                                <Link
-                                                    to={`/provider/${selectedAddress}/retrieval-history`}
-                                                />
                                             </MenuItem>
                                         </span>
 
@@ -367,31 +341,27 @@ const SideNavBar = () => {
                                                     icon={
                                                         <FaKey color="#fff" />
                                                     }
+                                                    component={<Link to={`/provider/${selectedAddress}/retrieval-acl`} />}
                                                 >
                                                     {t('menu.provider.retrieval.acl')}
-                                                    <Link
-                                                        to={`/provider/${selectedAddress}/retrieval-acl`}
-                                                    />
                                                 </MenuItem>
                                             </span>
                                         )}
                                     </SubMenu>
                                 </span>
                             </Menu>
-                        </SidebarContent>
+                        </div>
 
-                        <SidebarFooter>
-                            <Menu iconShape="circle">
+                        <div className="sidebar-footer">
+                            <Menu>
                                 {!isHidden && (
                                     <span onClick={handleCloseNavbar}>
-                                        <MenuItem icon={<FaInfo color="#222b2a" />}>
+                                        <MenuItem icon={<FaInfo color="#222b2a" />} component={<Link to={`/provider/${selectedAddress}/information`} />}>
                                             {t('menu.provider.informations')}
-                                            <Link to={`/provider/${selectedAddress}/information`} />
                                         </MenuItem>
 
-                                        <MenuItem id="menuSettings" icon={<FaCog color="#222b2a" />}>
+                                        <MenuItem id="menuSettings" icon={<FaCog color="#222b2a" />} component={<Link to={`/provider/${selectedAddress}/settings`} />}>
                                             {t('menu.provider.settings')}
-                                            <Link to={`/provider/${selectedAddress}/settings`} />
                                         </MenuItem>
                                     </span>
                                 )}
@@ -400,18 +370,18 @@ const SideNavBar = () => {
                                     <MenuItem
                                         id="menuHelp"
                                         icon={<FaLifeRing color="#222b2a" />}
+                                        component={<Link to={`/help`} />}
                                     >
                                         {t('menu.provider.helpCenter')}
-                                        <Link to={`/help`} />
                                     </MenuItem>
                                 </span>
                             </Menu>
 
                             {getVersionComponent()}
-                        </SidebarFooter>
+                        </div>
                     </>
                 )}
-            </ProSidebar>
+            </Sidebar>
         </>
     )
 }

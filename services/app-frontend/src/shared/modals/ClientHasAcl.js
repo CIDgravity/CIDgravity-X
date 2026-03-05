@@ -1,19 +1,23 @@
 import React from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import Button from 'react-bootstrap/Button'
+import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-export const ClientHasAcl = ({ isOpen, setIsOpen, toRoute, client }) => {
+export const ClientHasAcl = ({ show, setIsOpen, toRoute, client }) => {
     const { t } = useTranslation('ClientHasAcl') // second param ignored i18n
 
     return (
         <Modal
-            isOpen={isOpen}
-            fade={false}
-            toggle={() => setIsOpen(false)}
+            show={show}
+            animation={false}
+            onHide={() => setIsOpen(false)}
             size="lg"
         >
-            <ModalHeader toggle={() => setIsOpen(false)}>
+            <ModalHeader closeButton>
                 {t('header', { clientName: client.name })}
             </ModalHeader>
 
@@ -31,9 +35,10 @@ export const ClientHasAcl = ({ isOpen, setIsOpen, toRoute, client }) => {
                     </div>
                     <div className="p-1">
                         <Button
-                            tag={Link}
+                            as={Link}
                             className="custom-cidg-button"
                             to={toRoute}
+                            relative="path"
                         >
                             {t('button.goToRetrievalAclPage')}
                         </Button>

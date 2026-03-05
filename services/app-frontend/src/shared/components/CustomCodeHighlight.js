@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 export const CustomCodeHighlight = ({ text, wrapperClass }) => {
     const { t } = useTranslation('CustomCodeHighlight') // second param ignored i18n
@@ -17,7 +17,7 @@ export const CustomCodeHighlight = ({ text, wrapperClass }) => {
     }
 
     return (
-        <div className={wrapperClass ? wrapperClass : 'code-block-wrapper'} data-for="copyTooltip" data-tip={t('copy.tooltip')} onClick={copyToClipboard}>
+        <div className={wrapperClass ? wrapperClass : 'code-block-wrapper'} data-tooltip-id="copyTooltip" data-tooltip-content={t('copy.tooltip')} onClick={copyToClipboard}>
             <pre className="custom-pre">
                 <code>
                     <span className="token code-line command">
@@ -26,7 +26,7 @@ export const CustomCodeHighlight = ({ text, wrapperClass }) => {
                 </code>
             </pre>
 
-            <ReactTooltip place="bottom" id="copyTooltip" />
+            <Tooltip place="bottom" id="copyTooltip" />
         </div>
     )
 }

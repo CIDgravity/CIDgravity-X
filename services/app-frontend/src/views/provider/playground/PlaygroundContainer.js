@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react'
 
 import { isMobile } from 'react-device-detect'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Col, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import { toast } from 'react-toastify'
 import { Loader } from 'shared/components'
 import { Trans, withTranslation } from 'react-i18next'
@@ -31,12 +32,15 @@ import { GetLatestTicker } from 'shared/services/integration'
 import { computePriceEquivalence } from 'shared/utils/fil'
 import { getDefaultCurrency, computeAllRulePrices } from 'shared/utils/supported-currencies'
 
-import SyntaxHighlighter from 'react-syntax-highlighter'
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/light'
+import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+SyntaxHighlighter.registerLanguage('json', json)
 
 import PlaygroundForm from './PlaygroundForm'
 
-const dayjs = require('dayjs')
+import dayjs from 'dayjs'
+
 class PlaygroundContainer extends PureComponent {
     constructor(props) {
         super(props)
@@ -621,7 +625,7 @@ class PlaygroundContainer extends PureComponent {
                                                 <div className="mt-4">
                                                     {testResults.matchingPricing && testResults.internalDecision === 'reject' ? (
                                                         <>
-                                                            <p class="font-italic text-center">
+                                                            <p className="font-italic text-center">
                                                                 {t(
                                                                     'testResult.rejected.matchedPricing',
                                                                     {

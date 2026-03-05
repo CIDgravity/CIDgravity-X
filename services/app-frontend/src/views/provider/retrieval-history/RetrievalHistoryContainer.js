@@ -2,8 +2,9 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { isBrowser, isMobile } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
-import ReactTooltip from 'react-tooltip'
-import { Col, Row } from 'reactstrap'
+import { Tooltip } from 'react-tooltip'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import { Loader } from 'shared/components'
 import { CustomPagination } from 'shared/components/CustomPagination'
 import { ViewDealProposalJson } from 'shared/modals'
@@ -134,8 +135,8 @@ export function RetrievalHistoryContainer() {
         if (internalDecision === 'accept') {
             return (
                 <i
-                    data-for="status"
-                    data-tip={t('table.internalDecision.accept.tooltip')}
+                    data-tooltip-id="status"
+                    data-tooltip-content={t('table.internalDecision.accept.tooltip')}
                     style={{ color: 'green' }}
                     className="fas fa-arrow-right"
                 />
@@ -143,8 +144,8 @@ export function RetrievalHistoryContainer() {
         } else if (internalDecision === 'maintenance') {
             return (
                 <i
-                    data-for="status"
-                    data-tip={t('table.internalDecision.maintenance.tooltip')}
+                    data-tooltip-id="status"
+                    data-tooltip-content={t('table.internalDecision.maintenance.tooltip')}
                     style={{ color: 'orange' }}
                     className="fas fa-tools"
                 />
@@ -152,8 +153,8 @@ export function RetrievalHistoryContainer() {
         } else if (internalDecision === 'retrievalRateLimit') {
             return (
                 <i
-                    data-for="status"
-                    data-tip={t(
+                    data-tooltip-id="status"
+                    data-tooltip-content={t(
                         'table.internalDecision.retrievalRateLimit.tooltip'
                     )}
                     style={{ color: 'red' }}
@@ -163,8 +164,8 @@ export function RetrievalHistoryContainer() {
         } else if (internalDecision === 'acl') {
             return (
                 <i
-                    data-for="status"
-                    data-tip={t('table.internalDecision.acl.tooltip')}
+                    data-tooltip-id="status"
+                    data-tooltip-content={t('table.internalDecision.acl.tooltip')}
                     style={{ color: 'orange' }}
                     className="fas fa-ban"
                 />
@@ -291,8 +292,9 @@ export function RetrievalHistoryContainer() {
                             ></Col>
                         </Row>
 
-                        {dealsHistory.map((deal) => (
+                        {dealsHistory.map((deal, index) => (
                             <Row
+                                key={deal.id || index}
                                 className={`py-3 align-items-center align-items-stretch ${
                                     deal.default
                                         ? 'card-form-default-base'
@@ -307,7 +309,7 @@ export function RetrievalHistoryContainer() {
                                     {getIconForDealStatus(
                                         deal.internalDecision
                                     )}
-                                    <ReactTooltip place="bottom" id="status" />
+                                    <Tooltip place="bottom" id="status" />
                                 </Col>
 
                                 <Col
@@ -339,13 +341,13 @@ export function RetrievalHistoryContainer() {
                                                 <i
                                                     id="copyFullFromAddress"
                                                     className="ms-4 fas fa-copy fa-sm copy-btn"
-                                                    data-for="copy"
-                                                    data-tip={t(
+                                                    data-tooltip-id="copy"
+                                                    data-tooltip-content={t(
                                                         'table.from.copy.tooltip'
                                                     )}
                                                 />
 
-                                                <ReactTooltip
+                                                <Tooltip
                                                     place="bottom"
                                                     id="copy"
                                                 />
@@ -395,13 +397,13 @@ export function RetrievalHistoryContainer() {
                                                 className="btn-pointer card-rounded-btn"
                                             >
                                                 <i
-                                                    data-for="inspect-deal-proposal"
-                                                    data-tip={t(
+                                                    data-tooltip-id="inspect-deal-proposal"
+                                                    data-tooltip-content={t(
                                                         'table.inspect.tooltip'
                                                     )}
                                                     className="fa fa-eye"
                                                 />
-                                                <ReactTooltip
+                                                <Tooltip
                                                     place="bottom"
                                                     id="inspect-deal-proposal"
                                                 />

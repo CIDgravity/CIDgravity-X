@@ -1,6 +1,10 @@
 import { FastField, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { Col, FormGroup, Label, Row, Alert } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
+import Alert from 'react-bootstrap/Alert'
 import { object, string } from 'yup'
 
 import Select from 'react-select'
@@ -81,9 +85,9 @@ export function Form() {
                     <h3 className="title is-4 is-styled">{t('title')}</h3>
                     <h5>{t('subtitle')}</h5>
 
-                    <Alert color="warning" className="mt-4">
+                    <Alert variant="warning" className="mt-4">
                         <strong>
-                            <i class="fas fa-exclamation-triangle" />{' '}
+                            <i className="fas fa-exclamation-triangle" />{' '}
                             {t('beCareful')}
                         </strong>{' '}
 
@@ -96,9 +100,9 @@ export function Form() {
                 <Col md="6" xs="6">
                     <Row>
                         <FormGroup>
-                            <Label for="entity-name" className="form-label">
+                            <FormLabel htmlFor="entity-name" className="form-label">
                                 {t('entityNameField.label')}
-                            </Label>
+                            </FormLabel>
 
                             <FastField className="form-control" type="text" id={WizardProviderInformationStep.id} name="entityName" />
 
@@ -114,9 +118,9 @@ export function Form() {
 
                     <Row>
                         <FormGroup>
-                            <Label for="entity-type" className="form-label">
+                            <FormLabel htmlFor="entity-type" className="form-label">
                                 {t('entityTypeField.label')}
-                            </Label>
+                            </FormLabel>
 
                             <Select 
                                 name="entityType"
@@ -141,9 +145,9 @@ export function Form() {
 
                     <Row>
                         <FormGroup>
-                            <Label for="entity-country" className="form-label">
+                            <FormLabel htmlFor="entity-country" className="form-label">
                                 {t('entityCountryField.label')}
-                            </Label>
+                            </FormLabel>
 
                             <CountrySelector 
                                 fieldName="entityCountry"
@@ -165,9 +169,9 @@ export function Form() {
                 <Col md="6" xs="6">
                     <Row>
                         <FormGroup>
-                            <Label for="contactFullName" className="form-label">
+                            <FormLabel htmlFor="contactFullName" className="form-label">
                                 {t('contactFullNameField.label')}
-                            </Label>
+                            </FormLabel>
 
                             <FastField className="form-control" type="text" id={WizardProviderInformationStep.id} name="contactFullName" />
 
@@ -183,9 +187,9 @@ export function Form() {
 
                     <Row>
                         <FormGroup>
-                            <Label for="contact-email" className="form-label">
+                            <FormLabel htmlFor="contact-email" className="form-label">
                                 {t('contactEmailField.label')}
-                            </Label>
+                            </FormLabel>
 
                             <FastField className="form-control" type="text" id={WizardProviderInformationStep.id} name="contactEmail" />
 
@@ -201,9 +205,9 @@ export function Form() {
 
                     <Row>
                         <FormGroup>
-                            <Label for="contact-slack" className="form-label">
+                            <FormLabel htmlFor="contact-slack" className="form-label">
                                 {t('contactSlackField.label')}
-                            </Label>
+                            </FormLabel>
 
                             <FastField className="form-control" type="text" id={WizardProviderInformationStep.id} name="contactSlack" />
 
@@ -222,9 +226,9 @@ export function Form() {
             <Row className="p-2 mb-4">
                 <Col md="12" xs="12">
                     <FormGroup>
-                        <Label for="entity-website" className="form-label">
+                        <FormLabel htmlFor="entity-website" className="form-label">
                             {t('entityWebsiteField.label')}
-                        </Label>
+                        </FormLabel>
 
                         <FastField className="form-control" type="text" id={WizardProviderInformationStep.id} name="entityWebsite" />
 

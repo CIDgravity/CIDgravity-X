@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react'
 
-import { Button, Row, Col } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import { Link } from 'react-router'
 import { withTranslation } from 'react-i18next'
 
 class ErrorBoundaryRoute extends PureComponent {
@@ -21,10 +23,10 @@ class ErrorBoundaryRoute extends PureComponent {
                             <br />
                             <br />
                             <Button
-                                tag={Link}
+                                as={Link}
                                 to="/"
                                 type="submit"
-                                color="danger"
+                                variant="danger"
                                 size="1x"
                                 className="me-4"
                             >

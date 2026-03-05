@@ -1,9 +1,12 @@
 import { PureComponent } from 'react'
 import { Field, Form, withFormik } from 'formik'
 import { withTranslation } from 'react-i18next'
-import { withRouter } from 'react-router'
+import { withRouter } from 'shared/utils/withRouter'
 import { toast } from 'react-toastify'
-import { Col, FormGroup, Label, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 import CustomButtonPremium from 'shared/components/CustomButtonPremium'
 
@@ -23,9 +26,9 @@ class ClientBlacklistForm extends PureComponent {
 
                                 <Col xs="3" md="3" style={{marginTop: 20 + 'px'}}>
                                     <FormGroup>
-                                        <Label for="blacklist-address" className="form-label">
+                                        <FormLabel htmlFor="blacklist-address" className="form-label">
                                             {t('field.addressId.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <Field
                                             type="text"
@@ -45,9 +48,9 @@ class ClientBlacklistForm extends PureComponent {
 
                                 <Col xs="5" md="5" style={{marginTop: 20 + 'px'}}>
                                     <FormGroup>
-                                        <Label for="blacklist-comment" className="form-label">
+                                        <FormLabel htmlFor="blacklist-comment" className="form-label">
                                             {t('field.comment.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <Field
                                             type="string"

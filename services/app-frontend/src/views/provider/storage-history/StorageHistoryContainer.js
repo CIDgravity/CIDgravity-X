@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react'
 
 import { isBrowser, isMobile } from 'react-device-detect'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Col, Row } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import { Link } from 'react-router'
 import { Loader } from 'shared/components'
 import { GetAllDealsReceivedFromReportingService } from 'shared/services/deal-proposals'
 import {
@@ -22,7 +23,7 @@ import { withTranslation } from 'react-i18next'
 
 import { BsBuildingFillAdd } from 'react-icons/bs'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import moment from 'moment'
 
 class StorageHistoryContainer extends PureComponent {
@@ -325,8 +326,8 @@ class StorageHistoryContainer extends PureComponent {
             return (
                 <span>
                     <span
-                        data-for="clientCreatedAfterDealProcessed"
-                        data-tip={t(
+                        data-tooltip-id="clientCreatedAfterDealProcessed"
+                        data-tooltip-content={t(
                             'table.clientName.tooltip.clientCreatedAfterDealProcessed'
                         )}
                         className="text-bold text-bold-italic"
@@ -334,7 +335,7 @@ class StorageHistoryContainer extends PureComponent {
                         {deal.clientName}
                     </span>
 
-                    <ReactTooltip
+                    <Tooltip
                         place="bottom"
                         id="clientCreatedAfterDealProcessed"
                     />
@@ -347,41 +348,39 @@ class StorageHistoryContainer extends PureComponent {
                 <>
                     <span>
                         <span
-                            data-for="importedFrom"
-                            data-tip={this.getClientNameLookupSource(deal)}
+                            data-tooltip-id="importedFrom"
+                            data-tooltip-html={this.getClientNameLookupSource(deal)}
                         >
                             {deal.clientName}
                         </span>
 
-                        <ReactTooltip
+                        <Tooltip
                             place="bottom"
                             id="importedFrom"
-                            html={true}
                         />
                     </span>
 
                     <Link
                         style={{ color: '#222b2a' }}
-                        to={{
-                            pathname: './client/new',
-                            state: {
-                                createClientFromHistory: true,
-                                clientName: deal.clientName,
-                                clientAddress: deal.fromAddress,
-                            },
+                        to="../client/new"
+                        relative="path"
+                        state={{
+                            createClientFromHistory: true,
+                            clientName: deal.clientName,
+                            clientAddress: deal.fromAddress,
                         }}
                     >
                         <span>
                             <BsBuildingFillAdd
                                 className="ms-4 fas fa-building fa-sm copy-btn"
                                 id="createAsClient"
-                                data-for="createAsClient"
-                                data-tip={this.props.t(
+                                data-tooltip-id="createAsClient"
+                                data-tooltip-content={this.props.t(
                                     'table.clientName.tooltip.createAsClient'
                                 )}
                             />
 
-                            <ReactTooltip place="bottom" id="createAsClient" />
+                            <Tooltip place="bottom" id="createAsClient" />
                         </span>
                     </Link>
                 </>
@@ -522,8 +521,9 @@ class StorageHistoryContainer extends PureComponent {
                             </Row>
 
                             {dealsHistory &&
-                                dealsHistory.map((deal) => (
+                                dealsHistory.map((deal, index) => (
                                     <Row
+                                        key={deal.id || index}
                                         className={`py-3 align-items-center align-items-stretch ${
                                             deal.default
                                                 ? 'card-form-default-base'
@@ -548,8 +548,8 @@ class StorageHistoryContainer extends PureComponent {
                                             ) : (
                                                 <>
                                                     <span
-                                                        data-for="fullAddress"
-                                                        data-tip={
+                                                        data-tooltip-id="fullAddress"
+                                                        data-tooltip-content={
                                                             deal.fromAddress
                                                         }
                                                     >
@@ -557,7 +557,7 @@ class StorageHistoryContainer extends PureComponent {
                                                             deal.fromAddress
                                                         )}
 
-                                                        <ReactTooltip
+                                                        <Tooltip
                                                             place="bottom"
                                                             id="fullAddress"
                                                         />
@@ -573,13 +573,13 @@ class StorageHistoryContainer extends PureComponent {
                                                         <i
                                                             id="copyFullFromAddress"
                                                             className="ms-4 fas fa-copy fa-sm copy-btn"
-                                                            data-for="copy"
-                                                            data-tip={t(
+                                                            data-tooltip-id="copy"
+                                                            data-tooltip-content={t(
                                                                 'table.fromAddress.tooltip.copy'
                                                             )}
                                                         />
 
-                                                        <ReactTooltip
+                                                        <Tooltip
                                                             place="bottom"
                                                             id="copy"
                                                         />
@@ -644,13 +644,13 @@ class StorageHistoryContainer extends PureComponent {
                                                                 className="btn-pointer card-rounded-btn"
                                                             >
                                                                 <i
-                                                                    data-for="inspect-deal-proposal"
-                                                                    data-tip={t(
+                                                                    data-tooltip-id="inspect-deal-proposal"
+                                                                    data-tooltip-content={t(
                                                                         'table.inspect.tooltip'
                                                                     )}
                                                                     className="fa fa-eye"
                                                                 />
-                                                                <ReactTooltip
+                                                                <Tooltip
                                                                     place="bottom"
                                                                     id="inspect-deal-proposal"
                                                                 />
@@ -678,13 +678,13 @@ class StorageHistoryContainer extends PureComponent {
                                                                 className="btn-pointer card-rounded-btn"
                                                             >
                                                                 <i
-                                                                    data-for="inspect-acceptance-logic-results"
-                                                                    data-tip={t(
+                                                                    data-tooltip-id="inspect-acceptance-logic-results"
+                                                                    data-tooltip-content={t(
                                                                         'table.inspectAcceptanceLogic.tooltip'
                                                                     )}
                                                                     className="fa fa-filter"
                                                                 />
-                                                                <ReactTooltip
+                                                                <Tooltip
                                                                     place="bottom"
                                                                     id="inspect-acceptance-logic-results"
                                                                 />
@@ -695,17 +695,18 @@ class StorageHistoryContainer extends PureComponent {
                                                 {deal.decision !== 'error' && deal.internalDecision !== 'invalidProposal' && deal.internalDecision !== 'curioBackPressure' && (
                                                         <div className="pe-3">
                                                             <Link
-                                                                to={`./playground/${deal.id}`}
+                                                                to={`../playground/${deal.id}`}
+                                                                relative="path"
                                                                 className="icon-router-link"
                                                             >
                                                                 <i
-                                                                    data-for="go-to-playground"
-                                                                    data-tip={t(
+                                                                    data-tooltip-id="go-to-playground"
+                                                                    data-tooltip-content={t(
                                                                         'table.simulate.tooltip'
                                                                     )}
                                                                     className="fa fa-flask"
                                                                 />
-                                                                <ReactTooltip
+                                                                <Tooltip
                                                                     place="bottom"
                                                                     id="go-to-playground"
                                                                 />

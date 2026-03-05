@@ -1,18 +1,18 @@
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
-import SyntaxHighlighter from 'react-syntax-highlighter'
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/light'
+import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+SyntaxHighlighter.registerLanguage('json', json)
 
-import {
-    Button,
-    Col,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-} from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import Row from 'react-bootstrap/Row'
 
 export const ViewStorageAcceptanceLogicResults = ({
     isModalOpened,
@@ -22,12 +22,12 @@ export const ViewStorageAcceptanceLogicResults = ({
     const { t } = useTranslation('ViewStorageAcceptanceLogicResults') // second param ignored i18n
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>{t('header')}</ModalHeader>
+            <ModalHeader closeButton>{t('header')}</ModalHeader>
 
             <ModalBody>
                 <Row>
@@ -61,19 +61,21 @@ export const ViewStorageAcceptanceLogicResults = ({
 
             <ModalFooter>
                 <Button
-                    tag={Link}
-                    to={`./playground/${dealProposal.id}`}
+                    as={Link}
+                    to={`../playground/${dealProposal.id}`}
+                    relative="path"
                     className="btn-secondary"
                 >
                     {t('button.simulateInPlayground')}
                 </Button>
 
                 <Button
-                    tag={Link}
+                    as={Link}
                     to={
-                        './storage-acceptance-logic/' +
+                        '../storage-acceptance-logic/' +
                         dealProposal.storageAcceptanceLogicId
                     }
+                    relative="path"
                     className="btn-secondary"
                 >
                     {t('button.viewAcceptanceLogic')}

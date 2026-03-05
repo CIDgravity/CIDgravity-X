@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react'
 
 import { isBrowser } from 'react-device-detect'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Button, Col, Row, Alert } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Alert from 'react-bootstrap/Alert'
 import { Trans, withTranslation } from 'react-i18next'
 import {
     SendProposalTest,
@@ -270,7 +273,7 @@ class DiagnosisContainer extends PureComponent {
                                                         <tbody>
                                                             {testResultsAsErrorCodes.map(
                                                                 (errorCode) => (
-                                                                    <tr>
+                                                                    <tr key={errorCode.code}>
                                                                         <td>
                                                                             {t(
                                                                                 `errorCode.${errorCode.code}.name`,
@@ -365,7 +368,7 @@ class DiagnosisContainer extends PureComponent {
 
                                             <Col>
                                                 {receiveTestResults.isAvailable ? (
-                                                    <Alert color="success">
+                                                    <Alert variant="success">
                                                         <h4 className="alert-heading">
                                                             {t(
                                                                 `step.results.finishedSuccess.title`
@@ -432,7 +435,7 @@ class DiagnosisContainer extends PureComponent {
                                                         </p>
                                                     </Alert>
                                                 ) : (
-                                                    <Alert color="info">
+                                                    <Alert variant="info">
                                                         <h4 className="alert-heading">
                                                             {t(
                                                                 `step.results.howToSolve`
@@ -595,7 +598,7 @@ class DiagnosisContainer extends PureComponent {
                                             </Col>
 
                                             <Col>
-                                                <Alert color="info">
+                                                <Alert variant="info">
                                                     <h4 className="alert-heading">
                                                         {t(
                                                             `step.results.howToSolve`

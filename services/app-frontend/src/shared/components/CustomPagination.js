@@ -1,19 +1,6 @@
-import { makeStyles } from '@mui/styles'
-import { Pagination } from '@mui/lab'
+import { Pagination } from '@mui/material'
 
-import scssVariables from '../../scss/cidg-variables.scss'
-
-const useStyles = makeStyles(() => ({
-    ul: {
-        '& .MuiPaginationItem-root': {
-            '&.Mui-selected': {
-                background: scssVariables.blue,
-                color: '#fff',
-                borderRadius: '50%',
-            },
-        },
-    },
-}))
+import * as scssVariables from 'config/scss-variables'
 
 export function CustomPagination({
     currentPage,
@@ -21,13 +8,15 @@ export function CustomPagination({
     itemPerPage,
     onPageChanged,
 }) {
-    const classes = useStyles()
-
     return (
         <div className="d-flex justify-content-center py-4">
             <Pagination
-                classes={{
-                    ul: classes.ul,
+                sx={{
+                    '& .MuiPaginationItem-root.Mui-selected': {
+                        background: scssVariables.blue,
+                        color: '#fff',
+                        borderRadius: '50%',
+                    },
                 }}
                 defaultPage={currentPage}
                 count={Math.ceil(totalElements / itemPerPage)}

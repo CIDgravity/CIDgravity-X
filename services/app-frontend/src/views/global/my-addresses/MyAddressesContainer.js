@@ -1,9 +1,12 @@
 import { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { toast } from 'react-toastify'
-import { Button, Col, Container, Row } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import { Loader } from 'shared/components'
 
 import { ViewAddressAccessRights, ConfirmUnlinkAddress } from 'shared/modals'
@@ -22,7 +25,7 @@ import { shortenAddress } from 'shared/utils/filecoinUtil'
 import { loadAddressesFromJwt } from 'shared/utils/addresses'
 import { GetSelectedAddressIdFromSessionStorage } from 'shared/utils/auth'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import CustomBadgeOffer from 'shared/components/CustomBadgeOffer'
 
 class MyAddressesContainer extends PureComponent {
@@ -54,7 +57,7 @@ class MyAddressesContainer extends PureComponent {
         const { getAccessTokenSilently } = this.props.auth0
 
         // Must ignore cache here to avoid 401 error when deleting and always get the up to date token
-        const token = await getAccessTokenSilently({ ignoreCache: true })
+        const token = await getAccessTokenSilently({ cacheMode: 'off' })
 
         // Load addresses from JWT
         const [clientAddresses, providerAddresses] = await loadAddressesFromJwt(token)
@@ -212,7 +215,6 @@ class MyAddressesContainer extends PureComponent {
                                 </Row>
 
                                 {providerOwnedAddresses.map((providerAddress) => (
-                                    <>
                                         <div
                                             key={providerAddress.addressId}
                                             className={
@@ -261,11 +263,11 @@ class MyAddressesContainer extends PureComponent {
                                                             <i
                                                                 style={{ color: '#222b2a' }}
                                                                 className="fas fa-key"
-                                                                data-for="view"
-                                                                data-tip={t('minerAddress.table.access.tooltip')}
+                                                                data-tooltip-id="view"
+                                                                data-tooltip-content={t('minerAddress.table.access.tooltip')}
                                                             />
 
-                                                            <ReactTooltip place="bottom" id="view"/>
+                                                            <Tooltip place="bottom" id="view"/>
                                                         </span>
                                                     )}
 
@@ -277,17 +279,16 @@ class MyAddressesContainer extends PureComponent {
                                                             <i
                                                                 style={{ color: '#222b2a' }}
                                                                 className="fas fa-trash-alt"
-                                                                data-for="delete"
-                                                                data-tip={t('minerAddress.table.delete.tooltip')}
+                                                                data-tooltip-id="delete"
+                                                                data-tooltip-content={t('minerAddress.table.delete.tooltip')}
                                                             />
 
-                                                            <ReactTooltip place="bottom" id="delete" />
+                                                            <Tooltip place="bottom" id="delete" />
                                                         </span>
                                                     )}
                                                 </Col>
                                             </Row>
                                         </div>
-                                    </>
                                 ))}
                             </>
                         ) : error ? (
@@ -332,7 +333,6 @@ class MyAddressesContainer extends PureComponent {
 
                                 {clientOwnedAddresses.map(
                                     (clientOwnedAddress) => (
-                                        <>
                                             <div key={clientOwnedAddress.addressId} className={`p-3 card-form`}>
                                                 <Row key={clientOwnedAddress.addressId} className="align-items-center align-items-stretch">
                                                     <Col xs="2" md="2">
@@ -350,13 +350,13 @@ class MyAddressesContainer extends PureComponent {
                                                     <Col xs="2" md="2">
                                                         <div
                                                             className="flex-fill d-flex align-items-center"
-                                                            data-for="viewLongAddress"
-                                                            data-tip={clientOwnedAddress.address}
+                                                            data-tooltip-id="viewLongAddress"
+                                                            data-tooltip-content={clientOwnedAddress.address}
                                                         >
                                                             {shortenAddress(clientOwnedAddress.address)}
                                                         </div>
 
-                                                        <ReactTooltip place="bottom" id="viewLongAddress" />
+                                                        <Tooltip place="bottom" id="viewLongAddress" />
                                                     </Col>
 
                                                     <Col xs="2" md="2">
@@ -383,11 +383,11 @@ class MyAddressesContainer extends PureComponent {
                                                             <i
                                                                 style={{ color: '#222b2a' }}
                                                                 className="fas fa-key"
-                                                                data-for="view"
-                                                                data-tip={t('clientAddress.table.access.tooltip')}
+                                                                data-tooltip-id="view"
+                                                                data-tooltip-content={t('clientAddress.table.access.tooltip')}
                                                             />
 
-                                                            <ReactTooltip place="bottom" id="view" />
+                                                            <Tooltip place="bottom" id="view" />
                                                         </span>
 
                                                         {selectedAddressForTenant !== clientOwnedAddress.addressId && (
@@ -398,17 +398,16 @@ class MyAddressesContainer extends PureComponent {
                                                                 <i
                                                                     style={{ color: '#222b2a' }}
                                                                     className="fas fa-trash-alt"
-                                                                    data-for="delete"
-                                                                    data-tip={t('clientAddress.table.delete.tooltip')}
+                                                                    data-tooltip-id="delete"
+                                                                    data-tooltip-content={t('clientAddress.table.delete.tooltip')}
                                                                 />
 
-                                                                <ReactTooltip place="bottom" id="delete" />
+                                                                <Tooltip place="bottom" id="delete" />
                                                             </span>
                                                         )}
                                                     </Col>
                                                 </Row>
                                             </div>
-                                        </>
                                     )
                                 )}
                             </>
@@ -472,15 +471,15 @@ class MyAddressesContainer extends PureComponent {
                         <Col xs={12} md={6}>
                             <div
                                 className="text-end ms-2"
-                                data-for="claimNewAddress"
-                                data-tip={
+                                data-tooltip-id="claimNewAddress"
+                                data-tooltip-content={
                                     hasReachedAddressClaimedLimit
                                         ? t('button.claimNewAddress.tooltip.onMaximumReached')
                                         : null
                                 }
                             >
                                 <Button
-                                    tag={Link}
+                                    as={Link}
                                     to="/wizard"
                                     type="submit"
                                     disabled={hasReachedAddressClaimedLimit}
@@ -492,7 +491,7 @@ class MyAddressesContainer extends PureComponent {
                                     </span>
                                 </Button>
                             </div>
-                            <ReactTooltip id="claimNewAddress" place="bottom" />
+                            <Tooltip id="claimNewAddress" place="bottom" />
                         </Col>
                     ) : null}
                 </Row>

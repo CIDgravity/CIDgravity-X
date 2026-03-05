@@ -1,13 +1,11 @@
 import React from 'react'
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Row,
-    Col,
-} from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -23,12 +21,12 @@ export const BlockClientDeals = ({
 
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>
+            <ModalHeader closeButton>
                 {t('header', { clientName: client.name })}
             </ModalHeader>
 
@@ -62,7 +60,7 @@ export const BlockClientDeals = ({
                     {t('button.proceed')}
                 </Button>
 
-                <Button onClick={handleModal} color="secondary">
+                <Button onClick={handleModal} variant="secondary">
                     {t('button.close')}
                 </Button>
             </ModalFooter>

@@ -1,5 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import Row from 'react-bootstrap/Row'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -12,8 +18,8 @@ export const ImportExportOnboardingPolicy = ({
     const { t } = useTranslation('ImportExportOnboardingPolicy') // second param ignored i18n
 
     return (
-        <Modal isOpen={isModalOpened} fade={false} toggle={handleModal} size="lg">
-            <ModalHeader toggle={handleModal}>{t('header')}</ModalHeader>
+        <Modal show={isModalOpened} animation={false} onHide={handleModal} size="lg">
+            <ModalHeader closeButton>{t('header')}</ModalHeader>
 
             <ModalBody>
                 <Row>
@@ -39,7 +45,7 @@ export const ImportExportOnboardingPolicy = ({
             </ModalBody>
 
             <ModalFooter>
-                <Button onClick={handleCopyOnboardingPolicyJsonToClipboard} color="secondary" disabled={isImportLoading}>
+                <Button onClick={handleCopyOnboardingPolicyJsonToClipboard} variant="secondary" disabled={isImportLoading}>
                     {t('button.copyToClipboard')}
                 </Button>
 

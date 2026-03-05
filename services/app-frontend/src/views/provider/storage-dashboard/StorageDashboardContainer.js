@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react'
-import { Container, Row, Col } from 'reactstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { withAuth0 } from '@auth0/auth0-react'
 import { withTranslation } from 'react-i18next'
 

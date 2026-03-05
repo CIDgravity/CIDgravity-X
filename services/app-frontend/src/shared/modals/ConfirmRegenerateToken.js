@@ -1,5 +1,9 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Trans, useTranslation } from 'react-i18next'
 
 export const ConfirmRegenerateToken = ({
@@ -12,28 +16,28 @@ export const ConfirmRegenerateToken = ({
     return (
 
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>{t('header')}</ModalHeader>
+            <ModalHeader closeButton>{t('header')}</ModalHeader>
 
             <ModalBody>
                 <Trans t={t} i18nKey="body.yourTokenWillBeInvalidated" />
                 <strong>
-                    <i class="fas fa-exclamation-triangle" />{' '}
+                    <i className="fas fa-exclamation-triangle" />{' '}
                     {t('body.beCareful')}
                 </strong>{' '}
                 {t('body.dealProposalsWillNotBeProcessed')}
             </ModalBody>
 
             <ModalFooter>
-                <Button onClick={handleSubmitRegenerate} color="danger">
+                <Button onClick={handleSubmitRegenerate} variant="danger">
                     {t('button.confirm')}
                 </Button>
 
-                <Button onClick={handleModal} color="secondary">
+                <Button onClick={handleModal} variant="secondary">
                     {t('button.cancel')}
                 </Button>
             </ModalFooter>

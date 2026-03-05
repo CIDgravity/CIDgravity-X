@@ -1,5 +1,8 @@
 import React, { Fragment, PureComponent } from 'react'
-import { InputGroup, Input, Row, Col } from 'reactstrap'
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormControl from 'react-bootstrap/FormControl'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { withTranslation } from 'react-i18next'
 
 import { DecisionAndStatusAsyncSelect } from 'shared/forms'
@@ -34,7 +37,7 @@ class ClientStorageDealsHistorySearchAndFilters extends PureComponent {
                 <Row className="mt-4">
                     <Col xs={12} md={12} lg={12} className="mb-2">
                         <InputGroup>
-                            <Input
+                            <FormControl
                                 id="search"
                                 placeholder={t('inputSearch.placeholder')}
                                 onKeyDown={onSearchProviderOrProposalUUIDKeyDown}

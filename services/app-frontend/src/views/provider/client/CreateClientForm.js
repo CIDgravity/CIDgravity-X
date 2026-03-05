@@ -7,8 +7,13 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 
 import { Field, Form, withFormik } from 'formik'
-import { withRouter } from 'react-router'
-import { Alert, Button, Col, FormGroup, Label, Row } from 'reactstrap'
+import { withRouter } from 'shared/utils/withRouter'
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 import {
     CustomCreatableLabelWithTooltipAndCopy,
@@ -22,7 +27,7 @@ import {
     toReadableDurationFormatNew,
     toReadableSize,
 } from 'shared/utils/file_size'
-import scssVariables from 'scss/cidg-variables.scss'
+import * as scssVariables from 'config/scss-variables'
 import Switch from 'react-switch'
 
 const components = {
@@ -69,9 +74,9 @@ class CreateClientForm extends PureComponent {
                     <Row id="clientMainInformation" className="my-3">
                         <Col xs="12" md="12">
                             <FormGroup>
-                                <Label for="client-name" className="form-label">
+                                <FormLabel htmlFor="client-name" className="form-label">
                                     {t('clientName.label')}
-                                </Label>
+                                </FormLabel>
                                 <Field
                                     placeholder={t('clientName.placeholder')}
                                     id="client-name"
@@ -92,12 +97,12 @@ class CreateClientForm extends PureComponent {
                     <Row>
                         <Col xs="12" md="6">
                             <FormGroup>
-                                <Label
-                                    for="client-email"
+                                <FormLabel
+                                    htmlFor="client-email"
                                     className="form-label"
                                 >
                                     {t('email.label')}
-                                </Label>
+                                </FormLabel>
                                 <Field
                                     id="client-email"
                                     className="form-control"
@@ -115,12 +120,12 @@ class CreateClientForm extends PureComponent {
 
                         <Col xs="12" md="6">
                             <FormGroup>
-                                <Label
-                                    for="slack-username"
+                                <FormLabel
+                                    htmlFor="slack-username"
                                     className="form-label"
                                 >
                                     {t('slackUsername.label')}
-                                </Label>
+                                </FormLabel>
                                 <Field
                                     id="slack-username"
                                     className="form-control"
@@ -186,7 +191,7 @@ class CreateClientForm extends PureComponent {
                                     style={{ marginLeft: 10 + 'px' }}
                                 >
                                     {isCheckingClientAddress ? (
-                                        <Alert color="info">
+                                        <Alert variant="info">
                                             <span className="p-2">
                                                 <FontAwesomeIcon
                                                     spin
@@ -198,7 +203,7 @@ class CreateClientForm extends PureComponent {
                                             )}
                                         </Alert>
                                     ) : (
-                                        <Alert color="warning">
+                                        <Alert variant="warning">
                                             {t(
                                                 'manageClientAddresses.addressChecks.description'
                                             )}
@@ -248,7 +253,7 @@ class CreateClientForm extends PureComponent {
                             <Row className="mt-3">
                                 <Col xs="12" md="12">
                                     {isCheckingClientPeerId ? (
-                                        <Alert color="info">
+                                        <Alert variant="info">
                                             <span className="p-2">
                                                 <FontAwesomeIcon
                                                     spin
@@ -260,7 +265,7 @@ class CreateClientForm extends PureComponent {
                                             )}
                                         </Alert>
                                     ) : (
-                                        <Alert color="warning">
+                                        <Alert variant="warning">
                                             {t(
                                                 'manageClientPeerIds.peerIdChecks.description'
                                             )}
@@ -285,12 +290,12 @@ class CreateClientForm extends PureComponent {
                     <Row id="clientStorageDealRates" className="mt-4 my-3">
                         <Col xs="5" md="5" style={{ marginLeft: 10 + 'px' }}>
                             <FormGroup>
-                                <Label
-                                    for="slack-username"
+                                <FormLabel
+                                    htmlFor="slack-username"
                                     className="form-label"
                                 >
                                     {t('storageDealRates.numberOfDeal.label')}
-                                </Label>
+                                </FormLabel>
 
                                 <Field
                                     placeholder={5}
@@ -312,14 +317,14 @@ class CreateClientForm extends PureComponent {
 
                         <Col xs="6" md="6">
                             <FormGroup>
-                                <Label
-                                    for="slack-username"
+                                <FormLabel
+                                    htmlFor="slack-username"
                                     className="form-label"
                                 >
                                     {t(
                                         'storageDealRates.cumulativeDealSize.label'
                                     )}
-                                </Label>
+                                </FormLabel>
 
                                 <Field
                                     placeholder={5}
@@ -501,8 +506,7 @@ const formikConfig = {
                 .number()
                 .when('useGlobalSettingsForStartEpochSealingBuffer', {
                     is: false,
-                    then: yup
-                        .number()
+                    then: (schema) => schema
                         .integer(
                             'validation.isStartEpochSealingBufferValidType'
                         )

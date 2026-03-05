@@ -2,15 +2,13 @@ import { PureComponent } from 'react'
 import { withAuth0 } from '@auth0/auth0-react'
 
 import { withTranslation, Trans } from 'react-i18next'
-import {
-    Alert,
-    Col,
-    Container,
-    Row,
-    Button,
-    FormGroup,
-    Label,
-} from 'reactstrap'
+import Alert from 'react-bootstrap/Alert'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Button from 'react-bootstrap/Button'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
 import { CustomCodeHighlight } from 'shared/components/CustomCodeHighlight'
 
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
@@ -51,12 +49,12 @@ class CreateStorageAcceptanceLogicForm extends PureComponent {
                     <Row className="mt-4" style={{ marginLeft: 2 + 'px' }}>
                         <Col xs="12" md="12">
                             <FormGroup>
-                                <Label
-                                    for="pricing-model-name"
+                                <FormLabel
+                                    htmlFor="pricing-model-name"
                                     className="form-label"
                                 >
                                     {t('general.name.label')}
-                                </Label>
+                                </FormLabel>
 
                                 <input
                                     type="text"
@@ -93,7 +91,7 @@ class CreateStorageAcceptanceLogicForm extends PureComponent {
                                 <Button
                                     onClick={onClickManualEditJsonLogic}
                                     id="manualEditJsonLogic"
-                                    color="secondary"
+                                    variant="secondary"
                                     size="sm"
                                 >
                                     <span className="as--light">
@@ -108,7 +106,7 @@ class CreateStorageAcceptanceLogicForm extends PureComponent {
                         {builderNumberOfRules === 0 && (
                             <Col xs={4} md={4}>
                                 <Alert
-                                    color="warning"
+                                    variant="warning"
                                     className="d-flex align-items-center"
                                 >
                                     <div className="ms-4">

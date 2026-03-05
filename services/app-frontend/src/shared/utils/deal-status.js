@@ -1,4 +1,4 @@
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import { useTranslation } from 'react-i18next'
 
 import { dashToCamelCase } from './string'
@@ -47,7 +47,7 @@ export const GetDecisionsAndStatusesDropdownOptions = (isForClient = false) => {
 
 const generateIconWithTextAndTooltipForDealStatus = (iconName, iconColor, tooltip, text = null) => {
     return (
-        <span data-for="dealStatusTooltip" data-tip={tooltip}>
+        <span data-tooltip-id="dealStatusTooltip" data-tooltip-content={tooltip}>
             <i style={{ color: iconColor, marginRight: 5 + 'px' }} className={iconName} /> 
 
             {text !== null && (
@@ -56,7 +56,7 @@ const generateIconWithTextAndTooltipForDealStatus = (iconName, iconColor, toolti
                 </span>
             )}
 
-            <ReactTooltip place="bottom" id="dealStatusTooltip" />
+            <Tooltip place="bottom" id="dealStatusTooltip" />
         </span>
     )
 }

@@ -6,11 +6,11 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { createRef, PureComponent } from 'react'
 import { withTranslation } from 'react-i18next'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router'
+import { withRouter } from 'shared/utils/withRouter'
 import { toast } from 'react-toastify'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import {
-    AUTH0_CLIENT_ID,
     SESSION_STORAGE_TENANT_KEY,
     TOKEN_REFRESHED_DISPATCH_EVENT,
     WEBSOCKET_ENDPOINT,
@@ -22,17 +22,14 @@ import { loadAddressesFromJwt } from 'shared/utils/addresses'
 
 import CustomBadgeOffer from 'shared/components/CustomBadgeOffer'
 import Switch from 'react-switch'
-import scssVariables from '../../scss/cidg-variables.scss'
-import {
-    Navbar,
-    Nav,
-    NavItem,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    NavbarText
-} from 'reactstrap'
+import * as scssVariables from 'config/scss-variables'
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import NavItem from 'react-bootstrap/NavItem'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownToggle from 'react-bootstrap/DropdownToggle'
+import DropdownMenu from 'react-bootstrap/DropdownMenu'
+import DropdownItem from 'react-bootstrap/DropdownItem'
 import LanguageSwitcher from './LanguageSwitcher'
 
 class TopNavBar extends PureComponent {
@@ -194,7 +191,7 @@ class TopNavBar extends PureComponent {
         if (this.filPriceComponentRef !== null && this.filPriceComponentRef.current !== null) {
             if (tickerData) {
                 if (websocketOpened) {
-                    this.filPriceComponentRef.current.innerHTML = '<NavbarText className="text-center">$ ' + Number(tickerData.weightedPrice.toFixed(2)) + '</NavbarText>'
+                    this.filPriceComponentRef.current.innerHTML = '<span class="text-center">$ ' + Number(tickerData.weightedPrice.toFixed(2)) + '</span>'
                 } else {
                     this.filPriceComponentRef.current.innerHTML = '$ ' + Number(tickerData.weightedPrice.toFixed(2))
                 }
@@ -279,7 +276,7 @@ class TopNavBar extends PureComponent {
             urlActorType = 'client'
         }
 
-        // If user was on a tenant aware path, juste update the tenant and keep the same page
+        // If user was on a tenant aware path, just update the tenant and keep the same page
         // Otherwise, redirect to the dashboard page
         // If we change from provider to client, we need to redirect to dashboard, because same page can't exist
         if (url[5] === undefined || url[3] !== urlActorType) {
@@ -328,15 +325,15 @@ class TopNavBar extends PureComponent {
                 {user && (
                     <div>
                         <Navbar expand={true} className="cidg-top-navbar">
-                            <Nav className="me-auto align-items-center" navbar>
+                            <Nav className="me-auto align-items-center ps-3" navbar>
                                 <NavItem className="navitem-filprice me-1">
-                                    <NavbarText>
+                                    <Navbar.Text>
                                         <img
                                             src="/images/filecoin-logo.svg"
                                             className="filecoin-logo"
                                             alt="Filecoin"
                                         />
-                                    </NavbarText>
+                                    </Navbar.Text>
                                 </NavItem>
 
                                 <NavItem className="navitem-filprice me-4">
@@ -360,8 +357,8 @@ class TopNavBar extends PureComponent {
                                             areUnderMaintenance ? (
                                             <>
                                                 <div
-                                                    data-for="maintenanceModeToolip"
-                                                    data-tip={
+                                                    data-tooltip-id="maintenanceModeToolip"
+                                                    data-tooltip-content={
                                                         areUnderMaintenance[
                                                             selectedAddress
                                                                 ?.addressId
@@ -423,7 +420,7 @@ class TopNavBar extends PureComponent {
                                                         }
                                                     />
                                                 </div>
-                                                <ReactTooltip
+                                                <Tooltip
                                                     event="mouseenter"
                                                     eventOff="mouseleave click"
                                                     place="bottom"
@@ -436,8 +433,8 @@ class TopNavBar extends PureComponent {
 
                                 <NavItem className="me-4 navitem-profile">
                                     {addressesOwnedExceptSelected.length >= 1 ? (
-                                        <UncontrolledDropdown nav>
-                                            <DropdownToggle nav caret>
+                                        <Dropdown>
+                                            <DropdownToggle>
                                                 {selectedAddress ? (
                                                     <>
                                                         <span className="navitem-profile-addressOnly">
@@ -455,18 +452,20 @@ class TopNavBar extends PureComponent {
                                                         </span>
                                                     </>
                                                 )}
+                                                <i className="fas fa-caret-down ms-1" />
                                             </DropdownToggle>
-                                            <DropdownMenu end>
+                                            <DropdownMenu align="end">
 
                                                 {addressesOwnedExceptSelected.filter((item) => item.actorType === 'storageminer').length > 0 && (
                                                     <>
-                                                        <DropdownItem header className="actorType storageminer">
+                                                        <Dropdown.Header className="actorType storageminer">
                                                             {t('tenantSelector.providerCategory')}
-                                                        </DropdownItem>
+                                                        </Dropdown.Header>
                                                 
                                                         {addressesOwnedExceptSelected.filter((item) => item.actorType === 'storageminer').map(
                                                             (addr) => (
                                                                 <DropdownItem
+                                                                    key={addr.addressId}
                                                                     onClick={() =>
                                                                         this.handleSwitchTenant(
                                                                             addr.addressId,
@@ -493,14 +492,15 @@ class TopNavBar extends PureComponent {
 
                                                 {addressesOwnedExceptSelected.filter((item) => item.actorType === 'account').length > 0 && (
                                                     <>
-                                                        <DropdownItem divider />
-                                                        <DropdownItem header className="actorType account">
+                                                        <Dropdown.Divider />
+                                                        <Dropdown.Header className="actorType account">
                                                             {t('tenantSelector.clientsCategory')}
-                                                        </DropdownItem>
+                                                        </Dropdown.Header>
 
                                                         {addressesOwnedExceptSelected.filter((item) => item.actorType === 'account').map(
                                                             (addr) => (
                                                                 <DropdownItem
+                                                                    key={addr.addressId}
                                                                     onClick={() =>
                                                                         this.handleSwitchTenant(
                                                                             addr.addressId,
@@ -525,9 +525,9 @@ class TopNavBar extends PureComponent {
                                                     </>
                                                 )}
                                             </DropdownMenu>
-                                        </UncontrolledDropdown>
+                                        </Dropdown>
                                     ) : (
-                                        <NavbarText>
+                                        <Navbar.Text>
                                             {selectedAddress ? (
                                                 <>
                                                     <span className="navitem-profile-addressOnly">
@@ -545,7 +545,7 @@ class TopNavBar extends PureComponent {
                                                     </span>
                                                 </>
                                             )}
-                                        </NavbarText>
+                                        </Navbar.Text>
                                     )}
                                 </NavItem>
 
@@ -561,8 +561,8 @@ class TopNavBar extends PureComponent {
                                 )}
 
                                 <NavItem className="navitem-profile">
-                                    <UncontrolledDropdown nav>
-                                        <DropdownToggle nav>
+                                    <Dropdown>
+                                        <DropdownToggle>
                                             <div className="d-flex flex-row justify-content-center align-items-center">
                                                 <div>
                                                     <img
@@ -573,43 +573,40 @@ class TopNavBar extends PureComponent {
                                                 </div>
                                             </div>
                                         </DropdownToggle>
-                                        <DropdownMenu end>
-                                            <Link to="/profile">
-                                                <DropdownItem className="dropdown-item">
+                                        <DropdownMenu align="end">
+                                            <DropdownItem as={Link} to="/profile" className="dropdown-item">
+                                                <span>
+                                                    <i className="fas fa-users-cog fa-fw me-3" />
                                                     <span>
-                                                        <i className="picon fas fa-users-cog p-2" />
-                                                        <span>
-                                                            {t(
-                                                                'userDropdownMenu.account'
-                                                            )}
-                                                        </span>
+                                                        {t(
+                                                            'userDropdownMenu.account'
+                                                        )}
                                                     </span>
-                                                </DropdownItem>
-                                            </Link>
-                                            <Link to="/my-addresses">
-                                                <DropdownItem className="dropdown-item">
+                                                </span>
+                                            </DropdownItem>
+                                            <DropdownItem as={Link} to="/my-addresses" className="dropdown-item">
+                                                <span>
+                                                    <i className="fas fa-server fa-fw me-3" />
                                                     <span>
-                                                        <i className="picon fas fa-server p-2" />
-                                                        <span>
-                                                            {t(
-                                                                'userDropdownMenu.addresses'
-                                                            )}
-                                                        </span>
+                                                        {t(
+                                                            'userDropdownMenu.addresses'
+                                                        )}
                                                     </span>
-                                                </DropdownItem>
-                                            </Link>
-                                            <DropdownItem divider />
+                                                </span>
+                                            </DropdownItem>
+                                            <Dropdown.Divider />
                                             <DropdownItem
                                                 className="dropdown-item-danger"
                                                 onClick={() =>
                                                     logout({
-                                                        client_id:
-                                                            AUTH0_CLIENT_ID,
+                                                        logoutParams: {
+                                                            returnTo: window.location.origin,
+                                                        },
                                                     })
                                                 }
                                             >
                                                 <span>
-                                                    <i className="picon fas fa-sign-out-alt p-2" />
+                                                    <i className="fas fa-sign-out-alt fa-fw me-3" />
                                                     <span>
                                                         {t(
                                                             'userDropdownMenu.logout'
@@ -618,7 +615,7 @@ class TopNavBar extends PureComponent {
                                                 </span>
                                             </DropdownItem>
                                         </DropdownMenu>
-                                    </UncontrolledDropdown>
+                                    </Dropdown>
                                 </NavItem>
                             </Nav>
                         </Navbar>

@@ -3,7 +3,11 @@ import { PureComponent } from 'react'
 import { Trans, withTranslation } from 'react-i18next'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Alert, Button, Col, Container, Row } from 'reactstrap'
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import { AlertCreatePricingFromClient } from 'shared/modals'
 import {
     checkAddressValidityAndResolveId,
@@ -16,7 +20,7 @@ import {
 import { GetAllPricingModelsWithRulesForCurrentUser } from 'shared/services/pricing-model'
 import { GetAllStorageAcceptanceLogicsForCurrentTenant } from 'shared/services/storage-acceptance-logic'
 
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Loader } from 'shared/components'
 
 import {
@@ -113,9 +117,8 @@ class CreateClientContainer extends PureComponent {
         // here we will also check if the create client came from history (with address and clientName)
         if (this.props.match.params.clientId === 'new') {
             if (
-                this.props.location.state !== undefined &&
-                this.props.location.state.createClientFromHistory !== null &&
-                this.props.location.state.createClientFromHistory !== undefined
+                this.props.location.state != null &&
+                this.props.location.state.createClientFromHistory != null
             ) {
                 // resolve addressId from history address
                 const addressToCheck = {
@@ -303,9 +306,9 @@ class CreateClientContainer extends PureComponent {
         var linkTo = null
 
         if (linkToComponent === 'pricingModel') {
-            linkTo = '../pricing-model/new'
+            linkTo = '../../pricing-model/new'
         } else if (linkToComponent === 'acceptanceLogic') {
-            linkTo = '../storage-acceptance-logic/new'
+            linkTo = '../../storage-acceptance-logic/new'
         }
 
         this.setState({
@@ -793,7 +796,7 @@ class CreateClientContainer extends PureComponent {
                             currentClient.integration.id !== 0 && (
                                 <Row>
                                     <Col xs={12} md={12}>
-                                        <Alert color="warning">
+                                        <Alert variant="warning">
                                             <Trans
                                                 t={t}
                                                 i18nKey="clientFromIntegrationWarn"
@@ -1247,10 +1250,11 @@ class CreateClientContainer extends PureComponent {
                                 <br />
                                 <br />
                                 <Button
-                                    tag={Link}
-                                    to="../client"
+                                    as={Link}
+                                    to=".."
+                                    relative="path"
                                     type="submit"
-                                    color="danger"
+                                    variant="danger"
                                     size="1x"
                                     className="me-4"
                                 >

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
@@ -19,7 +19,7 @@ const CustomButtonPremium = ({
     return (
         <>
             {btnTag && btnToLink ? (
-                <Button tag={btnTag} id={btnId} to={btnToLink} color={btnColor} size={btnSize} className={btnClassName} disabled={disabled || !isPremium}>
+                <Button as={btnTag} id={btnId} to={btnToLink} variant={btnColor} size={btnSize} className={btnClassName} disabled={disabled || !isPremium}>
                     {!isPremium && (
                         <FontAwesomeIcon icon={faLock} />
                     )}
@@ -30,7 +30,7 @@ const CustomButtonPremium = ({
                 </Button>
 
             ) : btnHandleAction ? (
-                <Button onClick={btnHandleAction} id={btnId} color={btnColor} size={btnSize} className={btnClassName} disabled={disabled || !isPremium}>
+                <Button onClick={btnHandleAction} id={btnId} variant={btnColor} size={btnSize} className={btnClassName} disabled={disabled || !isPremium}>
                     {!isPremium && (
                         <FontAwesomeIcon icon={faLock} />
                     )}
@@ -41,7 +41,7 @@ const CustomButtonPremium = ({
                 </Button>
 
             ) : (
-                <Button btnType="submit" id={btnId} color={btnColor} size={btnSize} className={btnClassName} disabled={disabled || !isPremium}>
+                <Button btnType="submit" id={btnId} variant={btnColor} size={btnSize} className={btnClassName} disabled={disabled || !isPremium}>
                     {!isPremium && !isSubmitting && (
                         <FontAwesomeIcon icon={faLock} />
                     )}

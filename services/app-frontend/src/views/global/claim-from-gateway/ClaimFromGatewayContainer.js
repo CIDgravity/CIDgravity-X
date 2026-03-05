@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from 'react'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Button, Col, Container, Row } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import { Loader } from 'shared/components'
 import { Trans, withTranslation } from 'react-i18next'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { LinkGatewayAddressToUser } from 'shared/services/claim-gateway'
 import { HasAccessToAddress } from 'shared/services/addresses_claim'
 
@@ -14,7 +17,7 @@ const ClaimFromGatewayContainer = ({ t }) => {
     const [claimedAddress, setClaimedAddress] = useState(null)
     const [errorMessage, setErrorMessage] = useState(null)
     const [confirmed, setConfirmed] = useState(false)
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const translateErrorMessage = useCallback((originalErrorMessage) => {
         switch (originalErrorMessage) {
@@ -50,7 +53,7 @@ const ClaimFromGatewayContainer = ({ t }) => {
         if (!claimedAddress) return
         HasAccessToAddress(claimedAddress)
             .then(() => {
-                history.push(`/client/${claimedAddress}`)
+                navigate(`/client/${claimedAddress}`)
             })
             .catch(() => {
                 setErrorMessage('error.somethingWrong')
@@ -115,7 +118,7 @@ const ClaimFromGatewayContainer = ({ t }) => {
                     </Row>
                     <Row>
                         <Col xs={12}>
-                            <Button onClick={handleConfirm} color="primary" className="custom-cidg-button">
+                            <Button onClick={handleConfirm} variant="primary" className="custom-cidg-button">
                                 {t('button.confirmConnect')}
                             </Button>
                         </Col>

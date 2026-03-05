@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Button, Col, Row, Badge } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Badge from 'react-bootstrap/Badge'
+import { Link } from 'react-router'
 import { withTranslation } from 'react-i18next'
 import { isBrowser, isMobile } from 'react-device-detect'
 
@@ -19,7 +22,7 @@ import { CustomPagination } from 'shared/components/CustomPagination'
 import { toast } from 'react-toastify'
 import { getCurrencyLabelTranslation, computeRulePrice } from 'shared/utils/supported-currencies'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 class PricingModelContainer extends PureComponent {
     constructor(props) {
@@ -65,12 +68,21 @@ class PricingModelContainer extends PureComponent {
 
         try {
             const response = await GetAllPricingModelsWithRulesForCurrentUserPaginated(currentPage, itemPerPage)
+            const pricingModels = response.data['response']
+            const totalModels = response.data['x-total-count']
 
-            this.setState({
-                pricingModels: response.data['response'],
-                totalModels: response.data['x-total-count'],
-                isLoading: false,
-            })
+            // If current page is empty and we're not on the first page, go back one page
+            if ((!pricingModels || pricingModels.length === 0) && currentPage > 0) {
+                this.setState({ currentPage: currentPage - 1 }, () =>
+                    this.loadExistingPricingModels()
+                )
+            } else {
+                this.setState({
+                    pricingModels,
+                    totalModels,
+                    isLoading: false,
+                })
+            }
         } catch (error) {
             this.setState({ error: true, isLoading: false })
         }
@@ -132,27 +144,20 @@ class PricingModelContainer extends PureComponent {
 
     handleDeletePricingModel = async () => {
         const { t } = this.props
-        const {
-            pricingModelToDelete,
-            pricingModels,
-            indexPricingModelToDelete,
-        } = this.state
+        const { pricingModelToDelete } = this.state
         this.handleConfirmDeletePricingModal()
 
         try {
             const response = await RemovePricingModel(pricingModelToDelete)
 
             if (response) {
-                var pricingModelsCopy = [...pricingModels]
-                pricingModelsCopy[indexPricingModelToDelete].archived = true
-
                 this.setState({
                     pricingModelToDelete: null,
                     indexPricingModelToDelete: null,
-                    pricingModels: pricingModelsCopy,
                 })
 
                 toast.success(t('notification.success.onDeletePricingModel'))
+                await this.loadExistingPricingModels()
             } else {
                 toast.error(t('notification.error.onDeletePricingModel'))
             }
@@ -209,11 +214,11 @@ class PricingModelContainer extends PureComponent {
                         <Col xs={12} md={6}>
                             <div className="text-end ms-2">
                                 <Button
-                                    tag={Link}
+                                    as={Link}
                                     id="createNewPricingModel"
-                                    to="./pricing-model/new"
+                                    to="new"
                                     type="submit"
-                                    color="primary"
+                                    variant="primary"
                                     size="1x"
                                     className="me-4 custom-cidg-button"
                                 >
@@ -264,11 +269,10 @@ class PricingModelContainer extends PureComponent {
                                 </Row>
 
                                 {pricingModels.map((pricingModel, index) => (
-                                    <>
+                                    <React.Fragment key={pricingModel.id}>
                                         {!pricingModel.archived && (
                                             <div
                                                 id={'modelCard' + index}
-                                                key={pricingModel.id}
                                                 className={`p-3 ${
                                                     pricingModel.default
                                                         ? 'card-form-default'
@@ -407,13 +411,13 @@ class PricingModelContainer extends PureComponent {
                                                                 >
                                                                     <i
                                                                         className="fas fa-eye"
-                                                                        data-for="view"
-                                                                        data-tip={t(
+                                                                        data-tooltip-id="view"
+                                                                        data-tooltip-content={t(
                                                                             'table.view.tooltip'
                                                                         )}
                                                                     />
 
-                                                                    <ReactTooltip
+                                                                    <Tooltip
                                                                         place="bottom"
                                                                         id="view"
                                                                     />
@@ -426,7 +430,7 @@ class PricingModelContainer extends PureComponent {
                                                                         }}
                                                                         className="card-rounded-btn ms-4 icons-white btn-pointer"
                                                                         id={`edit-${pricingModel.id}`}
-                                                                        to={`./pricing-model/${pricingModel.id}`}
+                                                                        to={`${pricingModel.id}`}
                                                                     >
                                                                         <i
                                                                             id={
@@ -434,13 +438,13 @@ class PricingModelContainer extends PureComponent {
                                                                                 index
                                                                             }
                                                                             className="fas fa-edit"
-                                                                            data-for="edit"
-                                                                            data-tip={t(
+                                                                            data-tooltip-id="edit"
+                                                                            data-tooltip-content={t(
                                                                                 'table.edit.tooltip'
                                                                             )}
                                                                         />
 
-                                                                        <ReactTooltip
+                                                                        <Tooltip
                                                                             place="bottom"
                                                                             id="edit"
                                                                         />
@@ -452,17 +456,17 @@ class PricingModelContainer extends PureComponent {
                                                                         }}
                                                                         className="card-rounded-btn ms-4 icons btn-pointer"
                                                                         id={`edit-${pricingModel.id}`}
-                                                                        to={`./pricing-model/${pricingModel.id}`}
+                                                                        to={`${pricingModel.id}`}
                                                                     >
                                                                         <i
                                                                             className="fas fa-edit"
-                                                                            data-for="edit"
-                                                                            data-tip={t(
+                                                                            data-tooltip-id="edit"
+                                                                            data-tooltip-content={t(
                                                                                 'table.edit.tooltip'
                                                                             )}
                                                                         />
 
-                                                                        <ReactTooltip
+                                                                        <Tooltip
                                                                             place="bottom"
                                                                             id="edit"
                                                                         />
@@ -482,13 +486,13 @@ class PricingModelContainer extends PureComponent {
                                                                         >
                                                                             <i
                                                                                 className="fas fa-trash-alt"
-                                                                                data-for="delete"
-                                                                                data-tip={t(
+                                                                                data-tooltip-id="delete"
+                                                                                data-tooltip-content={t(
                                                                                     'table.delete.tooltip'
                                                                                 )}
                                                                             />
 
-                                                                            <ReactTooltip
+                                                                            <Tooltip
                                                                                 place="bottom"
                                                                                 id="delete"
                                                                             />
@@ -505,13 +509,13 @@ class PricingModelContainer extends PureComponent {
                                                                         >
                                                                             <i
                                                                                 className="fas fa-shield-alt"
-                                                                                data-for="default"
-                                                                                data-tip={t(
+                                                                                data-tooltip-id="default"
+                                                                                data-tooltip-content={t(
                                                                                     'table.setToDefault.tooltip'
                                                                                 )}
                                                                             />
 
-                                                                            <ReactTooltip
+                                                                            <Tooltip
                                                                                 place="bottom"
                                                                                 id="default"
                                                                             />
@@ -521,7 +525,7 @@ class PricingModelContainer extends PureComponent {
 
                                                                 {pricingModel.default && (
                                                                     <Badge
-                                                                        color="success"
+                                                                        variant="success"
                                                                         className="ms-4"
                                                                     >
                                                                         {t(
@@ -535,7 +539,7 @@ class PricingModelContainer extends PureComponent {
                                                 </Row>
                                             </div>
                                         )}
-                                    </>
+                                    </React.Fragment>
                                 ))}
 
                                 <CustomPagination
@@ -561,11 +565,11 @@ class PricingModelContainer extends PureComponent {
                                 <br />
                                 <br />
                                 <Button
-                                    tag={Link}
+                                    as={Link}
                                     id="createFirstDefaultModel"
-                                    to="./pricing-model/new"
+                                    to="new"
                                     type="submit"
-                                    color="primary"
+                                    variant="primary"
                                     size="1x"
                                     className="me-4 custom-cidg-button"
                                 >

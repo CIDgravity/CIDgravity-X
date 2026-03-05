@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router'
 
 // Provider components (located in views/provider)
 import { DashboardContainer } from 'views/provider/dashboard'
@@ -58,8 +58,6 @@ import { InitAxiosInterceptorsAndRefreshLogic } from './config/axiosInterceptors
 import { InitMomentConfiguration } from './config/moment'
 import { AUTH0_ERROR_RETRY } from './config/constants'
 
-import * as buffer from 'buffer'
-window.Buffer = buffer.Buffer
 
 const App = () => {
     InitMomentConfiguration()
@@ -99,195 +97,52 @@ const App = () => {
 
                     <div className="container-wrapper">
                         <Suspense fallback={null}>
-                            <Switch>
+                            <Routes>
                                 {/* Token protected route for homepage (no tenant selected) */}
-                                <ProtectedRoute
-                                    exact
-                                    path="/"
-                                    component={Homepage}
-                                />
-                                <ProtectedRoute
-                                    path="/onboarding"
-                                    component={OnboardingContainer}
-                                />
-                                <ProtectedRoute
-                                    path="/wizard"
-                                    component={WizardContainer}
-                                />
+                                <Route path="/" element={<ProtectedRoute component={Homepage} />} />
+                                <Route path="/onboarding" element={<ProtectedRoute component={OnboardingContainer} />} />
+                                <Route path="/wizard" element={<ProtectedRoute component={WizardContainer} />} />
 
-                                <Route
-                                    exact
-                                    path="/not-found"
-                                    component={ErrorBoundaryRoute}
-                                />
-                                <Route
-                                    exact
-                                    path="/not-authorized"
-                                    component={NotAuthorized}
-                                />
+                                <Route path="/not-found" element={<ErrorBoundaryRoute />} />
+                                <Route path="/not-authorized" element={<NotAuthorized />} />
 
                                 {/* Following route are protected with Auth0 token but not under miner context */}
-                                <ProtectedRoute
-                                    exact
-                                    path="/claim/:signedMessage"
-                                    component={ClaimFromGatewayContainer}
-                                />
-                                <ProtectedRoute
-                                    exact
-                                    path="/profile"
-                                    component={UserProfileContainer}
-                                />
-                                <ProtectedRoute
-                                    exact
-                                    path="/my-addresses"
-                                    component={MyAddressesContainer}
-                                />
-                                <ProtectedRoute
-                                    exact
-                                    path="/help"
-                                    component={HelpCenterContainer}
-                                />
+                                <Route path="/claim/:signedMessage" element={<ProtectedRoute component={ClaimFromGatewayContainer} />} />
+                                <Route path="/profile" element={<ProtectedRoute component={UserProfileContainer} />} />
+                                <Route path="/my-addresses" element={<ProtectedRoute component={MyAddressesContainer} />} />
+                                <Route path="/help" element={<ProtectedRoute component={HelpCenterContainer} />} />
 
                                 {/* Following route are protected by Auth0 and access to client (actorType = account) */}
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address"
-                                    component={ClientDashboardContainer}
-                                />
-
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address/information"
-                                    component={ClientInformationContainer}
-                                />
-
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address/settings"
-                                    component={ClientSettingsContainer}
-                                />
-
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address/onboarding-policy"
-                                    component={OnboardingPolicyContainer}
-                                />
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address/onboarding-policy/:policyGroupId"
-                                    component={CreateOnboardingPolicyGroupContainer}
-                                />
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address/blacklist"
-                                    component={ClientBlacklistContainer}
-                                />
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address/storage-history"
-                                    component={ClientStorageDealsHistoryContainer}
-                                />
-                                <ClientProtectedRoute
-                                    exact
-                                    path="/client/:address/provider-details/:providerAddress"
-                                    component={ProviderDetailsContainer}
-                                />
+                                <Route path="/client/:address" element={<ClientProtectedRoute component={ClientDashboardContainer} />} />
+                                <Route path="/client/:address/information" element={<ClientProtectedRoute component={ClientInformationContainer} />} />
+                                <Route path="/client/:address/settings" element={<ClientProtectedRoute component={ClientSettingsContainer} />} />
+                                <Route path="/client/:address/onboarding-policy" element={<ClientProtectedRoute component={OnboardingPolicyContainer} />} />
+                                <Route path="/client/:address/onboarding-policy/:policyGroupId" element={<ClientProtectedRoute component={CreateOnboardingPolicyGroupContainer} />} />
+                                <Route path="/client/:address/blacklist" element={<ClientProtectedRoute component={ClientBlacklistContainer} />} />
+                                <Route path="/client/:address/storage-history" element={<ClientProtectedRoute component={ClientStorageDealsHistoryContainer} />} />
+                                <Route path="/client/:address/provider-details/:providerAddress" element={<ClientProtectedRoute component={ProviderDetailsContainer} />} />
 
                                 {/* Following route are protected by Auth0 and access to provider (actorType = storageminer) */}
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/storage-acceptance-logic"
-                                    component={StorageAcceptanceLogicContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/storage-acceptance-logic/:acceptanceLogicId"
-                                    component={
-                                        CreateStorageAcceptanceLogicContainer
-                                    }
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/diagnosis/:errorCode?"
-                                    component={DiagnosisContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address"
-                                    component={DashboardContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/information"
-                                    component={ProviderInformationContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/settings/:tab?"
-                                    component={SettingsContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/pricing-model"
-                                    component={PricingModelContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/pricing-model/:pricingModelId"
-                                    component={CreatePricingModelContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/storage-history"
-                                    component={StorageHistoryContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/retrieval-acl"
-                                    component={RetrievalAclContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/storage-dashboard"
-                                    component={StorageDashboardContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/retrieval-dashboard"
-                                    component={RetrievalDashboardContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/retrieval-history"
-                                    component={RetrievalHistoryContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/playground"
-                                    component={PlaygroundContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/playground/:dealProposalId"
-                                    component={PlaygroundContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/blacklist"
-                                    component={BlacklistContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/client"
-                                    component={ClientContainer}
-                                />
-                                <ProviderProtectedRoute
-                                    exact
-                                    path="/provider/:address/client/:clientId"
-                                    component={CreateClientContainer}
-                                />
-                                <Route exact component={ErrorBoundaryRoute} />
-                            </Switch>
+                                <Route path="/provider/:address/storage-acceptance-logic" element={<ProviderProtectedRoute component={StorageAcceptanceLogicContainer} />} />
+                                <Route path="/provider/:address/storage-acceptance-logic/:acceptanceLogicId" element={<ProviderProtectedRoute component={CreateStorageAcceptanceLogicContainer} />} />
+                                <Route path="/provider/:address/diagnosis/:errorCode?" element={<ProviderProtectedRoute component={DiagnosisContainer} />} />
+                                <Route path="/provider/:address" element={<ProviderProtectedRoute component={DashboardContainer} />} />
+                                <Route path="/provider/:address/information" element={<ProviderProtectedRoute component={ProviderInformationContainer} />} />
+                                <Route path="/provider/:address/settings/:tab?" element={<ProviderProtectedRoute component={SettingsContainer} />} />
+                                <Route path="/provider/:address/pricing-model" element={<ProviderProtectedRoute component={PricingModelContainer} />} />
+                                <Route path="/provider/:address/pricing-model/:pricingModelId" element={<ProviderProtectedRoute component={CreatePricingModelContainer} />} />
+                                <Route path="/provider/:address/storage-history" element={<ProviderProtectedRoute component={StorageHistoryContainer} />} />
+                                <Route path="/provider/:address/retrieval-acl" element={<ProviderProtectedRoute component={RetrievalAclContainer} />} />
+                                <Route path="/provider/:address/storage-dashboard" element={<ProviderProtectedRoute component={StorageDashboardContainer} />} />
+                                <Route path="/provider/:address/retrieval-dashboard" element={<ProviderProtectedRoute component={RetrievalDashboardContainer} />} />
+                                <Route path="/provider/:address/retrieval-history" element={<ProviderProtectedRoute component={RetrievalHistoryContainer} />} />
+                                <Route path="/provider/:address/playground" element={<ProviderProtectedRoute component={PlaygroundContainer} />} />
+                                <Route path="/provider/:address/playground/:dealProposalId" element={<ProviderProtectedRoute component={PlaygroundContainer} />} />
+                                <Route path="/provider/:address/blacklist" element={<ProviderProtectedRoute component={BlacklistContainer} />} />
+                                <Route path="/provider/:address/client" element={<ProviderProtectedRoute component={ClientContainer} />} />
+                                <Route path="/provider/:address/client/:clientId" element={<ProviderProtectedRoute component={CreateClientContainer} />} />
+                                <Route path="*" element={<ErrorBoundaryRoute />} />
+                            </Routes>
                         </Suspense>
                     </div>
                 </div>

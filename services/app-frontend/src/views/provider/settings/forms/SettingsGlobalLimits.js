@@ -1,45 +1,48 @@
 import React, { PureComponent } from 'react'
 
-import { Row, Col, FormGroup, Label, Button } from 'reactstrap'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Button from 'react-bootstrap/Button'
 
 import { Field, Form, withFormik } from 'formik'
 import { toReadableSize } from 'shared/utils/file_size'
-import 'react-tabs/style/react-tabs.css'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import { withTranslation } from 'react-i18next'
 import * as yup from 'yup'
-import { toast } from 'react-toastify'
-import { withRouter } from 'react-router'
+
+import { withRouter } from 'shared/utils/withRouter'
 
 class SettingsGlobalLimits extends PureComponent {
     render() {
         const { errors, touched, isSubmitting, t } = this.props
 
         return (
-            <Form enableReinitialize>
+            <Form>
                 <Row>
                     <h5 className="mb-4">{t('client.rateLimit.title')}</h5>
 
                     <Col xs="4" md="4">
                         <FormGroup>
-                            <Label
-                                for="storage-global-hourly-deal-limit"
+                            <FormLabel
+                                htmlFor="storage-global-hourly-deal-limit"
                                 className="form-label"
                             >
                                 {t('client.rateLimit.storageDealPerHour.label')}
-                            </Label>{' '}
+                            </FormLabel>{' '}
                             *
                             <i
                                 style={{
                                     marginTop: '4px',
                                 }}
-                                data-for="storageGlobalDealsLimitPerHour"
-                                data-tip={t(
+                                data-tooltip-id="storageGlobalDealsLimitPerHour"
+                                data-tooltip-content={t(
                                     'client.rateLimit.storageDealPerHour.info'
                                 )}
                                 className="ms-4 fas fa-info-circle fa-sm"
                             />
-                            <ReactTooltip
+                            <Tooltip
                                 place="bottom"
                                 id="storageGlobalDealsLimitPerHour"
                             />
@@ -61,24 +64,24 @@ class SettingsGlobalLimits extends PureComponent {
 
                     <Col xs="4" md="4">
                         <FormGroup>
-                            <Label
-                                for="storage-global-hourly-deal-size-limit"
+                            <FormLabel
+                                htmlFor="storage-global-hourly-deal-size-limit"
                                 className="form-label"
                             >
                                 {t('client.rateLimit.cumulativeDealSize.label')}
-                            </Label>{' '}
+                            </FormLabel>{' '}
                             *
                             <i
                                 style={{
                                     marginTop: '4px',
                                 }}
-                                data-for="storageGlobalDealsLimitSizePerHour"
-                                data-tip={t(
+                                data-tooltip-id="storageGlobalDealsLimitSizePerHour"
+                                data-tooltip-content={t(
                                     'client.rateLimit.cumulativeDealSize.info'
                                 )}
                                 className="ms-4 fas fa-info-circle fa-sm"
                             />
-                            <ReactTooltip
+                            <Tooltip
                                 place="bottom"
                                 id="storageGlobalDealsLimitSizePerHour"
                             />
@@ -100,26 +103,26 @@ class SettingsGlobalLimits extends PureComponent {
 
                     <Col xs="4" md="4">
                         <FormGroup>
-                            <Label
-                                for="retrieval-global-hourly-deal-limit"
+                            <FormLabel
+                                htmlFor="retrieval-global-hourly-deal-limit"
                                 className="form-label"
                             >
                                 {t(
                                     'client.rateLimit.retrievalDealPerHour.label'
                                 )}
-                            </Label>{' '}
+                            </FormLabel>{' '}
                             *
                             <i
                                 style={{
                                     marginTop: '4px',
                                 }}
-                                data-for="retrievalGlobalDealsLimitPerHour"
-                                data-tip={t(
+                                data-tooltip-id="retrievalGlobalDealsLimitPerHour"
+                                data-tooltip-content={t(
                                     'client.rateLimit.retrievalDealPerHour.info'
                                 )}
                                 className="ms-4 fas fa-info-circle fa-sm"
                             />
-                            <ReactTooltip
+                            <Tooltip
                                 place="bottom"
                                 id="retrievalGlobalDealsLimitPerHour"
                             />
@@ -166,6 +169,7 @@ class SettingsGlobalLimits extends PureComponent {
 
 const formikConfig = {
     displayName: 'SettingsGlobalLimits',
+    enableReinitialize: true,
 
     mapPropsToValues: ({ currentAddress }) => ({
         retrievalGlobalHourlyDealLimit:
@@ -201,20 +205,12 @@ const formikConfig = {
     handleSubmit: (values, { props, setSubmitting }) => {
         props
             .onSubmit(values)
-            .then((returnValue) => {
-                const { status, message } = returnValue
-
-                if (status) {
-                    setSubmitting(false)
-                } else {
-                    setSubmitting(false)
-                    toast.error(message)
-                }
+            .then(() => {
+                setSubmitting(false)
             })
             .catch((e) => {
-                console.log(e)
+                console.error(e)
                 setSubmitting(false)
-                toast.error(e)
             })
     },
 }

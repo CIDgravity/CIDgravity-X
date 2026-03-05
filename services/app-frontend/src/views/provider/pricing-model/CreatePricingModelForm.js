@@ -1,21 +1,26 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import * as yup from 'yup'
 
 import { FormControlLabel } from '@mui/material'
 import { Field, Form, withFormik } from 'formik'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import { Trans, withTranslation } from 'react-i18next'
-import { withRouter } from 'react-router'
+import { withRouter } from 'shared/utils/withRouter'
 import { toast } from 'react-toastify'
-import { Button, Col, Container, FormGroup, Label, Row } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 import { PriceConversionAlert, getCurrencyOptions, getCurrencyLabelTranslation } from 'shared/utils/supported-currencies'
 
 import Select from 'react-select'
 import Switch from 'react-switch'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 class CreatePricingModelForm extends PureComponent {
     render() {
@@ -57,12 +62,12 @@ class CreatePricingModelForm extends PureComponent {
                         <Row className="my-4">
                             <Col xs="8" md="8">
                                 <FormGroup>
-                                    <Label
-                                        for="pricing-model-name"
+                                    <FormLabel
+                                        htmlFor="pricing-model-name"
                                         className="form-label"
                                     >
                                         {t('general.name.label')}
-                                    </Label>
+                                    </FormLabel>
 
                                     <Field
                                         id="pricing-model-name"
@@ -81,12 +86,12 @@ class CreatePricingModelForm extends PureComponent {
 
                             <Col xs="4" md="4">
                                 <FormGroup>
-                                    <Label
-                                        for="pricing-model-currency"
+                                    <FormLabel
+                                        htmlFor="pricing-model-currency"
                                         className="form-label"
                                     >
                                         {t('general.currency.label')}
-                                    </Label>
+                                    </FormLabel>
 
                                     <Select
                                         placeholder={t('general.currency.placeholder')}
@@ -130,23 +135,23 @@ class CreatePricingModelForm extends PureComponent {
                                             {isNewDefault ||
                                             pricingModel.default ? (
                                                 <i
-                                                    data-for="fallDefault"
-                                                    data-tip={t(
+                                                    data-tooltip-id="fallDefault"
+                                                    data-tooltip-content={t(
                                                         'general.fallback.info.isDefault'
                                                     )}
-                                                    class="ms-4 fas fa-info-circle"
+                                                    className="ms-4 fas fa-info-circle"
                                                 />
                                             ) : (
                                                 <i
-                                                    data-for="fallDefault"
-                                                    data-tip={t(
+                                                    data-tooltip-id="fallDefault"
+                                                    data-tooltip-content={t(
                                                         'general.fallback.info.isNotDefault'
                                                     )}
-                                                    class="ms-4 fas fa-info-circle"
+                                                    className="ms-4 fas fa-info-circle"
                                                 />
                                             )}
 
-                                            <ReactTooltip
+                                            <Tooltip
                                                 place="bottom"
                                                 id="fallDefault"
                                             />
@@ -175,7 +180,7 @@ class CreatePricingModelForm extends PureComponent {
                                     <ul id="test" className="rules mt-4" {...provided.droppableProps} ref={provided.innerRef}>
                                         {ruleList.map((rule, i) => {
                                             return (
-                                                <>
+                                                <React.Fragment key={rule.uniqueId}>
                                                     {!rule.archived && (
                                                         <Draggable key={rule.uniqueId} draggableId={rule.uniqueId} index={i}>
                                                             {(provided) => (
@@ -215,22 +220,22 @@ class CreatePricingModelForm extends PureComponent {
 
                                                                         <Row className="mb-4 mt-4">
                                                                             <Col style={{width: 20 + "%"}} className="mt-4">
-                                                                                <Label
-                                                                                    for="transfer-type"
+                                                                                <FormLabel
+                                                                                    htmlFor="transfer-type"
                                                                                     className="form-label"
                                                                                 >
                                                                                     {t(
                                                                                         'rule.type.label'
                                                                                     )}
-                                                                                </Label>
+                                                                                </FormLabel>
                                                                                 <i
-                                                                                    data-for="type"
-                                                                                    data-tip={t(
+                                                                                    data-tooltip-id="type"
+                                                                                    data-tooltip-content={t(
                                                                                         'rule.type.info'
                                                                                     )}
-                                                                                    class="ms-4 fas fa-info-circle"
+                                                                                    className="ms-4 fas fa-info-circle"
                                                                                 />
-                                                                                <ReactTooltip
+                                                                                <Tooltip
                                                                                     place="bottom"
                                                                                     id="type"
                                                                                 />
@@ -280,14 +285,14 @@ class CreatePricingModelForm extends PureComponent {
                                                                             </Col>
 
                                                                             <Col style={{width: 10 + "%"}} className="mt-4">
-                                                                                <Label
-                                                                                    for="deal-type"
+                                                                                <FormLabel
+                                                                                    htmlFor="deal-type"
                                                                                     className="form-label"
                                                                                 >
                                                                                     {t(
                                                                                         'rule.isVerified.label'
                                                                                     )}
-                                                                                </Label>
+                                                                                </FormLabel>
 
                                                                                 <select
                                                                                     className="form-select"
@@ -328,27 +333,27 @@ class CreatePricingModelForm extends PureComponent {
                                                                                 md="3"
                                                                                 style={{width: 20 + "%"}}
                                                                             >
-                                                                                <Label
-                                                                                    for="deal-type"
+                                                                                <FormLabel
+                                                                                    htmlFor="deal-type"
                                                                                     className="form-label"
                                                                                 >
                                                                                     {t(
                                                                                         'rule.size.label'
                                                                                     )}
-                                                                                </Label>
+                                                                                </FormLabel>
 
                                                                                 <i
-                                                                                    data-for="size"
-                                                                                    data-tip={t(
+                                                                                    data-tooltip-id="size"
+                                                                                    data-tooltip-content={t(
                                                                                         'rule.size.info',
                                                                                         {
                                                                                             newLine:
                                                                                                 '<br />',
                                                                                         }
                                                                                     )}
-                                                                                    class="ms-4 fas fa-info-circle"
+                                                                                    className="ms-4 fas fa-info-circle"
                                                                                 />
-                                                                                <ReactTooltip
+                                                                                <Tooltip
                                                                                     place="bottom"
                                                                                     id="size"
                                                                                     html={
@@ -356,7 +361,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                     }
                                                                                 />
 
-                                                                                <div class="input-group mb-3">
+                                                                                <div className="input-group mb-3">
                                                                                     <input
                                                                                         type="number"
                                                                                         className="form-control"
@@ -377,7 +382,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                         }
                                                                                     />
 
-                                                                                    <div class="input-group-prepend">
+                                                                                    <div className="input-group-prepend">
                                                                                         <select
                                                                                             onChange={(
                                                                                                 e
@@ -418,7 +423,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                     </div>
                                                                                 </div>
 
-                                                                                <div class="input-group mb-3">
+                                                                                <div className="input-group mb-3">
                                                                                     <input
                                                                                         type="number"
                                                                                         className="form-control"
@@ -439,7 +444,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                         }
                                                                                     />
 
-                                                                                    <div class="input-group-prepend">
+                                                                                    <div className="input-group-prepend">
                                                                                         <select
                                                                                             onChange={(
                                                                                                 e
@@ -487,27 +492,27 @@ class CreatePricingModelForm extends PureComponent {
                                                                                 className="ms-3"
                                                                                 style={{width: 20 + "%"}}
                                                                             >
-                                                                                <Label
-                                                                                    for="deal-type"
+                                                                                <FormLabel
+                                                                                    htmlFor="deal-type"
                                                                                     className="form-label"
                                                                                 >
                                                                                     {t(
                                                                                         'rule.duration.label'
                                                                                     )}
-                                                                                </Label>
+                                                                                </FormLabel>
 
                                                                                 <i
-                                                                                    data-for="duration"
-                                                                                    data-tip={t(
+                                                                                    data-tooltip-id="duration"
+                                                                                    data-tooltip-content={t(
                                                                                         'rule.duration.info',
                                                                                         {
                                                                                             newLine:
                                                                                                 '<br />',
                                                                                         }
                                                                                     )}
-                                                                                    class="ms-4 fas fa-info-circle"
+                                                                                    className="ms-4 fas fa-info-circle"
                                                                                 />
-                                                                                <ReactTooltip
+                                                                                <Tooltip
                                                                                     place="bottom"
                                                                                     id="duration"
                                                                                     html={
@@ -515,7 +520,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                     } // enable parsing '<br />' into new line in tooltip
                                                                                 />
 
-                                                                                <div class="input-group mb-3">
+                                                                                <div className="input-group mb-3">
                                                                                     <input
                                                                                         type="number"
                                                                                         className="form-control"
@@ -537,7 +542,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                         }
                                                                                     />
 
-                                                                                    <div class="input-group-prepend">
+                                                                                    <div className="input-group-prepend">
                                                                                         <select
                                                                                             onChange={(
                                                                                                 e
@@ -549,29 +554,17 @@ class CreatePricingModelForm extends PureComponent {
                                                                                                 )
                                                                                             }
                                                                                             className="form-select"
+                                                                                            value={
+                                                                                                rule.minDurationUnit ||
+                                                                                                'Days'
+                                                                                            }
                                                                                         >
-                                                                                            <option
-                                                                                                selected={
-                                                                                                    rule.minDurationUnit ===
-                                                                                                    'Days'
-                                                                                                        ? 'selected'
-                                                                                                        : ''
-                                                                                                }
-                                                                                                value="Days"
-                                                                                            >
+                                                                                            <option value="Days">
                                                                                                 {t(
                                                                                                     'rule.duration.min.unit.day'
                                                                                                 )}
                                                                                             </option>
-                                                                                            <option
-                                                                                                selected={
-                                                                                                    rule.minDurationUnit ===
-                                                                                                    'Epochs'
-                                                                                                        ? 'selected'
-                                                                                                        : ''
-                                                                                                }
-                                                                                                value="Epochs"
-                                                                                            >
+                                                                                            <option value="Epochs">
                                                                                                 {t(
                                                                                                     'rule.duration.min.unit.epoch'
                                                                                                 )}
@@ -580,7 +573,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                     </div>
                                                                                 </div>
 
-                                                                                <div class="input-group mb-3">
+                                                                                <div className="input-group mb-3">
                                                                                     <input
                                                                                         type="number"
                                                                                         min="0"
@@ -602,7 +595,7 @@ class CreatePricingModelForm extends PureComponent {
                                                                                         }
                                                                                     />
 
-                                                                                    <div class="input-group-prepend">
+                                                                                    <div className="input-group-prepend">
                                                                                         <select
                                                                                             onChange={(
                                                                                                 e
@@ -614,29 +607,17 @@ class CreatePricingModelForm extends PureComponent {
                                                                                                 )
                                                                                             }
                                                                                             className="form-select"
+                                                                                            value={
+                                                                                                rule.maxDurationUnit ||
+                                                                                                'Days'
+                                                                                            }
                                                                                         >
-                                                                                            <option
-                                                                                                selected={
-                                                                                                    rule.maxDurationUnit ===
-                                                                                                    'Days'
-                                                                                                        ? 'selected'
-                                                                                                        : ''
-                                                                                                }
-                                                                                                value="Days"
-                                                                                            >
+                                                                                            <option value="Days">
                                                                                                 {t(
                                                                                                     'rule.duration.max.unit.day'
                                                                                                 )}
                                                                                             </option>
-                                                                                            <option
-                                                                                                selected={
-                                                                                                    rule.maxDurationUnit ===
-                                                                                                    'Epochs'
-                                                                                                        ? 'selected'
-                                                                                                        : ''
-                                                                                                }
-                                                                                                value="Epochs"
-                                                                                            >
+                                                                                            <option value="Epochs">
                                                                                                 {t(
                                                                                                     'rule.duration.max.unit.epoch'
                                                                                                 )}
@@ -647,17 +628,17 @@ class CreatePricingModelForm extends PureComponent {
                                                                             </Col>
 
                                                                             <Col xs="2" md="2" style={{width: 25 + "%"}}>
-                                                                                <Label for="deal-type" className="form-label">
+                                                                                <FormLabel htmlFor="deal-type" className="form-label">
                                                                                     {t('rule.price.label')}
-                                                                                </Label>
+                                                                                </FormLabel>
 
                                                                                 <i
-                                                                                    data-for="price"
-                                                                                    data-tip={t('rule.price.info')}
-                                                                                    class="ms-4 fas fa-info-circle"
+                                                                                    data-tooltip-id="price"
+                                                                                    data-tooltip-content={t('rule.price.info')}
+                                                                                    className="ms-4 fas fa-info-circle"
                                                                                 />
 
-                                                                                <ReactTooltip place="bottom" id="price" />
+                                                                                <Tooltip place="bottom" id="price" />
 
                                                                                 <input
                                                                                     type="text"
@@ -686,7 +667,7 @@ class CreatePricingModelForm extends PureComponent {
                                                             )}
                                                         </Draggable>
                                                     )}
-                                                </>
+                                                </React.Fragment>
                                             )
                                         })}
                                         {provided.placeholder}

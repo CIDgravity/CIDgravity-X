@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Button, Col, Row, Badge } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Badge from 'react-bootstrap/Badge'
+import { Link } from 'react-router'
 import { withTranslation } from 'react-i18next'
 import { isBrowser, isMobile } from 'react-device-detect'
 
@@ -19,7 +22,7 @@ import {
 import { CustomPagination } from 'shared/components/CustomPagination'
 import { toast } from 'react-toastify'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 class StorageAcceptanceLogicContainer extends PureComponent {
     constructor(props) {
@@ -53,11 +56,16 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                     itemPerPage
                 )
 
-            this.setState({
-                acceptanceLogics: response.data['response'],
-                totalAcceptanceLogics: response.data['x-total-count'],
-                isLoading: false,
-            })
+            const acceptanceLogics = response.data['response']
+            const totalAcceptanceLogics = response.data['x-total-count']
+
+            if ((!acceptanceLogics || acceptanceLogics.length === 0) && currentPage > 0) {
+                this.setState({ currentPage: currentPage - 1 }, () =>
+                    this.loadExistingAcceptanceLogics()
+                )
+            } else {
+                this.setState({ acceptanceLogics, totalAcceptanceLogics, isLoading: false })
+            }
         } catch (error) {
             this.setState({ error: true, isLoading: false })
         }
@@ -116,29 +124,21 @@ class StorageAcceptanceLogicContainer extends PureComponent {
 
     handleDeleteAcceptanceLogic = async () => {
         const { t } = this.props
-        const {
-            clickedAcceptanceLogic,
-            acceptanceLogics,
-            indexAcceptanceLogicToDelete,
-        } = this.state
+        const { clickedAcceptanceLogic } = this.state
 
         try {
             const response = await RemoveAcceptanceLogic(clickedAcceptanceLogic)
 
             if (response) {
-                var acceptanceLogicsCopy = [...acceptanceLogics]
-                acceptanceLogicsCopy[
-                    indexAcceptanceLogicToDelete
-                ].isArchived = true
-
                 this.setState({
                     confirmDeleteAcceptanceLogicModalOpened: false,
                     acceptanceLogicToDelete: null,
                     indexAcceptanceLogicToDelete: null,
-                    acceptanceLogics: acceptanceLogicsCopy,
                 })
 
                 toast.success(t('notification.success.onDeleteAcceptanceLogic'))
+
+                await this.loadExistingAcceptanceLogics()
             } else {
                 toast.error(t('notification.error.onDeleteAcceptanceLogic'))
             }
@@ -191,11 +191,11 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                         <Col xs={12} md={4}>
                             <div className="text-end ms-2">
                                 <Button
-                                    tag={Link}
+                                    as={Link}
                                     id="createNewAcceptanceLogic"
-                                    to="./storage-acceptance-logic/new"
+                                    to="new"
                                     type="submit"
-                                    color="primary"
+                                    variant="primary"
                                     size="1x"
                                     className="me-4 custom-cidg-button"
                                 >
@@ -233,11 +233,10 @@ class StorageAcceptanceLogicContainer extends PureComponent {
 
                                 {acceptanceLogics.map(
                                     (acceptanceLogic, index) => (
-                                        <>
+                                        <React.Fragment key={acceptanceLogic.id}>
                                             {!acceptanceLogic.isArchived && (
                                                 <div
                                                     id={'modelCard' + index}
-                                                    key={acceptanceLogic.id}
                                                     className={`p-3 ${
                                                         acceptanceLogic.isDefault
                                                             ? 'card-form-default'
@@ -339,13 +338,13 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                                                     >
                                                                         <i
                                                                             className="fas fa-eye"
-                                                                            data-for="view"
-                                                                            data-tip={t(
+                                                                            data-tooltip-id="view"
+                                                                            data-tooltip-content={t(
                                                                                 'table.view.tooltip'
                                                                             )}
                                                                         />
 
-                                                                        <ReactTooltip
+                                                                        <Tooltip
                                                                             place="bottom"
                                                                             id="view"
                                                                         />
@@ -358,7 +357,7 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                                                             }}
                                                                             className="card-rounded-btn ms-4 icons-white btn-pointer"
                                                                             id={`edit-${acceptanceLogic.id}`}
-                                                                            to={`./storage-acceptance-logic/${acceptanceLogic.id}`}
+                                                                            to={`${acceptanceLogic.id}`}
                                                                         >
                                                                             <i
                                                                                 id={
@@ -366,13 +365,13 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                                                                     index
                                                                                 }
                                                                                 className="fas fa-edit"
-                                                                                data-for="edit"
-                                                                                data-tip={t(
+                                                                                data-tooltip-id="edit"
+                                                                                data-tooltip-content={t(
                                                                                     'table.edit.tooltip'
                                                                                 )}
                                                                             />
 
-                                                                            <ReactTooltip
+                                                                            <Tooltip
                                                                                 place="bottom"
                                                                                 id="edit"
                                                                             />
@@ -384,17 +383,17 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                                                             }}
                                                                             className="card-rounded-btn ms-4 icons btn-pointer"
                                                                             id={`edit-${acceptanceLogic.id}`}
-                                                                            to={`./storage-acceptance-logic/${acceptanceLogic.id}`}
+                                                                            to={`${acceptanceLogic.id}`}
                                                                         >
                                                                             <i
                                                                                 className="fas fa-edit"
-                                                                                data-for="edit"
-                                                                                data-tip={t(
+                                                                                data-tooltip-id="edit"
+                                                                                data-tooltip-content={t(
                                                                                     'table.edit.tooltip'
                                                                                 )}
                                                                             />
 
-                                                                            <ReactTooltip
+                                                                            <Tooltip
                                                                                 place="bottom"
                                                                                 id="edit"
                                                                             />
@@ -414,13 +413,13 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                                                             >
                                                                                 <i
                                                                                     className="fas fa-trash-alt"
-                                                                                    data-for="delete"
-                                                                                    data-tip={t(
+                                                                                    data-tooltip-id="delete"
+                                                                                    data-tooltip-content={t(
                                                                                         'table.delete.tooltip'
                                                                                     )}
                                                                                 />
 
-                                                                                <ReactTooltip
+                                                                                <Tooltip
                                                                                     place="bottom"
                                                                                     id="delete"
                                                                                 />
@@ -437,13 +436,13 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                                                             >
                                                                                 <i
                                                                                     className="fas fa-shield-alt"
-                                                                                    data-for="default"
-                                                                                    data-tip={t(
+                                                                                    data-tooltip-id="default"
+                                                                                    data-tooltip-content={t(
                                                                                         'table.setToDefault.tooltip'
                                                                                     )}
                                                                                 />
 
-                                                                                <ReactTooltip
+                                                                                <Tooltip
                                                                                     place="bottom"
                                                                                     id="default"
                                                                                 />
@@ -453,7 +452,7 @@ class StorageAcceptanceLogicContainer extends PureComponent {
 
                                                                     {acceptanceLogic.isDefault && (
                                                                         <Badge
-                                                                            color="success"
+                                                                            variant="success"
                                                                             className="ms-4"
                                                                         >
                                                                             {t(
@@ -467,7 +466,7 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                                     </Row>
                                                 </div>
                                             )}
-                                        </>
+                                        </React.Fragment>
                                     )
                                 )}
 
@@ -494,11 +493,11 @@ class StorageAcceptanceLogicContainer extends PureComponent {
                                 <br />
                                 <br />
                                 <Button
-                                    tag={Link}
+                                    as={Link}
                                     id="createDefaultAcceptanceLogic"
-                                    to="./storage-acceptance-logic/new"
+                                    to="new"
                                     type="submit"
-                                    color="primary"
+                                    variant="primary"
                                     size="1x"
                                     className="me-4 custom-cidg-button"
                                 >

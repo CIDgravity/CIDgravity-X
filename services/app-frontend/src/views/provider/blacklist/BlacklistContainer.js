@@ -2,7 +2,9 @@ import { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
 import { isBrowser, isMobile } from 'react-device-detect'
-import { Col, Input, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import FormControl from 'react-bootstrap/FormControl'
+import Row from 'react-bootstrap/Row'
 
 import { Loader } from 'shared/components'
 import {
@@ -20,7 +22,7 @@ import { Trans, withTranslation } from 'react-i18next'
 
 import debounce from 'lodash/debounce'
 import moment from 'moment'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import BlacklistForm from './BlacklistForm'
 
 import {
@@ -276,7 +278,7 @@ class BlacklistContainer extends PureComponent {
                         <section className="card-form">
                             <Row className="d-none d-md-flex mb-4">
                                 <Col xs={12} md={12} lg={12} className="mb-4">
-                                    <Input
+                                    <FormControl
                                         id="search"
                                         placeholder={t(
                                             'searchForm.searchInput.placeholder'
@@ -333,8 +335,8 @@ class BlacklistContainer extends PureComponent {
                                                             <Col xs="6" md="6">
                                                                 <div className="flex-fill d-flex align-items-center">
                                                                     <span
-                                                                        data-for="infoFullAddress"
-                                                                        data-tip={
+                                                                        data-tooltip-id="infoFullAddress"
+                                                                        data-tooltip-content={
                                                                             blacklisted
                                                                                 .stateAccountKey
                                                                                 .addressId
@@ -359,8 +361,8 @@ class BlacklistContainer extends PureComponent {
                                                                     </span>
 
                                                                     <i
-                                                                        data-for="infoCopyAddress"
-                                                                        data-tip={t(
+                                                                        data-tooltip-id="infoCopyAddress"
+                                                                        data-tooltip-content={t(
                                                                             'table.address.copy.tooltip'
                                                                         )}
                                                                         style={{
@@ -378,13 +380,13 @@ class BlacklistContainer extends PureComponent {
                                                                         }
                                                                     />
 
-                                                                    <ReactTooltip
+                                                                    <Tooltip
                                                                         place="bottom"
                                                                         id="infoCopyAddress"
                                                                     />
                                                                 </div>
 
-                                                                <ReactTooltip
+                                                                <Tooltip
                                                                     place="bottom"
                                                                     id="infoFullAddress"
                                                                 />
@@ -420,13 +422,13 @@ class BlacklistContainer extends PureComponent {
                                                                         {blacklisted.comment && (
                                                                             <span>
                                                                                 <i
-                                                                                    data-for="infoComment"
-                                                                                    data-tip={
+                                                                                    data-tooltip-id="infoComment"
+                                                                                    data-tooltip-content={
                                                                                         blacklisted.comment
                                                                                     }
                                                                                     className="fas fa-info-circle"
                                                                                 />
-                                                                                <ReactTooltip
+                                                                                <Tooltip
                                                                                     place="bottom"
                                                                                     id="infoComment"
                                                                                 />
@@ -442,13 +444,13 @@ class BlacklistContainer extends PureComponent {
                                                                             className="btn-pointer card-rounded-btn"
                                                                         >
                                                                             <i
-                                                                                data-for="remove"
-                                                                                data-tip={t(
+                                                                                data-tooltip-id="remove"
+                                                                                data-tooltip-content={t(
                                                                                     'table.action.remove.tooltip'
                                                                                 )}
                                                                                 className="fas fa-minus-circle ms-4"
                                                                             />
-                                                                            <ReactTooltip
+                                                                            <Tooltip
                                                                                 place="bottom"
                                                                                 id="remove"
                                                                             />

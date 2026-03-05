@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Col, Row } from 'reactstrap'
-import { useHistory } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import { useNavigate } from 'react-router'
 import { CustomCodeHighlight } from 'shared/components/CustomCodeHighlight'
 import { FaCheckCircle, FaRegCircle } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +21,7 @@ export function WizardEndPage({
     const { t } = useTranslation('WizardEndPage') // second param ignored i18n
 
     const [completedStep2, setCompletedStep2] = useState(false)
-    const history = useHistory()
+    const navigate = useNavigate()
 
     if (minerAlreadyClaimed) {
         return (
@@ -35,7 +37,7 @@ export function WizardEndPage({
                             onClick={() => {
                                 HasAccessToAddress(shortAddressId)
                                 .then(() => {
-                                    history.push(`/client/${shortAddressId}`)
+                                    navigate(`/client/${shortAddressId}`)
                                 })
                             }}
                             size="1x"
@@ -50,7 +52,7 @@ export function WizardEndPage({
                             onClick={() => {
                                 HasAccessToAddress(shortAddressId)
                                 .then(() => {
-                                    history.push(`/provider/${shortAddressId}/diagnosis`)
+                                    navigate(`/provider/${shortAddressId}/diagnosis`)
                                 })
                             }}
                             size="1x"
@@ -93,7 +95,7 @@ export function WizardEndPage({
                                     {completedStep2 ? (
                                         <FaCheckCircle className="text-success" />
                                     ) : (
-                                        <FaRegCircle color="grey" />
+                                        <FaRegCircle variant="grey" />
                                     )}
                                 </h5>
                             </Col>
@@ -124,7 +126,7 @@ export function WizardEndPage({
                                             onClick={() => {
                                                 HasAccessToAddress(shortAddressId)
                                                 .then(() => {
-                                                    history.push(`/provider/${shortAddressId}`)
+                                                    navigate(`/provider/${shortAddressId}`)
                                                 })
                                             }}
                                             size="1x"
@@ -162,7 +164,7 @@ export function WizardEndPage({
                         onClick={() => {
                             HasAccessToAddress(shortAddressId)
                             .then(() => {
-                                history.push(`/client/${shortAddressId}`)
+                                navigate(`/client/${shortAddressId}`)
                             })
                         }}
                         size="1x"

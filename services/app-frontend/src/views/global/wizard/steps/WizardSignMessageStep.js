@@ -5,7 +5,11 @@ import {
 } from 'shared/services/addresses_claim'
 import { CustomCodeHighlight } from 'shared/components/CustomCodeHighlight'
 import { ErrorMessage, FastField, Form, Formik } from 'formik'
-import { Button, Label, Row, Col, Alert } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert'
 import { Loader } from 'shared/components'
 import { object, string } from 'yup'
 import { useTranslation } from 'react-i18next'
@@ -91,15 +95,15 @@ export function WizardSignMessageStep({
                             {loading ? (
                                 <Loader />
                             ) : error ? (
-                                <Alert color="danger">
+                                <Alert variant="danger">
                                     {t('error.isUnableToGenerateChallenge')}
                                 </Alert>
                             ) : (
                                 <>
                                     <Row className="p-2 ms-0">
-                                        <Label>
+                                        <FormLabel>
                                             {t('runThisCommandStep.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <div>
                                             <CustomCodeHighlight
@@ -115,9 +119,9 @@ export function WizardSignMessageStep({
                                     </Row>
 
                                     <Row className="p-2 mt-4 ms-0">
-                                        <Label>
+                                        <FormLabel>
                                             {t('putSignedMessageStep.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <FastField
                                             className="form-control"

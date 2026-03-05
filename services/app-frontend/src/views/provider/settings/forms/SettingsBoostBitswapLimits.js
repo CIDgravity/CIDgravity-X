@@ -1,14 +1,17 @@
 import React, { PureComponent } from 'react'
 
-import { Row, Col, FormGroup, Label, Button } from 'reactstrap'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Button from 'react-bootstrap/Button'
 
 import { Field, Form, withFormik } from 'formik'
-import 'react-tabs/style/react-tabs.css'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import { Trans, withTranslation } from 'react-i18next'
 import * as yup from 'yup'
-import { toast } from 'react-toastify'
-import { withRouter } from 'react-router'
+
+import { withRouter } from 'shared/utils/withRouter'
 import { CustomCodeHighlight } from 'shared/components/CustomCodeHighlight'
 import moment from 'moment/moment'
 
@@ -24,12 +27,11 @@ class SettingsBoostBitswapLimits extends PureComponent {
         } = this.props
 
         return (
-            <Form enableReinitialize>
-                <Row>
-                    <h5 className="mb-4">{t('client.bitswap.title')}</h5>
+            <Form>
+                <h5 className="mb-4">{t('client.bitswap.title')}</h5>
 
-                    <Row>
-                        <Col xs="12" md="12">
+                <Row>
+                    <Col xs="12" md="12">
                             <Trans t={t} i18nKey="client.bitswap.description">
                                 {
                                     'booster-bitswap can be configured to fetch its config from CIDgravity;'
@@ -70,9 +72,9 @@ class SettingsBoostBitswapLimits extends PureComponent {
                                     marginTop: '30px',
                                 }}
                             >
-                                <Label className="form-label">
+                                <FormLabel className="form-label">
                                     {t('client.bitswap.recentActivity.title')}
-                                </Label>
+                                </FormLabel>
                             </h6>
 
                             {currentAddress.statusCheck &&
@@ -101,26 +103,26 @@ class SettingsBoostBitswapLimits extends PureComponent {
                     <Row className="mt-4">
                         <Col xs="4" md="4" style={{ marginTop: '20px' }}>
                             <FormGroup>
-                                <Label
-                                    for="bitswap-simultaneous-requests"
+                                <FormLabel
+                                    htmlFor="bitswap-simultaneous-requests"
                                     className="form-label"
                                 >
                                     {t(
                                         'client.bitswap.simultaneousRequests.label'
                                     )}
-                                </Label>{' '}
+                                </FormLabel>{' '}
                                 *
                                 <i
                                     style={{
                                         marginTop: '4px',
                                     }}
-                                    data-for="bitswapSimultaneousRequests"
-                                    data-tip={t(
+                                    data-tooltip-id="bitswapSimultaneousRequests"
+                                    data-tooltip-content={t(
                                         'client.bitswap.simultaneousRequests.info'
                                     )}
                                     className="ms-4 fas fa-info-circle fa-sm"
                                 />
-                                <ReactTooltip
+                                <Tooltip
                                     place="bottom"
                                     id="bitswapSimultaneousRequests"
                                 />
@@ -142,26 +144,26 @@ class SettingsBoostBitswapLimits extends PureComponent {
 
                         <Col xs="4" md="4" style={{ marginTop: '20px' }}>
                             <FormGroup>
-                                <Label
-                                    for="bitswap-simultaneous-requests-per-peer"
+                                <FormLabel
+                                    htmlFor="bitswap-simultaneous-requests-per-peer"
                                     className="form-label"
                                 >
                                     {t(
                                         'client.bitswap.simultaneousRequestsPerPeer.label'
                                     )}
-                                </Label>{' '}
+                                </FormLabel>{' '}
                                 *
                                 <i
                                     style={{
                                         marginTop: '4px',
                                     }}
-                                    data-for="bitswapSimultaneousRequestsPerPeer"
-                                    data-tip={t(
+                                    data-tooltip-id="bitswapSimultaneousRequestsPerPeer"
+                                    data-tooltip-content={t(
                                         'client.bitswap.simultaneousRequestsPerPeer.info'
                                     )}
                                     className="ms-4 fas fa-info-circle fa-sm"
                                 />
-                                <ReactTooltip
+                                <Tooltip
                                     place="bottom"
                                     id="bitswapSimultaneousRequestsPerPeer"
                                 />
@@ -183,24 +185,24 @@ class SettingsBoostBitswapLimits extends PureComponent {
 
                         <Col xs="4" md="4" style={{ marginTop: '20px' }}>
                             <FormGroup>
-                                <Label
-                                    for="bitswap-max-bandwidth"
+                                <FormLabel
+                                    htmlFor="bitswap-max-bandwidth"
                                     className="form-label"
                                 >
                                     {t('client.bitswap.maxBandwidth.label')}
-                                </Label>{' '}
+                                </FormLabel>{' '}
                                 *
                                 <i
                                     style={{
                                         marginTop: '4px',
                                     }}
-                                    data-for="bitswapMaxBandwidth"
-                                    data-tip={t(
+                                    data-tooltip-id="bitswapMaxBandwidth"
+                                    data-tooltip-content={t(
                                         'client.bitswap.maxBandwidth.info'
                                     )}
                                     className="ms-4 fas fa-info-circle fa-sm"
                                 />
-                                <ReactTooltip
+                                <Tooltip
                                     place="bottom"
                                     id="bitswapMaxBandwidth"
                                 />
@@ -255,7 +257,6 @@ class SettingsBoostBitswapLimits extends PureComponent {
                             </FormGroup>
                         </Col>
                     </Row>
-                </Row>
 
                 <Row className="mt-2">
                     <Col className="text-start">
@@ -283,6 +284,7 @@ class SettingsBoostBitswapLimits extends PureComponent {
 
 const formikConfig = {
     displayName: 'SettingsBoostBitswapLimits',
+    enableReinitialize: true,
 
     mapPropsToValues: ({ currentAddress }) => ({
         bitswapSimultaneousRequests:
@@ -314,20 +316,12 @@ const formikConfig = {
     handleSubmit: (values, { props, setSubmitting }) => {
         props
             .onSubmit(values)
-            .then((returnValue) => {
-                const { status, message } = returnValue
-
-                if (status) {
-                    setSubmitting(false)
-                } else {
-                    setSubmitting(false)
-                    toast.error(message)
-                }
+            .then(() => {
+                setSubmitting(false)
             })
             .catch((e) => {
-                console.log(e)
+                console.error(e)
                 setSubmitting(false)
-                toast.error(e)
             })
     },
 }

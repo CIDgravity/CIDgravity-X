@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react'
-import { Container, Row, Col, Button } from 'reactstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { withTranslation } from 'react-i18next'
 
 import { Loader } from 'shared/components'
@@ -153,10 +156,10 @@ class DashboardContainer extends PureComponent {
                                 <br />
                                 <br />
                                 <Button
-                                    tag={Link}
-                                    to="../dashboard"
+                                    as={Link}
+                                    to="."
                                     type="submit"
-                                    color="danger"
+                                    variant="danger"
                                     size="1x"
                                     className="me-4"
                                 >

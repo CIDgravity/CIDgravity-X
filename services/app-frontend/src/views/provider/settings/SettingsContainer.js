@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react'
 
-import { Container, Row, Col, Label, Button } from 'reactstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react'
 import { isMobile } from 'react-device-detect'
 import { Loader } from 'shared/components'
@@ -16,11 +20,9 @@ import {
     ConfirmRegenerateToken,
     ConfirmEnableMinerStatusChecker,
 } from 'shared/modals'
-import 'react-tabs/style/react-tabs.css'
-
 import moment from 'moment'
 import Switch from 'react-switch'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import { withTranslation } from 'react-i18next'
 import { FormControlLabel } from '@mui/material'
 
@@ -485,17 +487,16 @@ class SettingsContainer extends PureComponent {
                                                         style={{
                                                             marginTop: '4px',
                                                         }}
-                                                        data-for="CIDgravityConnectorInfo"
-                                                        data-tip={t(
+                                                        data-tooltip-id="CIDgravityConnectorInfo"
+                                                        data-tooltip-html={t(
                                                             'other.connector.info'
                                                         )}
                                                         className="ms-4 fas fa-info-circle fa-sm"
                                                     />
 
-                                                    <ReactTooltip
+                                                    <Tooltip
                                                         place="bottom"
                                                         id="CIDgravityConnectorInfo"
-                                                        html={true}
                                                     />
                                                 </span>
                                             </h5>
@@ -585,11 +586,11 @@ class SettingsContainer extends PureComponent {
                                                             marginTop: '30px',
                                                         }}
                                                     >
-                                                        <Label className="form-label">
+                                                        <FormLabel className="form-label">
                                                             {t(
                                                                 'other.minerStatusCheck.title'
                                                             )}
-                                                        </Label>
+                                                        </FormLabel>
                                                     </h6>
 
                                                     <div className="mb-4">
@@ -647,11 +648,11 @@ class SettingsContainer extends PureComponent {
                                                     marginTop: '30px',
                                                 }}
                                             >
-                                                <Label className="form-label">
+                                                <FormLabel className="form-label">
                                                     {t(
                                                         'other.connector.token.title'
                                                     )}
-                                                </Label>
+                                                </FormLabel>
 
                                                 <span
                                                     onClick={
@@ -661,13 +662,13 @@ class SettingsContainer extends PureComponent {
                                                 >
                                                     <i
                                                         className="ms-4 fa fa-refresh fa-sm copy-btn"
-                                                        data-for="regenerate"
-                                                        data-tip={t(
+                                                        data-tooltip-id="regenerate"
+                                                        data-tooltip-content={t(
                                                             'other.connector.token.regenerate'
                                                         )}
                                                     />
 
-                                                    <ReactTooltip
+                                                    <Tooltip
                                                         place="bottom"
                                                         id="regenerate"
                                                     />
@@ -739,14 +740,14 @@ class SettingsContainer extends PureComponent {
                                                         style={{
                                                             marginTop: '4px',
                                                         }}
-                                                        data-for="size"
-                                                        data-tip={t(
+                                                        data-tooltip-id="size"
+                                                        data-tooltip-content={t(
                                                             'client.unknownClient.info'
                                                         )}
                                                         className="ms-4 fas fa-info-circle"
                                                     />
 
-                                                    <ReactTooltip
+                                                    <Tooltip
                                                         place="bottom"
                                                         id="size"
                                                     />
@@ -855,11 +856,11 @@ class SettingsContainer extends PureComponent {
                                         {t('other.customMessage.title')}
                                         <i
                                             style={{ marginTop: '4px' }}
-                                            data-for="customMessageInfo"
-                                            data-tip={t('other.customMessage.info')}
+                                            data-tooltip-id="customMessageInfo"
+                                            data-tooltip-content={t('other.customMessage.info')}
                                             className="ms-4 fas fa-info-circle fa-sm"
                                         />
-                                        <ReactTooltip place="bottom" id="customMessageInfo" />
+                                        <Tooltip place="bottom" id="customMessageInfo" />
                                     </h5>
 
                                     <textarea

@@ -1,14 +1,14 @@
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Badge } from 'reactstrap'
+import Badge from 'react-bootstrap/Badge'
 import { copyToClipboard } from 'shared/utils/copy-to-clipboard'
 import { RetrievalAclAlreadyOtherList } from 'shared/modals'
 import { RetrievalAclForm } from './RetrievalAclForm'
 import { isClientAcl, isPeerIdAcl } from 'shared/utils/retrievalAclUtil'
 
-import DataTable from 'react-data-table-component'
+import { Table } from 'antd'
 import { useTranslation } from 'react-i18next'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 // type is str 'whitelist' or 'blacklist'
 export function RetrievalAclView({
@@ -49,46 +49,33 @@ export function RetrievalAclView({
     }
 
     const isAclEntryNew = (aclEntry) => {
-        if (aclEntry.id === undefined) {
-            return true
-        } else {
-            return false
-        }
+        return aclEntry.id === undefined
     }
-
-    const conditionalRowStyles = [
-        {
-            when: (aclEntry) => isAclEntryNew(aclEntry),
-            style: {
-                fontStyle: 'italic',
-            },
-        },
-    ]
 
     const columns = [
         {
-            name: t(`${type}.table.peerId.title`),
-            width: '250px',
-            selector: (aclEntry) =>
+            title: t(`${type}.table.peerId.title`),
+            width: 250,
+            render: (_, aclEntry) =>
                 isPeerIdAcl(aclEntry) ? (
                     <>
                         <span
-                            data-for="showEntirePeerId"
-                            data-tip={aclEntry.peerId}
+                            data-tooltip-id="showEntirePeerId"
+                            data-tooltip-content={aclEntry.peerId}
                         >
                             {displayPeerIdShortFormat(aclEntry.peerId)}
                         </span>
 
-                        <ReactTooltip place="right" id="showEntirePeerId" />
+                        <Tooltip place="right" id="showEntirePeerId" />
 
                         <span onClick={() => copyToClipboard(aclEntry.peerId)}>
                             <i
                                 className="ms-4 fas fa-copy fa-sm copy-btn"
-                                data-for="copyPeerIdToClipboard"
-                                data-tip="Copy full Peer ID"
+                                data-tooltip-id="copyPeerIdToClipboard"
+                                data-tooltip-content="Copy full Peer ID"
                             />
 
-                            <ReactTooltip
+                            <Tooltip
                                 place="bottom"
                                 id="copyPeerIdToClipboard"
                             />
@@ -97,8 +84,8 @@ export function RetrievalAclView({
                 ) : (
                     <>
                         <span
-                            data-for="displayAllPeerIds"
-                            data-tip={aclEntry.client?.peerIds.join('<br />')}
+                            data-tooltip-id="displayAllPeerIds"
+                            data-tooltip-html={aclEntry.client?.peerIds.join('<br />')}
                         >
                             {aclEntry.client?.peerIds?.length === undefined ||
                             aclEntry.client?.peerIds?.length === null
@@ -107,19 +94,18 @@ export function RetrievalAclView({
                                       count: aclEntry.client?.peerIds?.length,
                                   })}
 
-                            <ReactTooltip
+                            <Tooltip
                                 place="right"
                                 id="displayAllPeerIds"
-                                html={true}
                             />
                         </span>
                     </>
                 ),
         },
         {
-            name: t(`${type}.table.client.title`),
-            width: '400px',
-            selector: (aclEntry) => {
+            title: t(`${type}.table.client.title`),
+            width: 400,
+            render: (_, aclEntry) => {
                 if (isClientAcl(aclEntry)) {
                     return aclEntry.client.name
                 }
@@ -137,17 +123,16 @@ export function RetrievalAclView({
             },
         },
         {
-            name: t(`${type}.table.comment.title`),
-            width: 'auto',
-            selector: (aclEntry) => (
+            title: t(`${type}.table.comment.title`),
+            render: (_, aclEntry) => (
                 <>
                     <span
-                        data-for={
+                        data-tooltip-id={
                             aclEntry.comment.length > 50
                                 ? 'displayEntireComment'
                                 : ''
                         }
-                        data-tip={aclEntry.comment.replace(
+                        data-tooltip-html={aclEntry.comment.replace(
                             /.{30}/g,
                             '$&<br />'
                         )}
@@ -156,19 +141,18 @@ export function RetrievalAclView({
                             ? aclEntry.comment.substring(0, 50) + ' [...]'
                             : aclEntry.comment}
 
-                        <ReactTooltip
+                        <Tooltip
                             place="bottom"
                             id="displayEntireComment"
-                            html={true}
                         />
                     </span>
                 </>
             ),
         },
         {
-            name: t(`${type}.table.action.title`),
-            width: '56px',
-            cell: (aclEntry) => (
+            title: t(`${type}.table.action.title`),
+            width: 56,
+            render: (_, aclEntry) => (
                 <button
                     className="btn btn-danger btn-sm"
                     onClick={() => handleOnDeleteFromAcl(aclEntry)}
@@ -176,8 +160,6 @@ export function RetrievalAclView({
                     <FontAwesomeIcon icon={faXmark} size="2xs" />
                 </button>
             ),
-            allowOverflow: true,
-            button: true,
         },
     ]
 
@@ -207,7 +189,7 @@ export function RetrievalAclView({
                         </label>
                         {isCurrentlyAppliedAcl ? (
                             <div className="p-2">
-                                <Badge color="success">Active</Badge>
+                                <Badge variant="success">Active</Badge>
                             </div>
                         ) : null}
                     </div>
@@ -220,12 +202,14 @@ export function RetrievalAclView({
                         style={{ width: '100%' }}
                     >
                         <section className="card-form">
-                            <DataTable
+                            <Table
                                 columns={columns}
-                                noDataComponent={t(`${type}.table.empty`)}
-                                data={modifiedAclList}
-                                conditionalRowStyles={conditionalRowStyles}
-                                pagination
+                                dataSource={modifiedAclList}
+                                rowKey={(record) => record.id ?? record.peerId ?? record.client?.name}
+                                locale={{ emptyText: t(`${type}.table.empty`) }}
+                                rowClassName={(record) => isAclEntryNew(record) ? 'fst-italic' : ''}
+                                pagination={{ pageSize: 10, hideOnSinglePage: true }}
+                                size="small"
                             />
                         </section>
                     </div>
@@ -251,12 +235,12 @@ export function RetrievalAclView({
                     handleOnChangeComment={handleOnChangeComment}
                     disabled={isAddFormDisabled}
                     errorExplanationSelectedElem={errorExplanationSelectedElem}
-                    isOpen={isModalFormOpen}
+                    show={isModalFormOpen}
                     setIsOpen={setIsModalFormOpen}
                 />
                 <RetrievalAclAlreadyOtherList
                     type={type}
-                    isOpen={isAlreadyInOtherAclModalOpen}
+                    show={isAlreadyInOtherAclModalOpen}
                     setIsOpen={setIsAlreadyInOtherAclModalOpen}
                     onConfirm={handleOnConfirmReplace}
                     selectedPeerOrClientId={selectedPeerOrClientId}

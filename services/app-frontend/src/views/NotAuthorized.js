@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Button, Row, Col } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import { Link } from 'react-router'
 import { withTranslation } from 'react-i18next'
 
 import { SESSION_STORAGE_TENANT_KEY } from 'config/constants'
@@ -60,13 +62,13 @@ class NotAuthorized extends PureComponent {
 
                             <div className="mt-2">
                                 {!isLoading && firstAddressId !== null && firstAddressActorTypeForPageUrl !== null ? (
-                                    <Button tag={Link} to={`${firstAddressActorTypeForPageUrl}/${firstAddressId}`} color="danger">
+                                    <Button as={Link} to={`${firstAddressActorTypeForPageUrl}/${firstAddressId}`} variant="danger">
                                         <span className="as--light">
                                             {t('button.back')}
                                         </span>
                                     </Button>
                                 ) : !isLoading ? (
-                                    <Button className="mt-2" tag={Link} to="/onboarding" color="primary">
+                                    <Button className="mt-2" as={Link} to="/onboarding" variant="primary">
                                         <span className="as--light">
                                             {t('button.claim')}
                                         </span>

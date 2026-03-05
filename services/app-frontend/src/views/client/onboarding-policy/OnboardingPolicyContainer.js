@@ -1,8 +1,12 @@
 import React, { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Button, Col, Row, FormGroup, Label } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import { Link } from 'react-router'
 import { Trans, withTranslation } from 'react-i18next'
 import { isBrowser, isMobile } from 'react-device-detect'
 
@@ -24,18 +28,18 @@ import {
 } from 'shared/services/cidg-services/client-backend/onboarding_policy_settings'
 
 import { toast } from 'react-toastify'
-import { withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
 import BadgeMui from "@mui/material/Badge";
 import Select from 'react-select'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 import PremiumRestrictedSection from 'shared/components/PremiumRestrictedSection'
 import CustomButtonPremium from 'shared/components/CustomButtonPremium'
 
-const CustomBadge = withStyles((theme) => ({
-    badge: { width: props => props.width, padding: "10px", backgroundColor: props => props.bgColor, color: props => props.textColor },
-}))(BadgeMui);
+const CustomBadge = styled(BadgeMui)(({ width, bgColor, textColor }) => ({
+    '& .MuiBadge-badge': { width, padding: "10px", backgroundColor: bgColor, color: textColor },
+}));
 
 class OnboardingPolicyContainer extends PureComponent {
     constructor(props) {
@@ -391,11 +395,11 @@ class OnboardingPolicyContainer extends PureComponent {
                         <br />
                         <br />
                         <Button
-                            tag={Link}
+                            as={Link}
                             id="initOnboardingPolicy"
-                            to="./onboarding-policy/init"
+                            to="init"
                             type="submit"
-                            color="primary"
+                            variant="primary"
                             size="1x"
                             className="me-4 custom-cidg-button"
                         >
@@ -425,18 +429,18 @@ class OnboardingPolicyContainer extends PureComponent {
 
                                             <Col xs="4" md="4">
                                                 <FormGroup>
-                                                    <Label for="settings-priority" className="form-label">
+                                                    <FormLabel htmlFor="settings-priority" className="form-label">
                                                         {t('settings.priority.label')}
-                                                    </Label>{' *'}
+                                                    </FormLabel>{' *'}
 
                                                     <i
                                                         style={{ marginTop: '4px' }}
-                                                        data-for="policySettingsPriority"
-                                                        data-tip={t('settings.priority.tooltip')}
+                                                        data-tooltip-id="policySettingsPriority"
+                                                        data-tooltip-content={t('settings.priority.tooltip')}
                                                         className="ms-4 fas fa-info-circle fa-sm"
                                                     />
 
-                                                    <ReactTooltip place="bottom" id="policySettingsPriority" />
+                                                    <Tooltip place="bottom" id="policySettingsPriority" />
                                         
                                                     <Select 
                                                         name="entityType"
@@ -494,19 +498,19 @@ class OnboardingPolicyContainer extends PureComponent {
 
                                             <Col xs="3" md="3">
                                                 {policyGroup.providers?.map((provider, index) => (
-                                                    <div className={"ms-3" + (index > 0 ? ' mt-2' : '')}>
-                                                        <Link to={`./provider-details/${provider.addressId}`}>
+                                                    <div key={provider.addressId} className={"ms-3" + (index > 0 ? ' mt-2' : '')}>
+                                                        <Link to={`../provider-details/${provider.addressId}`} relative="path">
                                                             <CustomBadge 
                                                                 bgColor="#000b44"
                                                                 textColor="#ffffff"
                                                                 badgeContent={this.getProviderNameLookupIfAvailable(provider)}
                                                                 width={this.getProviderBadgeWidth(provider)}
-                                                                data-for={'viewProviderComment-' + index} 
-                                                                data-tip={provider.comment} 
+                                                                data-tooltip-id={'viewProviderComment-' + index} 
+                                                                data-tooltip-content={provider.comment} 
                                                             />
                                                         </Link>
                                                         
-                                                        <ReactTooltip place="bottom" id={'viewProviderComment-' + index} />
+                                                        <Tooltip place="bottom" id={'viewProviderComment-' + index} />
                                                     </div>
                                                 ))}
                                             </Col>
@@ -525,16 +529,16 @@ class OnboardingPolicyContainer extends PureComponent {
                                                             style={{ color: '#222b2a'}}
                                                             className="card-rounded-btn ms-4 btn-pointer icons"
                                                             id={`edit-${policyGroup.id}`}
-                                                            to={`./onboarding-policy/${policyGroup.id}`}
+                                                            to={`${policyGroup.id}`}
                                                         >
                                                             <i
                                                                 id={'editPolicy' + index}
                                                                 className="fas fa-edit"
-                                                                data-for="edit"
-                                                                data-tip={t('table.edit.tooltip')}
+                                                                data-tooltip-id="edit"
+                                                                data-tooltip-content={t('table.edit.tooltip')}
                                                             />
 
-                                                            <ReactTooltip place="bottom" id="edit"/>
+                                                            <Tooltip place="bottom" id="edit"/>
                                                         </Link>
 
                                                         <span
@@ -544,11 +548,11 @@ class OnboardingPolicyContainer extends PureComponent {
                                                         >
                                                             <i
                                                                 className="fas fa-trash-alt"
-                                                                data-for="delete"
-                                                                data-tip={t('table.delete.tooltip')}
+                                                                data-tooltip-id="delete"
+                                                                data-tooltip-content={t('table.delete.tooltip')}
                                                             />
 
-                                                            <ReactTooltip place="bottom" id="delete"/>
+                                                            <Tooltip place="bottom" id="delete"/>
                                                         </span>
                                                     </div>
                                                 </Col>
@@ -586,16 +590,16 @@ class OnboardingPolicyContainer extends PureComponent {
                                                         style={{ color: '#222b2a'}}
                                                         className="card-rounded-btn ms-4 btn-pointer icons"
                                                         id="edit-mix"
-                                                        to="./onboarding-policy/mix"
+                                                        to="mix"
                                                     >
                                                         <i
                                                             id="editPolicy-mix"
                                                             className="fas fa-edit"
-                                                            data-for="edit"
-                                                            data-tip={t('table.edit.tooltip')}
+                                                            data-tooltip-id="edit"
+                                                            data-tooltip-content={t('table.edit.tooltip')}
                                                         />
 
-                                                        <ReactTooltip place="bottom" id="edit"/>
+                                                        <Tooltip place="bottom" id="edit"/>
                                                     </Link>
                                                 </div>
                                             </Col>

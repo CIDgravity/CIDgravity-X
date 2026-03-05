@@ -1,17 +1,17 @@
 import { useTranslation } from 'react-i18next'
 
-import SyntaxHighlighter from 'react-syntax-highlighter'
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/light'
+import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+SyntaxHighlighter.registerLanguage('json', json)
 
-import {
-    Button,
-    Col,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-} from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import Row from 'react-bootstrap/Row'
 
 export const ViewDealProposalJson = ({
     isModalOpened,
@@ -21,12 +21,12 @@ export const ViewDealProposalJson = ({
     const { t } = useTranslation('ViewDealProposalJson') // second param ignored i18n
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>{t('header')}</ModalHeader>
+            <ModalHeader closeButton>{t('header')}</ModalHeader>
 
             <ModalBody>
                 <Row>

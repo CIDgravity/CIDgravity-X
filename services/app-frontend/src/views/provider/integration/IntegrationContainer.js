@@ -1,7 +1,9 @@
 import { withAuth0 } from '@auth0/auth0-react'
 import { PureComponent } from 'react'
 import { withTranslation } from 'react-i18next'
-import { Col, Container, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 
 import moment from 'moment'
 

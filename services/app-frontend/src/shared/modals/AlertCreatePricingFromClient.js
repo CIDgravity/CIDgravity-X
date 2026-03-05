@@ -1,6 +1,10 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
 export const AlertCreatePricingFromClient = ({
@@ -12,22 +16,22 @@ export const AlertCreatePricingFromClient = ({
 
     return (
         <Modal
-            zIndex="9999"
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            style={{ zIndex: 9999 }}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>{t('header')}</ModalHeader>
+            <ModalHeader closeButton>{t('header')}</ModalHeader>
 
             <ModalBody>{t('body.warningDataWillBeLost')}</ModalBody>
 
             <ModalFooter>
-                <Button tag={Link} to={linkTo} color="danger" size="1x">
+                <Button as={Link} to={linkTo} relative="path" variant="danger" size="1x">
                     {t('button.continue')}
                 </Button>
 
-                <Button onClick={handleModal} color="secondary" size="1x">
+                <Button onClick={handleModal} variant="secondary" size="1x">
                     {t('button.cancel')}
                 </Button>
             </ModalFooter>

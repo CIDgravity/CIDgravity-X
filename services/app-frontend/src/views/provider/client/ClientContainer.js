@@ -2,8 +2,11 @@ import React, { PureComponent } from 'react'
 
 import { isBrowser, isMobile } from 'react-device-detect'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Row, Col, Button, Badge } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import Badge from 'react-bootstrap/Badge'
+import { Link } from 'react-router'
 import { Loader } from 'shared/components'
 import {
     ConfirmDeleteClient,
@@ -27,7 +30,7 @@ import { toast } from 'react-toastify'
 import { CustomPagination } from 'shared/components/CustomPagination'
 import { Trans, withTranslation } from 'react-i18next'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 class ClientContainer extends PureComponent {
     constructor(props) {
@@ -92,11 +95,16 @@ class ClientContainer extends PureComponent {
                 itemPerPage
             )
 
-            this.setState({
-                clients: response.data['response'],
-                totalClients: response.data['x-total-count'],
-                isLoading: false,
-            })
+            const clients = response.data['response']
+            const totalClients = response.data['x-total-count']
+
+            if ((!clients || clients.length === 0) && currentPage > 0) {
+                this.setState({ currentPage: currentPage - 1 }, () =>
+                    this.loadExistingClients()
+                )
+            } else {
+                this.setState({ clients, totalClients, isLoading: false })
+            }
         } catch (error) {
             this.setState({ error: true, isLoading: false })
         }
@@ -148,25 +156,23 @@ class ClientContainer extends PureComponent {
     }
 
     handleDeleteClient = async () => {
-        const { clientToDelete, clients, indexClientToDelete } = this.state
+        const { clientToDelete } = this.state
         this.closeDeleteClientModal()
 
         try {
             const response = await RemoveClient(clientToDelete)
 
             if (response) {
-                var clientsCopy = [...clients]
-                clientsCopy[indexClientToDelete].archived = true
-
                 this.setState({
                     clientToDelete: null,
                     indexClientToDelete: null,
-                    clients: clientsCopy,
                 })
 
                 toast.success(
                     this.props.t('notification.success.onRemoveClient')
                 )
+
+                await this.loadExistingClients()
             } else {
                 toast.error(this.props.t('notification.error.onRemoveClient'))
             }
@@ -254,10 +260,10 @@ class ClientContainer extends PureComponent {
                         <Col xs={6} md={5}>
                             <div className="text-end">
                                 <Button
-                                    tag={Link}
+                                    as={Link}
                                     id="createNewClient"
                                     disabled={isLoading}
-                                    to="./client/new"
+                                    to="new"
                                     size="1x"
                                     className="me-2 custom-cidg-button"
                                 >
@@ -339,9 +345,10 @@ class ClientContainer extends PureComponent {
                             <Col md={3}>
                                 <div className="text-end">
                                     <Button
-                                        tag={Link}
-                                        to="./settings/global"
-                                        color="success"
+                                        as={Link}
+                                        to="../settings/global"
+                                        relative="path"
+                                        variant="success"
                                         size="sm"
                                     >
                                         <span className="as--light">
@@ -387,9 +394,10 @@ class ClientContainer extends PureComponent {
                             <Col md={3}>
                                 <div className="text-end">
                                     <Button
-                                        tag={Link}
-                                        to="./settings/global"
-                                        color="success"
+                                        as={Link}
+                                        to="../settings/global"
+                                        relative="path"
+                                        variant="success"
                                         size="sm"
                                     >
                                         <span className="as--light">
@@ -440,13 +448,13 @@ class ClientContainer extends PureComponent {
                                         'table.columns.currentStorageRateLimit.title'
                                     )}
                                     <i
-                                        data-for="dealRateTooltip"
-                                        data-tip={t(
+                                        data-tooltip-id="dealRateTooltip"
+                                        data-tooltip-content={t(
                                             'table.columns.currentStorageRateLimit.tooltip'
                                         )}
                                         className="ms-4 fas fa-info-circle"
                                     />
-                                    <ReactTooltip
+                                    <Tooltip
                                         place="top"
                                         id="dealRateTooltip"
                                     />
@@ -454,10 +462,9 @@ class ClientContainer extends PureComponent {
                             </Row>
 
                             {clients.map((client, indexClient) => (
-                                <>
+                                <React.Fragment key={client.id}>
                                     {!client.archived && (
                                         <div
-                                            key={client.id}
                                             className="card-form p-3"
                                         >
                                             <Row className="align-items-center align-items-stretch">
@@ -491,7 +498,7 @@ class ClientContainer extends PureComponent {
                                                                     }
 
                                                                     <Badge
-                                                                        color="success"
+                                                                        variant="success"
                                                                         className="ms-2"
                                                                     >
                                                                         {t(
@@ -531,7 +538,7 @@ class ClientContainer extends PureComponent {
                                                                     }
 
                                                                     <Badge
-                                                                        color="success"
+                                                                        variant="success"
                                                                         className="ms-2"
                                                                     >
                                                                         {t(
@@ -640,17 +647,17 @@ class ClientContainer extends PureComponent {
                                                                     }}
                                                                     className="card-rounded-btn ms-4 icons btn-pointer"
                                                                     id={`edit-${client.id}`}
-                                                                    to={`./client/${client.id}`}
+                                                                    to={`${client.id}`}
                                                                 >
                                                                     <i
                                                                         className="fas fa-edit ms-4"
-                                                                        data-for="edit"
-                                                                        data-tip={t(
+                                                                        data-tooltip-id="edit"
+                                                                        data-tooltip-content={t(
                                                                             'table.tooltip.editClient'
                                                                         )}
                                                                     />
 
-                                                                    <ReactTooltip
+                                                                    <Tooltip
                                                                         place="bottom"
                                                                         id="edit"
                                                                     />
@@ -674,13 +681,13 @@ class ClientContainer extends PureComponent {
                                                                                     color: '#222b2a',
                                                                                 }}
                                                                                 className="fas fa-trash-alt"
-                                                                                data-for="delete"
-                                                                                data-tip={t(
+                                                                                data-tooltip-id="delete"
+                                                                                data-tooltip-content={t(
                                                                                     'table.tooltip.deleteClient'
                                                                                 )}
                                                                             />
 
-                                                                            <ReactTooltip
+                                                                            <Tooltip
                                                                                 place="bottom"
                                                                                 id="delete"
                                                                             />
@@ -701,14 +708,14 @@ class ClientContainer extends PureComponent {
                                                                                     color: '#222b2a',
                                                                                 }}
                                                                                 className="fas fa-envelope ms-4"
-                                                                                data-for="contactByEmail"
-                                                                                data-tip={t(
+                                                                                data-tooltip-id="contactByEmail"
+                                                                                data-tooltip-content={t(
                                                                                     'table.tooltip.sendEmail'
                                                                                 )}
                                                                             />
                                                                         </a>
 
-                                                                        <ReactTooltip
+                                                                        <Tooltip
                                                                             place="bottom"
                                                                             id="contactByEmail"
                                                                         />
@@ -722,13 +729,13 @@ class ClientContainer extends PureComponent {
                                                                                 color: '#222b2a',
                                                                             }}
                                                                             className="fab fa-slack ms-4"
-                                                                            data-for="slackUsername"
-                                                                            data-tip={
+                                                                            data-tooltip-id="slackUsername"
+                                                                            data-tooltip-content={
                                                                                 client.slack
                                                                             }
                                                                         />
 
-                                                                        <ReactTooltip
+                                                                        <Tooltip
                                                                             place="bottom"
                                                                             id="slackUsername"
                                                                         />
@@ -749,13 +756,13 @@ class ClientContainer extends PureComponent {
                                                                                 color: 'green',
                                                                             }}
                                                                             className="fas fa-check ms-4"
-                                                                            data-for="lockClient"
-                                                                            data-tip={t(
+                                                                            data-tooltip-id="lockClient"
+                                                                            data-tooltip-content={t(
                                                                                 'table.tooltip.blockClient'
                                                                             )}
                                                                         />
 
-                                                                        <ReactTooltip
+                                                                        <Tooltip
                                                                             place="bottom"
                                                                             id="lockClient"
                                                                         />
@@ -775,13 +782,13 @@ class ClientContainer extends PureComponent {
                                                                                 color: 'red',
                                                                             }}
                                                                             className="fas fa-times ms-4"
-                                                                            data-for="allowClient"
-                                                                            data-tip={t(
+                                                                            data-tooltip-id="allowClient"
+                                                                            data-tooltip-content={t(
                                                                                 'table.tooltip.unblockClient'
                                                                             )}
                                                                         />
 
-                                                                        <ReactTooltip
+                                                                        <Tooltip
                                                                             place="bottom"
                                                                             id="allowClient"
                                                                         />
@@ -800,7 +807,7 @@ class ClientContainer extends PureComponent {
                                                     >
                                                         {!client.isBlocked ? (
                                                             <Button
-                                                                color="success"
+                                                                variant="success"
                                                                 size="sm"
                                                                 onClick={() =>
                                                                     this.handleOpenedBlockClientModal(
@@ -816,7 +823,7 @@ class ClientContainer extends PureComponent {
                                                             </Button>
                                                         ) : (
                                                             <Button
-                                                                color="danger"
+                                                                variant="danger"
                                                                 size="sm"
                                                                 onClick={() =>
                                                                     this.handleChangeBlockClientState(
@@ -840,7 +847,7 @@ class ClientContainer extends PureComponent {
                                                     <Col xs="1" md="1">
                                                         <div className="flex-fill align-items-center">
                                                             <div className="flex-fill d-flex align-items-center">
-                                                                <Badge color="info">
+                                                                <Badge variant="info">
                                                                     {client.integration.name.toUpperCase()}
                                                                 </Badge>
                                                             </div>
@@ -850,7 +857,7 @@ class ClientContainer extends PureComponent {
                                             </Row>
                                         </div>
                                     )}
-                                </>
+                                </React.Fragment>
                             ))}
 
                             <CustomPagination
@@ -901,11 +908,11 @@ class ClientContainer extends PureComponent {
                 {hasAssociatedAclModalOpen && (
                     <ClientHasAcl
                         client={clientToDelete}
-                        isOpen={hasAssociatedAclModalOpen}
+                        show={hasAssociatedAclModalOpen}
                         setIsOpen={() =>
                             this.setState({ hasAssociatedAclModalOpen: false })
                         }
-                        toRoute={'./retrieval-acl'}
+                        toRoute={'../retrieval-acl'}
                     />
                 )}
             </div>

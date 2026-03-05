@@ -1,11 +1,14 @@
 import React from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { useTranslation } from 'react-i18next'
 
 // type === 'blacklist' || type === 'whitelist'
 export default function RetrievalAclAlreadyOtherList({
     type,
-    isOpen,
+    show,
     setIsOpen,
     onConfirm,
     selectedPeerOrClientId,
@@ -14,12 +17,12 @@ export default function RetrievalAclAlreadyOtherList({
 
     return (
         <Modal
-            isOpen={isOpen}
-            fade={false}
-            toggle={() => setIsOpen(false)}
+            show={show}
+            animation={false}
+            onHide={() => setIsOpen(false)}
             size="lg"
         >
-            <ModalHeader toggle={() => setIsOpen(false)}>
+            <ModalHeader closeButton>
                 {t(`${type}.header`)}
             </ModalHeader>
 

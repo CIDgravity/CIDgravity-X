@@ -1,7 +1,8 @@
-@import 'cidg-variables.scss';
+@use 'cidg-variables.scss' as vars;
+@use '../../node_modules/bootstrap/scss/bootstrap' as bs;
 
 .settings-container {
-    @include media-breakpoint-up(md) {
+    @include bs.media-breakpoint-up(md) {
         .maintenance-section {
             display: none;
         }

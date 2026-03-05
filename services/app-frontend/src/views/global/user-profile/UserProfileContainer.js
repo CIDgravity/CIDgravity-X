@@ -1,7 +1,10 @@
 import { PureComponent } from 'react'
 
 import { withAuth0 } from '@auth0/auth0-react'
-import { Col, Container, Label, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 import { Loader } from 'shared/components'
 import { GetCurrentUser } from 'shared/services/account'
@@ -97,7 +100,7 @@ class UserProfileContainer extends PureComponent {
                                                             color: 'green',
                                                         }}
                                                     >
-                                                        <i class="fas fa-check-circle me-2" />
+                                                        <i className="fas fa-check-circle me-2" />
                                                         {t(
                                                             'profile.email.isVerified'
                                                         )}
@@ -106,7 +109,7 @@ class UserProfileContainer extends PureComponent {
                                                     <span
                                                         style={{ color: 'red' }}
                                                     >
-                                                        <i class="fas fa-exclamation-circle me-2" />
+                                                        <i className="fas fa-exclamation-circle me-2" />
                                                         {t(
                                                             'profile.email.isNotVerified'
                                                         )}
@@ -123,12 +126,12 @@ class UserProfileContainer extends PureComponent {
                                     <form id="profile-form">
                                         <Row>
                                             <Col xs="12" md="6">
-                                                <Label
-                                                    for="user-email"
+                                                <FormLabel
+                                                    htmlFor="user-email"
                                                     className="form-label"
                                                 >
                                                     {t('user.email.label')}
-                                                </Label>
+                                                </FormLabel>
 
                                                 <input
                                                     className="form-control"
@@ -140,12 +143,12 @@ class UserProfileContainer extends PureComponent {
                                             </Col>
 
                                             <Col xs="12" md="6">
-                                                <Label
-                                                    for="user-nickname"
+                                                <FormLabel
+                                                    htmlFor="user-nickname"
                                                     className="form-label"
                                                 >
                                                     {t('user.nickname.label')}
-                                                </Label>
+                                                </FormLabel>
 
                                                 <input
                                                     className="form-control"
@@ -159,12 +162,12 @@ class UserProfileContainer extends PureComponent {
 
                                         <Row className="mt-4">
                                             <Col xs="12" md="12">
-                                                <Label
-                                                    for="user-provider-id"
+                                                <FormLabel
+                                                    htmlFor="user-provider-id"
                                                     className="form-label"
                                                 >
                                                     {t('user.userId.label')}
-                                                </Label>
+                                                </FormLabel>
 
                                                 <input
                                                     className="form-control"

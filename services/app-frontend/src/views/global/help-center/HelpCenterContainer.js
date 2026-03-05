@@ -5,9 +5,12 @@ import { faWrench, faBook } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { PureComponent } from 'react'
 import { PopupModal } from 'react-calendly'
-import { Button, Col, Container, Row } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import { isMobile } from 'react-device-detect'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { GetSelectedAddressIdFromSessionStorage, GetSelectedAddressActorTypeFromSessionStorage } from 'shared/utils/auth'
 
@@ -65,8 +68,8 @@ class HelpCenterContainer extends PureComponent {
                                         </p>
 
                                         <Button
-                                            tag={Link}
-                                            to={`provider/${selectedAddress}/diagnosis`}
+                                            as={Link}
+                                            to={`/provider/${selectedAddress}/diagnosis`}
                                             className="custom-cidg-button"
                                             size="sm"
                                         >
@@ -219,42 +222,41 @@ class HelpCenterContainer extends PureComponent {
                                         t={t}
                                         i18nKey="training.bookCallWithExpert"
                                     />
-                                    <br />
-                                    <div>
-                                        <Button
-                                            size="sm"
-                                            className="custom-cidg-button"
-                                            onClick={() =>
-                                                this.setState({ isOpen: true })
-                                            }
-                                            style={{ marginTop: '1rem' }}
-                                        >
-                                            {t('button.book')}
-                                        </Button>
-                                        <PopupModal
-                                            url="https://calendly.com/juliennoel/meeting-cidgravity?hide_event_type_details=1&hide_gdpr_banner=1"
-                                            text="Calendly"
-                                            rootElement={document.getElementById(
-                                                'root'
-                                            )}
-                                            onModalClose={() =>
-                                                this.setState({ isOpen: false })
-                                            }
-                                            open={this.state.isOpen}
-                                            prefill={{
-                                                email: this.props.auth0.user
-                                                    .email,
-                                                name: this.props.auth0.user
-                                                    .name,
-                                                customAnswers: {
-                                                    a1: t(
-                                                        'training.formDefaultMessage'
-                                                    ),
-                                                },
-                                            }}
-                                        />
-                                    </div>
                                 </p>
+                                <div>
+                                    <Button
+                                        size="sm"
+                                        className="custom-cidg-button"
+                                        onClick={() =>
+                                            this.setState({ isOpen: true })
+                                        }
+                                        style={{ marginTop: '1rem' }}
+                                    >
+                                        {t('button.book')}
+                                    </Button>
+                                    <PopupModal
+                                        url="https://calendly.com/juliennoel/meeting-cidgravity?hide_event_type_details=1&hide_gdpr_banner=1"
+                                        text="Calendly"
+                                        rootElement={document.getElementById(
+                                            'root'
+                                        )}
+                                        onModalClose={() =>
+                                            this.setState({ isOpen: false })
+                                        }
+                                        open={this.state.isOpen}
+                                        prefill={{
+                                            email: this.props.auth0.user
+                                                .email,
+                                            name: this.props.auth0.user
+                                                .name,
+                                            customAnswers: {
+                                                a1: t(
+                                                    'training.formDefaultMessage'
+                                                ),
+                                            },
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </section>
                     </Col>

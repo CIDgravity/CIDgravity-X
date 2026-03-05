@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react'
 
-import { Alert, Container, Row, Col } from 'reactstrap'
+import Alert from 'react-bootstrap/Alert'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { withAuth0 } from '@auth0/auth0-react'
 import { Loader } from 'shared/components'
 import { withTranslation, Trans } from 'react-i18next'
@@ -17,12 +20,10 @@ import { faEnvelope, faShield, faCircleExclamation } from '@fortawesome/free-sol
 
 import { GetCountryNameFromCode } from 'shared/components/CountrySelector'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 
-import MarkdownIt from 'markdown-it';
-import MdEditor from 'react-markdown-editor-lite';
-import 'react-markdown-editor-lite/lib/index.css';
+import MDEditor from '@uiw/react-md-editor';
 
 class ProviderDetailsContainer extends PureComponent {
     constructor(props) {
@@ -139,7 +140,6 @@ class ProviderDetailsContainer extends PureComponent {
     render() {
         const { isLoading, isError, providerAddressDetails, pricingRulesApplied } = this.state
         const { t } = this.props
-        const mdParser = new MarkdownIt();
 
         return (
             <Container className="settings-container">
@@ -174,21 +174,12 @@ class ProviderDetailsContainer extends PureComponent {
                             <Row>
                                 <Col xs='12' md='12'>
                                     <section className="card-form">
-                                        <MdEditor 
-                                            style={{
-                                                border: 'none',
-                                                borderRight: 'none'
-                                            }}
-                                            readOnly
-                                            view={{
-                                                menu: false,
-                                                md: false,
-                                                html: true
-                                            }}
-                                        
-                                            renderHTML={text => mdParser.render(text)}  
-                                            value={providerAddressDetails.information.providerBio}
-                                        />
+                                        <div data-color-mode="light">
+                                            <MDEditor.Markdown
+                                                source={providerAddressDetails.information.providerBio}
+                                                style={{ padding: '12px' }}
+                                            />
+                                        </div>
                                     </section>
                                 </Col>
                             </Row>
@@ -211,21 +202,21 @@ class ProviderDetailsContainer extends PureComponent {
                                                 
                                             {providerAddressDetails.information.isVerified ? (
                                                 <>
-                                                    <span style={{ color: "green" }} data-for="untrustedKYS" data-tip={t(`information.isVerified.tooltip`)}>
+                                                    <span style={{ color: "green" }} data-tooltip-id="untrustedKYS" data-tooltip-content={t(`information.isVerified.tooltip`)}>
                                                         <FontAwesomeIcon style={{ marginRight: 5 + "px", marginLeft: 20 + "px" }}  icon={faShield} />
                                                         {t(`information.isVerified.title`)}
                                                     </span>
 
-                                                    <ReactTooltip place="bottom" id="untrustedKYS" />
+                                                    <Tooltip place="bottom" id="untrustedKYS" />
                                                 </>
                                             ) : (
                                                 <>
-                                                    <span style={{ color: "red" }} data-for="untrustedKYS" data-tip={t(`information.isNotVerified.tooltip`)}>
+                                                    <span style={{ color: "red" }} data-tooltip-id="untrustedKYS" data-tooltip-content={t(`information.isNotVerified.tooltip`)}>
                                                         <FontAwesomeIcon style={{ marginRight: 5 + "px", marginLeft: 20 + "px" }}  icon={faCircleExclamation} />
                                                         {t(`information.isNotVerified.title`)}
                                                     </span>
 
-                                                    <ReactTooltip place="bottom" id="untrustedKYS" />
+                                                    <Tooltip place="bottom" id="untrustedKYS" />
                                                 </>
                                             )}
 
@@ -253,7 +244,7 @@ class ProviderDetailsContainer extends PureComponent {
                                             </p>
                                         </>
                                     ) : (
-                                        <Alert color="warning">
+                                        <Alert variant="warning">
                                             {t('information.notAvailable')}
                                         </Alert>
                                     )}
@@ -295,7 +286,7 @@ class ProviderDetailsContainer extends PureComponent {
                             </Row>
 
                             {pricingRulesApplied.length <= 0 ? (
-                                <Alert color="warning">
+                                <Alert variant="warning">
                                     {t('pricing.noRulesApplied')}
                                 </Alert>
 

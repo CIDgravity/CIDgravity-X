@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Label, Row, Col } from 'reactstrap'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { Field, useField, useFormikContext } from 'formik'
 import { boolean, object, string } from 'yup'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +21,7 @@ export const WizardImportDataStep = (stepTitle) => ({
         import: boolean().required(),
         pricingModel: string().when('import', {
             is: 'true',
-            then: string().required('validation.isAddressSelectionMandatory'),
+            then: (schema) => schema.required('validation.isAddressSelectionMandatory'),
         }),
     }),
     keepValuesOnPrevious: true,
@@ -66,14 +68,14 @@ export function Form() {
             </Row>
 
             <Row className="p-0 ms-0 mt-4 pt-4">
-                <Label for="do-you-want-to-import" className="form-label">
+                <FormLabel htmlFor="do-you-want-to-import" className="form-label">
                     {t('doYouWantToImportRadio.label')}
-                </Label>
+                </FormLabel>
             </Row>
 
             <Row className="p-0 ms-0 mt-2">
                 <Col>
-                    <Label>
+                    <FormLabel>
                         <Field
                             type="radio"
                             id="clients_pricing"
@@ -81,13 +83,13 @@ export function Form() {
                             value={'false'}
                         />
                         &nbsp;{t('doYouWantToImportRadio.noOption')}
-                    </Label>
+                    </FormLabel>
                 </Col>
             </Row>
 
             <Row className="p-0 ms-0 mt-2">
                 <Col>
-                    <Label>
+                    <FormLabel>
                         <Field
                             type="radio"
                             id="clients_pricing"
@@ -95,7 +97,7 @@ export function Form() {
                             value={'true'}
                         />
                         &nbsp;{t('doYouWantToImportRadio.yesOption')}
-                    </Label>
+                    </FormLabel>
                 </Col>
             </Row>
 

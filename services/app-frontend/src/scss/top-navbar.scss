@@ -1,14 +1,16 @@
 @use 'sass:map';
+@use 'cidg-variables.scss' as vars;
+@use '../../node_modules/bootstrap/scss/bootstrap' as bs;
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Trade+Winds&display=swap');
-@import 'cidg-variables.scss';
 
 .cidg-top-navbar {
-    background: $light;
+    background: vars.$light;
     width: 100%;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 0.875rem;
 
     .navbar-text {
-        color: $body-color;
+        color: vars.$body-color;
     }
 
     // This enables positioning the caret! will be useful when we use bootstrap for the sidebar
@@ -22,31 +24,51 @@
     //
     a,
     span {
-        color: $body-color;
+        color: vars.$body-color;
         border: none;
         outline: none;
         transition: none;
     }
 
+    // Strip default btn-primary styling from dropdown toggles (reactstrap had `nav` prop)
+    .btn.dropdown-toggle {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: vars.$body-color !important;
+        padding: 0.5rem;
+        &:hover, &:focus, &:active, &.show {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: vars.$body-color !important;
+        }
+        // Hide the broken native caret (custom.scss .btn-primary border:none kills it)
+        // Carets are added as explicit <i> icons in JSX instead
+        &::after {
+            display: none;
+        }
+    }
+
     .dropdown-item:hover {
-        background: $cidg-dark-blue;
+        background: vars.$cidg-dark-blue;
         a,
         span {
-            color: $white;
+            color: vars.$white;
         }
     }
 
     .dropdown-item-danger {
-        color: $danger;
+        color: vars.$danger;
     }
 
     .dropdown-item-danger:hover {
-        background: $danger;
-        color: $white;
+        background: vars.$danger;
+        color: vars.$white;
     }
 
     .dropdown-menu {
-        font-size: $font-size-base;
+        font-size: vars.$font-size-base;
     }
 
     // old-school caret
@@ -65,7 +87,7 @@
         width: 40px;
     }
 
-    @include media-breakpoint-down(md) {
+    @include bs.media-breakpoint-down(md) {
         width: 100%;
         .navitem-profile-friendlyAndAddress {
             display: none;
@@ -77,7 +99,7 @@
             display: none;
         }
     }
-    @include media-breakpoint-up(md) {
+    @include bs.media-breakpoint-up(md) {
         .navitem-profile-addressOnly {
             display: none;
         }

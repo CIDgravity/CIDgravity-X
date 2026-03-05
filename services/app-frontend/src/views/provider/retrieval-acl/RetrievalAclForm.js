@@ -1,17 +1,15 @@
 import CreatableSelect from 'react-select/creatable'
-import {
-    Button,
-    Col,
-    FormGroup,
-    Input,
-    InputGroup,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-} from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import Row from 'react-bootstrap/Row'
 import { useTranslation } from 'react-i18next'
 
 // type === 'blacklist' || type === 'whitelist'
@@ -26,7 +24,7 @@ export function RetrievalAclForm({
     disabled,
     type,
     errorExplanationSelectedElem,
-    isOpen,
+    show,
     setIsOpen,
 }) {
     const handleEnter = (event) => {
@@ -39,12 +37,12 @@ export function RetrievalAclForm({
 
     return (
         <Modal
-            isOpen={isOpen}
-            fade={false}
-            toggle={() => setIsOpen(false)}
+            show={show}
+            animation={false}
+            onHide={() => setIsOpen(false)}
             size="lg"
         >
-            <ModalHeader toggle={() => setIsOpen(false)}>
+            <ModalHeader closeButton>
                 {t(`${type}.title`)}
             </ModalHeader>
 
@@ -52,9 +50,9 @@ export function RetrievalAclForm({
                 <Row className="my-3">
                     <Col xs="12" md="12">
                         <FormGroup>
-                            <Label className="form-label">
+                            <FormLabel className="form-label">
                                 {t(`${type}.elementToSelect.label`)}
-                            </Label>
+                            </FormLabel>
 
                             <CreatableSelect
                                 placeholder={t(
@@ -83,11 +81,11 @@ export function RetrievalAclForm({
 
                 <Row className="my-3">
                     <Col xs="12" md="12">
-                        <Label className="form-label">
+                        <FormLabel className="form-label">
                             {t(`${type}.comment.label`)}
-                        </Label>
+                        </FormLabel>
                         <InputGroup>
-                            <Input
+                            <FormControl
                                 value={comment}
                                 onKeyDown={handleEnter}
                                 onChange={(e) =>
@@ -105,7 +103,7 @@ export function RetrievalAclForm({
                         <Button
                             onClick={handleOnAddToAcl}
                             disabled={disabled}
-                            color="primary"
+                            variant="primary"
                             type="submit"
                         >
                             {t(`button.${type}.addToAcl`)}

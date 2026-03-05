@@ -1,22 +1,22 @@
 import React, { PureComponent } from 'react'
 
-import { Button } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
 import { isMobile } from 'react-device-detect'
 import { Field, Form, withFormik } from 'formik'
 import { withTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
-import { withRouter } from 'react-router'
+
+import { withRouter } from 'shared/utils/withRouter'
 import { toReadableDurationFormatNew } from 'shared/utils/file_size'
 
 import * as yup from 'yup'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 class SettingsStartEpochSealingBuffer extends PureComponent {
     render() {
         const { errors, touched, isSubmitting, t } = this.props
 
         return (
-            <Form enableReinitialize>
+            <Form>
 
                 <div className="card p-4" style={!isMobile ? { height: 200 + 'px' } : {}}>
                     <h5 className="mb-4">
@@ -24,12 +24,12 @@ class SettingsStartEpochSealingBuffer extends PureComponent {
 
                         <i
                             style={{ marginTop: '4px' }}
-                            data-for="startEpochSealingBuffer"
-                            data-tip={t('tooltip')}
+                            data-tooltip-id="startEpochSealingBuffer"
+                            data-tooltip-html={t('tooltip')}
                             className="ms-4 fas fa-info-circle"
                         />
 
-                        <ReactTooltip place="bottom" id="startEpochSealingBuffer" html={true}/>
+                        <Tooltip place="bottom" id="startEpochSealingBuffer" />
                     </h5>
 
                     <Field
@@ -61,6 +61,7 @@ class SettingsStartEpochSealingBuffer extends PureComponent {
 
 const formikConfig = {
     displayName: 'StartEpochSealingBuffer',
+    enableReinitialize: true,
 
     mapPropsToValues: ({ currentAddress }) => ({
         startEpochSealingBuffer: toReadableDurationFormatNew('Epochs', 'Hours', currentAddress.settings.startEpochSealingBuffer)
@@ -78,20 +79,12 @@ const formikConfig = {
     handleSubmit: (values, { props, setSubmitting }) => {
         props
             .onSubmit(values)
-            .then((returnValue) => {
-                const { status, message } = returnValue
-
-                if (status) {
-                    setSubmitting(false)
-                } else {
-                    setSubmitting(false)
-                    toast.error(message)
-                }
+            .then(() => {
+                setSubmitting(false)
             })
             .catch((e) => {
-                console.log(e)
+                console.error(e)
                 setSubmitting(false)
-                toast.error(e)
             })
     },
 }

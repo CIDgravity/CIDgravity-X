@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 
 // enable adding tooltip
 // see https://github.com/JedWatson/react-select/discussions/4915#discussioncomment-1646128 for inspiration
@@ -27,21 +27,21 @@ export const CustomCreatableLabelWithTooltipAndCopy = (props) => {
             <span
                 className="p-2"
                 {...props}
-                data-for={value}
-                data-tip={tooltipContent}
+                data-tooltip-id={value}
+                data-tooltip-content={tooltipContent}
             />
 
             <span
-                data-for="copyTooltip"
-                data-tip={t('tooltip.copy')}
+                data-tooltip-id="copyTooltip"
+                data-tooltip-content={t('tooltip.copy')}
                 className="p-2"
                 onClick={copyToClipboard}
             >
                 <FontAwesomeIcon className="command-copy" icon={faCopy} />
-                <ReactTooltip place="bottom" id="copyTooltip" />
+                <Tooltip place="bottom" id="copyTooltip" />
             </span>
 
-            <ReactTooltip place="right" id={value} />
+            <Tooltip place="right" id={value} />
         </div>
     )
 }
@@ -65,13 +65,13 @@ export const CustomCreatableLabelWithCopy = (props) => {
             <span className="p-2" {...props} />
 
             <span
-                data-for="copyTooltip"
-                data-tip={t('tooltip.copy')}
+                data-tooltip-id="copyTooltip"
+                data-tooltip-content={t('tooltip.copy')}
                 className="p-2"
                 onClick={copyToClipboard}
             >
                 <FontAwesomeIcon className="command-copy" icon={faCopy} />
-                <ReactTooltip place="bottom" id="copyTooltip" />
+                <Tooltip place="bottom" id="copyTooltip" />
             </span>
         </div>
     )

@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react'
 
-import { Container, Row, Col, Button } from 'reactstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Trans, withTranslation } from 'react-i18next'
 
 class OnboardingContainer extends PureComponent {
@@ -63,7 +66,7 @@ class OnboardingContainer extends PureComponent {
                             </div>
 
                             <Button
-                                tag={Link}
+                                as={Link}
                                 className="mt-4 custom-cidg-button"
                                 to="/wizard"
                                 size="1x"

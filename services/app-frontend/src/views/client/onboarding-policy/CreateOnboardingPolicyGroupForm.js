@@ -3,9 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { PureComponent } from 'react'
 import { Field, Form, withFormik } from 'formik'
 import { Trans, withTranslation } from 'react-i18next'
-import { withRouter } from 'react-router'
+import { withRouter } from 'shared/utils/withRouter'
 import { toast } from 'react-toastify'
-import { Alert, Button, Col, Container, FormGroup, Label, Row } from 'reactstrap'
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 import * as yup from 'yup'
 
@@ -32,9 +38,9 @@ class CreateOnboardingPolicyGroupForm extends PureComponent {
                         <Row className="my-4">
                             <Col xs="9" md="9" style={{marginTop: 20 + 'px'}}>
                                 <FormGroup>
-                                    <Label for="onboarding-policy-group-name" className="form-label">
+                                    <FormLabel htmlFor="onboarding-policy-group-name" className="form-label">
                                         {t('general.name.label')}
-                                    </Label>
+                                    </FormLabel>
 
                                     <Field
                                         id="onboarding-policy-group-name"
@@ -54,9 +60,9 @@ class CreateOnboardingPolicyGroupForm extends PureComponent {
 
                             <Col xs="3" md="3" style={{marginTop: 20 + 'px'}}>
                                 <FormGroup>
-                                    <Label for="onboarding-policy-group-number-of-copies" className="form-label">
+                                    <FormLabel htmlFor="onboarding-policy-group-number-of-copies" className="form-label">
                                         {t('general.numberOfCopies.label')}
-                                    </Label>
+                                    </FormLabel>
 
                                     <Field
                                         type="number"
@@ -92,7 +98,7 @@ class CreateOnboardingPolicyGroupForm extends PureComponent {
 
                             <ul className="rules mt-4">
                                 {selectedProvidersList.length <= 0 ? (
-                                    <Alert color="info" className="d-flex align-items-center">
+                                    <Alert variant="info" className="d-flex align-items-center">
                                         <div className="ms-4">
                                             <Trans t={t} i18nKey="providers.howToAddFirstProvider" />
                                         </div>
@@ -102,7 +108,7 @@ class CreateOnboardingPolicyGroupForm extends PureComponent {
                                     <>
                                         {selectedProvidersList.map((provider, i) => {
                                             return (
-                                                <li>
+                                                <li key={i}>
                                                     <div id={'providerCard-' + i} className="card p-4 mb-4">
                                                         <Row className="ms-auto">
                                                             {selectedProvidersList.length !== 1 && (
@@ -114,11 +120,11 @@ class CreateOnboardingPolicyGroupForm extends PureComponent {
 
                                                         <Row>
                                                             <Col xs="4" md="4">
-                                                                <Label for="provider-addressId" className="form-label">
+                                                                <FormLabel htmlFor="provider-addressId" className="form-label">
                                                                     {t('providers.field.address.label')} *
-                                                                </Label>
+                                                                </FormLabel>
 
-                                                                <div class="input-group mb-3">
+                                                                <div className="input-group mb-3">
                                                                     <input
                                                                         type="text"
                                                                         className="form-control"
@@ -132,11 +138,11 @@ class CreateOnboardingPolicyGroupForm extends PureComponent {
                                                             </Col>
 
                                                             <Col xs="8" md="8">
-                                                                <Label for="provider-comment" className="form-label">
+                                                                <FormLabel htmlFor="provider-comment" className="form-label">
                                                                     {t('providers.field.comment.label')}
-                                                                </Label>
+                                                                </FormLabel>
 
-                                                                <div class="input-group mb-3">
+                                                                <div className="input-group mb-3">
                                                                     <input
                                                                         type="text"
                                                                         className="form-control"
@@ -162,7 +168,7 @@ class CreateOnboardingPolicyGroupForm extends PureComponent {
                     <Row className="mt-3 mb-4">
                         <Col className="text-end">
                             {!isInitOrMixGroup && (
-                                <Button id="addNewProvider" className="me-4 mb-4" color="primary" onClick={onAddProvider}>
+                                <Button id="addNewProvider" className="me-4 mb-4" variant="primary" onClick={onAddProvider}>
                                     {t('button.addNewProvider')}
                                 </Button>
                             )}

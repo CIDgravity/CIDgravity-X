@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next'
-import {
-    Alert,
-    Button,
-    Col,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-} from 'reactstrap'
-import SyntaxHighlighter from 'react-syntax-highlighter'
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import Row from 'react-bootstrap/Row'
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/light'
+import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+SyntaxHighlighter.registerLanguage('json', json)
 
 export const ViewStorageAcceptanceLogic = ({
     isModalOpened,
@@ -20,12 +20,12 @@ export const ViewStorageAcceptanceLogic = ({
     const { t } = useTranslation('ViewStorageAcceptanceLogic') // second param ignored i18n
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>
+            <ModalHeader closeButton>
                 {t('header', {
                     storageAcceptanceLogicName: acceptanceLogic?.name,
                 })}
@@ -61,7 +61,7 @@ export const ViewStorageAcceptanceLogic = ({
                         {acceptanceLogic?.clients?.length !== 0 ? (
                             <ul>
                                 {acceptanceLogic?.clients?.map((client) => (
-                                    <li>{client.name}</li>
+                                    <li key={client.name}>{client.name}</li>
                                 ))}
                             </ul>
                         ) : (
@@ -81,13 +81,13 @@ export const ViewStorageAcceptanceLogic = ({
                                     <ul>
                                         {acceptanceLogic?.clientsWithDefault?.map(
                                             (client) => (
-                                                <li>{client.name}</li>
+                                                <li key={client.name}>{client.name}</li>
                                             )
                                         )}
                                     </ul>
                                 )}
 
-                                <Alert color="warning">
+                                <Alert variant="warning">
                                     {t(
                                         'body.client.acceptanceLogic.alsoApplyToUnknownClients'
                                     )}

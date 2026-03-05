@@ -5,22 +5,22 @@ import Select from 'react-select'
 
 import { Trans, withTranslation } from 'react-i18next'
 import { Field, Form, withFormik } from 'formik'
-import { withRouter } from 'react-router'
-import { Button, Col, FormGroup, Label, Row } from 'reactstrap'
+import { withRouter } from 'shared/utils/withRouter'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
 
 import {  CountrySelector } from 'shared/components/CountrySelector'
 
-import MarkdownIt from 'markdown-it';
-import MdEditor from 'react-markdown-editor-lite';
-import 'react-markdown-editor-lite/lib/index.css';
+import MDEditor from '@uiw/react-md-editor';
 
 class ProviderInformationForm extends PureComponent {
 
     render() {
         const { t } = this.props
         const { currentProviderBio, errors, touched, isSubmitting, setFieldValue, values, providerBioChange } = this.props
-
-        const mdParser = new MarkdownIt();
 
         const entityTypeOptions = [
             { value: "organization", label: t('entityType.options.organization') },
@@ -37,9 +37,9 @@ class ProviderInformationForm extends PureComponent {
                         <section className="card-form">
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="entity-name" className="form-label">
+                                    <FormLabel htmlFor="entity-name" className="form-label">
                                         {t('entityName.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('entityName.placeholder')}
                                         id="entity-name"
@@ -59,9 +59,9 @@ class ProviderInformationForm extends PureComponent {
                             <Row className="my-3">
                                 <Col xs="6" md="6">
                                     <FormGroup>
-                                        <Label for="entity-type" className="form-label">
+                                        <FormLabel htmlFor="entity-type" className="form-label">
                                             {t('entityType.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <Select 
                                             name="entityType"
@@ -81,9 +81,9 @@ class ProviderInformationForm extends PureComponent {
 
                                 <Col xs="6" md="6">
                                     <FormGroup>
-                                        <Label for="entity-country" className="form-label">
+                                        <FormLabel htmlFor="entity-country" className="form-label">
                                             {t('entityCountry.label')}
-                                        </Label>
+                                        </FormLabel>
 
                                         <CountrySelector 
                                             defaultValueCountryCode={values.entityCountry}
@@ -103,9 +103,9 @@ class ProviderInformationForm extends PureComponent {
 
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="entity-website" className="form-label">
+                                    <FormLabel htmlFor="entity-website" className="form-label">
                                         {t('entityWebsite.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('entityWebsite.placeholder')}
                                         id="entity-website"
@@ -129,9 +129,9 @@ class ProviderInformationForm extends PureComponent {
                         <section className="card-form">
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="contact-fullname" className="form-label">
+                                    <FormLabel htmlFor="contact-fullname" className="form-label">
                                         {t('contactFullName.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('contactFullName.placeholder')}
                                         id="contact-fullname"
@@ -150,9 +150,9 @@ class ProviderInformationForm extends PureComponent {
 
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="contact-email" className="form-label">
+                                    <FormLabel htmlFor="contact-email" className="form-label">
                                         {t('contactEmail.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('contactEmail.placeholder')}
                                         id="contact-email"
@@ -171,9 +171,9 @@ class ProviderInformationForm extends PureComponent {
 
                             <Row className="my-3">
                                 <FormGroup>
-                                    <Label for="contact-slack" className="form-label">
+                                    <FormLabel htmlFor="contact-slack" className="form-label">
                                         {t('contactSlack.label')}
-                                    </Label>
+                                    </FormLabel>
                                     <Field
                                         placeholder={t('contactSlack.placeholder')}
                                         id="contact-slack"
@@ -210,12 +210,13 @@ class ProviderInformationForm extends PureComponent {
 
                             <Row className="mt-4 p-2">
                                 <Col xs="12" md="12">
-                                    <MdEditor 
-                                        style={{ height: '300px' }} 
-                                        renderHTML={text => mdParser.render(text)}  
-                                        onChange={providerBioChange}
-                                        value={currentProviderBio}
-                                    />
+                                    <div data-color-mode="light">
+                                        <MDEditor
+                                            height={300}
+                                            value={currentProviderBio}
+                                            onChange={(val) => providerBioChange({ text: val || '' })}
+                                        />
+                                    </div>
                                 </Col>
                             </Row>
                         </section>

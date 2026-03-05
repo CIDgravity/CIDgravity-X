@@ -1,16 +1,14 @@
 import React from 'react'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import { useTranslation } from 'react-i18next'
 
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Row,
-    Col,
-} from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 export const ViewAddressAccessRights = ({
     isModalOpened,
@@ -23,12 +21,12 @@ export const ViewAddressAccessRights = ({
     const { t } = useTranslation('ViewAddressAccessRights') // second param ignored i18n
     return (
         <Modal
-            isOpen={isModalOpened}
-            fade={false}
-            toggle={handleModal}
+            show={isModalOpened}
+            animation={false}
+            onHide={handleModal}
             size="lg"
         >
-            <ModalHeader toggle={handleModal}>
+            <ModalHeader closeButton>
                 {t('header', { addressId: address.addressId })}
             </ModalHeader>
 
@@ -94,11 +92,11 @@ export const ViewAddressAccessRights = ({
                                         <i
                                             style={{ color: '#222b2a' }}
                                             className="fas fa-trash-alt"
-                                            data-for="delete"
-                                            data-tip="Remove access"
+                                            data-tooltip-id="delete"
+                                            data-tooltip-content="Remove access"
                                         />
 
-                                        <ReactTooltip
+                                        <Tooltip
                                             place="bottom"
                                             id="delete"
                                         />

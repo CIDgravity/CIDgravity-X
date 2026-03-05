@@ -2,18 +2,19 @@ import React, { PureComponent } from 'react'
 
 import { isBrowser, isMobile } from 'react-device-detect'
 import { withAuth0 } from '@auth0/auth0-react'
-import { Col, Row } from 'reactstrap'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import { Loader } from 'shared/components'
 import { GetAllClientDealsSentFromReportingService } from 'shared/services/deal-proposals'
 import { ViewDealProposalJson } from 'shared/modals'
 import { CustomPagination } from 'shared/components/CustomPagination'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { GenerateTableColumnForDealStatus } from 'shared/utils/deal-status'
 import ClientStorageDealsHistorySearchAndFilters from './ClientStorageDealsHistorySearchAndFilters'
 import { withTranslation } from 'react-i18next'
 
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import moment from 'moment'
 
 class ClientStorageDealsHistoryContainer extends PureComponent {
@@ -318,33 +319,33 @@ class ClientStorageDealsHistoryContainer extends PureComponent {
                                 </Col>
 
                                 <Col className="u-pointer-cursor text-secondary" xs="2" md="2">
-                                    <span data-for="sealling-duration-tooltip" data-tip={t('table.sealingDuration.tooltip')}>
+                                    <span data-tooltip-id="sealling-duration-tooltip" data-tooltip-content={t('table.sealingDuration.tooltip')}>
                                         {t('table.sealingDuration.title')}
                                     </span>
                                     
-                                    <ReactTooltip className="maxWidthTooltip" place="bottom" id="sealling-duration-tooltip"/>
+                                    <Tooltip className="maxWidthTooltip" place="bottom" id="sealling-duration-tooltip"/>
                                 </Col>
 
                                 <Col className="u-pointer-cursor text-secondary" xs="2" md="2">
-                                    <span data-for="overall-duration-tooltip" data-tip={t('table.overallDuration.tooltip')}>
+                                    <span data-tooltip-id="overall-duration-tooltip" data-tooltip-content={t('table.overallDuration.tooltip')}>
                                         {t('table.overallDuration.title')}
                                     </span>
 
-                                    <ReactTooltip className="maxWidthTooltip" place="bottom" id="overall-duration-tooltip"/>
+                                    <Tooltip className="maxWidthTooltip" place="bottom" id="overall-duration-tooltip"/>
                                 </Col>
 
                                 <Col className="u-pointer-cursor text-secondary" xs="1"md="1"></Col>
                             </Row>
 
                             {dealsHistory &&
-                                dealsHistory.map((deal) => (
-                                    <Row className='py-3 align-items-center align-items-stretch card-form-base'>
+                                dealsHistory.map((deal, index) => (
+                                    <Row key={deal.id || index} className='py-3 align-items-center align-items-stretch card-form-base'>
                                         <Col xs="2" md="2" className="align-items-center ps-3 flex-fill d-flex">
                                             {GenerateTableColumnForDealStatus(t, deal, true)}
                                         </Col>
 
                                         <Col xs={isMobile ? '6' : '1'} md={isMobile ? '6' : '1'}>
-                                            <Link to={`./provider-details/${deal.provider}`}>
+                                            <Link to={`../provider-details/${deal.provider}`} relative="path">
                                                 {deal.provider}
                                             </Link>
                                         </Col>
@@ -373,8 +374,8 @@ class ClientStorageDealsHistoryContainer extends PureComponent {
                                                 {deal.originalProposal !== '{}' && deal.originalProposal !== undefined && deal.originalProposal !== null && (
                                                     <div className="pe-3">
                                                         <span onClick={() => this.handleViewProposalJson(deal)} className="btn-pointer card-rounded-btn">
-                                                            <i data-for="inspect-deal-proposal" data-tip={t('table.inspect.tooltip')} className="fa fa-eye" />
-                                                            <ReactTooltip place="bottom" id="inspect-deal-proposal"/>
+                                                            <i data-tooltip-id="inspect-deal-proposal" data-tooltip-content={t('table.inspect.tooltip')} className="fa fa-eye" />
+                                                            <Tooltip place="bottom" id="inspect-deal-proposal"/>
                                                         </span>
                                                     </div>
                                                 )}

@@ -2,9 +2,14 @@ import { Form, withFormik } from 'formik'
 import { PureComponent } from 'react'
 import { isMobile } from 'react-device-detect'
 import { withTranslation } from 'react-i18next'
-import { withRouter } from 'react-router'
+import { withRouter } from 'shared/utils/withRouter'
 import { toast } from 'react-toastify'
-import { Button, Col, FormGroup, Label, Row, Input } from 'reactstrap'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormLabel from 'react-bootstrap/FormLabel'
+import Row from 'react-bootstrap/Row'
+import FormControl from 'react-bootstrap/FormControl'
 
 import { GetPlaygroundAccepanceLogicFields } from 'shared/services/playground'
 import { PriceConversionAlert, getCurrencyLabelTranslation, SupportedCurrencies } from 'shared/utils/supported-currencies'
@@ -14,10 +19,11 @@ import CustomSizeInput from 'shared/forms/CustomSizeInput'
 import DatePicker from 'react-datepicker'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import * as yup from 'yup'
 
-const dayjs = require('dayjs')
+import dayjs from 'dayjs'
+
 class PlaygroundForm extends PureComponent {
     render() {
         const {
@@ -64,12 +70,12 @@ class PlaygroundForm extends PureComponent {
                     <Row className="mt-4" style={{ marginLeft: 5 + 'px' }}>
                         <Col xs="12" md="12">
                             <FormGroup>
-                                <Label
-                                    for="address-from"
+                                <FormLabel
+                                    htmlFor="address-from"
                                     className="form-label"
                                 >
                                     {t('fromAddress.label')}
-                                </Label>
+                                </FormLabel>
 
                                 <CreatableSelect
                                     autoFocus
@@ -91,9 +97,9 @@ class PlaygroundForm extends PureComponent {
                             xs={isMobile ? '12' : '6'}
                             md={isMobile ? '12' : '6'}
                         >
-                            <Label for="deal-size" className="form-label">
+                            <FormLabel htmlFor="deal-size" className="form-label">
                                 {t('dealDuration.label')}
-                            </Label>
+                            </FormLabel>
 
                             <div className="input-group mb-3">
                                 <input
@@ -131,16 +137,16 @@ class PlaygroundForm extends PureComponent {
                             xs={isMobile ? '12' : '6'}
                             md={isMobile ? '12' : '6'}
                         >
-                            <Label for="deal-size" className="form-label">
+                            <FormLabel htmlFor="deal-size" className="form-label">
                                 {t('dealSize.label')}
-                            </Label>
+                            </FormLabel>
 
                             <i
-                                data-for="paddingSize"
-                                data-tip={t('dealSize.tooltip')}
+                                data-tooltip-id="paddingSize"
+                                data-tooltip-content={t('dealSize.tooltip')}
                                 className="ms-4 fas fa-info-circle"
                             />
-                            <ReactTooltip place="bottom" id="paddingSize" />
+                            <Tooltip place="bottom" id="paddingSize" />
 
                             <div className="input-group mb-3">
                                 <input
@@ -181,9 +187,9 @@ class PlaygroundForm extends PureComponent {
 
                     <Row className="mt-4" style={{ marginLeft: 5 + 'px' }}>
                         <Col xs="6" md="6">
-                            <Label for="verified" className="form-label">
+                            <FormLabel htmlFor="verified" className="form-label">
                                 {t('verified.label')}
-                            </Label>
+                            </FormLabel>
 
                             <select
                                 className="form-select"
@@ -204,9 +210,9 @@ class PlaygroundForm extends PureComponent {
                         </Col>
 
                         <Col xs="6" md="6">
-                            <Label for="transfer-type" className="form-label">
+                            <FormLabel htmlFor="transfer-type" className="form-label">
                                 {t('transferType.label')}
-                            </Label>
+                            </FormLabel>
 
                             <select
                                 className="form-select"
@@ -235,12 +241,12 @@ class PlaygroundForm extends PureComponent {
 
                     <Row className="mt-4" style={{ marginLeft: 5 + 'px' }}>
                         <Col xs={isMobile ? '12' : '7'} md={isMobile ? '12' : '7'}>
-                            <Label for="deal-price" className="form-label">
+                            <FormLabel htmlFor="deal-price" className="form-label">
                                 {t('price.label')}
-                            </Label>
+                            </FormLabel>
 
-                            <i data-for="dealPriceUnit" data-tip={t('price.tooltip')} className="ms-4 fas fa-info-circle"/>
-                            <ReactTooltip place="bottom" id="dealPriceUnit" />
+                            <i data-tooltip-id="dealPriceUnit" data-tooltip-content={t('price.tooltip')} className="ms-4 fas fa-info-circle"/>
+                            <Tooltip place="bottom" id="dealPriceUnit" />
 
                             <div className="input-group mb-3">
                                 <input
@@ -297,7 +303,7 @@ class PlaygroundForm extends PureComponent {
                     </Row>
 
                     {sealingPipelineValues.map((element, index) => (
-                        <Row className="mt-4" style={{ marginLeft: 5 + 'px' }}>
+                        <Row key={index} className="mt-4" style={{ marginLeft: 5 + 'px' }}>
                             <Col xs="6" md="6">
                                 <Select
                                     name="state"
@@ -332,7 +338,7 @@ class PlaygroundForm extends PureComponent {
                             <Col xs="4" md="4">
                                 {/* The field use depend on value selected on dropdown */}
                                 {element.state === 'BaseFee' ? (
-                                    <Input
+                                    <FormControl
                                         type="number"
                                         id={'value-' + index}
                                         className="form-control"
@@ -421,8 +427,8 @@ class PlaygroundForm extends PureComponent {
                             <Col xs="1" md="1">
                                 {element.state === 'BaseFee' ? (
                                     <i
-                                        data-for="unitToolTip"
-                                        data-tip={
+                                        data-tooltip-id="unitToolTip"
+                                        data-tooltip-content={
                                             simulateFromHistory
                                                 ? t(
                                                       'sealingpipeline.value.tooltips.valueMustBeAttoFil'
@@ -435,15 +441,15 @@ class PlaygroundForm extends PureComponent {
                                     />
                                 ) : element.state === 'FilPriceInUsd' ? (
                                     <i
-                                        data-for="unitToolTip"
-                                        data-tip={t(
+                                        data-tooltip-id="unitToolTip"
+                                        data-tooltip-content={t(
                                             'sealingpipeline.value.tooltips.mustBeInUSDollars'
                                         )}
                                         className="mt-3 fas fa-info-circle"
                                     />
                                 ) : null}
 
-                                <ReactTooltip place="bottom" id="unitToolTip" />
+                                <Tooltip place="bottom" id="unitToolTip" />
                             </Col>
 
                             <Col xs="1" md="1">
